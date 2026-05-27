@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEFAT — Reporte de Desempeño Digital Abril 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #b91c1c;
+  --green: #0f9b6a;
+  --yellow: #d97706;
+  --red: #dc2626;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Outfit', sans-serif; font-size: 13px; background: var(--bg); color: var(--text); line-height: 1.55; }
+.container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+.section { border-top: 1px solid var(--border); padding-top: 32px; margin-top: 32px; }
+.label-accent { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: block; }
+.label-muted { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+.header { background: #0c1520; padding: 28px 40px; display: flex; justify-content: space-between; align-items: flex-start; }
+.header-left .client-name { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: #ffffff; margin-bottom: 6px; }
+.header-left .report-type { font-size: 13px; color: #94a3b8; margin-bottom: 10px; }
+.period-badge { display: inline-block; background: var(--accent); color: #ffffff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; letter-spacing: 0.04em; }
+.header-right { text-align: right; }
+.header-right .agency { font-size: 13px; color: #94a3b8; margin-bottom: 4px; }
+.header-right .email { font-size: 11px; color: #64748b; margin-bottom: 4px; }
+.header-right .gen-date { font-size: 11px; color: #64748b; }
+.mom-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.mom-cell { background: var(--surface); padding: 20px 24px; }
+.mom-cell.highlight { background: #fff8f8; }
+.mom-period { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.mom-row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.mom-row:last-child { border-bottom: none; }
+.mom-row-label { font-size: 12px; color: var(--text); }
+.mom-row-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.mom-change-cell { display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+.mom-change-item { display: flex; flex-direction: column; gap: 2px; }
+.mom-change-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.mom-change-val { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.mom-change-val.up { color: var(--green); }
+.mom-change-val.down { color: var(--red); }
+.mom-change-val.neutral { color: var(--muted); }
+.kpi-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--border); }
+.kpi-card { background: var(--surface); padding: 20px 16px; }
+.kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 6px; }
+.kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+.kpi-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.04em; }
+.badge-up { background: #d1fae5; color: #065f46; }
+.badge-down { background: #fee2e2; color: #991b1b; }
+.badge-neutral { background: #f1f5f9; color: #475569; }
+.badge-warn { background: #fef3c7; color: #92400e; }
+.badge-bueno { background: #d1fae5; color: #065f46; }
+.badge-bajo { background: #fee2e2; color: #991b1b; }
+.two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; }
+.two-col-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.channel-bar-row { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+.channel-bar-row:last-child { border-bottom: none; }
+.channel-name { font-size: 12px; font-weight: 600; width: 140px; flex-shrink: 0; color: var(--text); }
+.bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.bar-fill { height: 6px; border-radius: 2px; background: var(--accent); }
+.bar-fill.muted { background: #94a3b8; }
+.bar-fill.green { background: var(--green); }
+.bar-fill.yellow { background: var(--yellow); }
+.channel-pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--text); width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 2px solid var(--border); text-align: left; }
+td { padding: 8px 10px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+tr:hover td { background: #f8f9fa; }
+td.num { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+.delta-up { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green); font-weight: 700; }
+.delta-down { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--red); font-weight: 700; }
+.delta-neutral { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+.funnel-step { display: flex; align-items: stretch; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 0; }
+.funnel-step:last-child { border-bottom: none; }
+.funnel-source-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; writing-mode: vertical-lr; transform: rotate(180deg); padding: 0 6px; border-radius: 2px; align-self: stretch; display: flex; align-items: center; justify-content: center; margin-right: 16px; min-width: 20px; }
+.tag-ga4 { background: #dbeafe; color: #1e40af; }
+.tag-hs { background: #f0fdf4; color: #065f46; }
+.tag-handoff { background: var(--accent); color: #ffffff; }
+.funnel-label { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); align-self: center; }
+.funnel-values { display: flex; gap: 24px; align-items: center; }
+.funnel-val-group { text-align: right; }
+.funnel-period-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 2px; }
+.funnel-val-num { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+.funnel-val-num.accent { color: var(--accent); }
+.funnel-pct { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.funnel-delta { font-size: 11px; font-weight: 700; width: 64px; text-align: right; align-self: center; }
+.insight-block { padding: 16px 20px; border-left: 3px solid var(--border); margin-bottom: 12px; }
+.insight-block.neutral { border-left-color: #94a3b8; background: #f8fafc; }
+.insight-block.positive { border-left-color: var(--green); background: #f0fdf4; }
+.insight-block.caution { border-left-color: var(--yellow); background: #fffbeb; }
+.insight-block.attention { border-left-color: var(--accent); background: #fff5f5; }
+.insight-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.insight-type-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; }
+.it-info { background: #e2e8f0; color: #334155; }
+.it-positive { background: #d1fae5; color: #065f46; }
+.it-caution { background: #fef3c7; color: #92400e; }
+.it-attention { background: #fee2e2; color: #991b1b; }
+.insight-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.insight-finding { font-size: 13px; color: var(--text); margin-bottom: 6px; line-height: 1.5; }
+.insight-consequence { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 6px; }
+.insight-signal { font-size: 11px; font-weight: 600; color: var(--muted); font-style: italic; }
+.methodology-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.03); }
+.method-row { display: flex; gap: 16px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.method-row:last-child { border-bottom: none; }
+.method-key { font-weight: 700; color: var(--text); width: 220px; flex-shrink: 0; }
+.method-val { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.note-tag { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 3px; background: #fef3c7; color: #92400e; letter-spacing: 0.06em; text-transform: uppercase; margin-left: 6px; }
+
+/* Daily charts */
+.chart-wrapper { overflow-x: auto; }
+.daily-chart { display: flex; align-items: flex-end; gap: 3px; min-width: 680px; }
+.bar-group { display: flex; gap: 1px; align-items: flex-end; flex: 1; }
+.b-apr { flex: 1; background: var(--accent); border-radius: 1px 1px 0 0; }
+.b-mar { flex: 1; background: #94a3b8; border-radius: 1px 1px 0 0; }
+.chart-xaxis { display: flex; gap: 3px; padding-top: 4px; min-width: 680px; }
+.chart-day-label { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--muted); text-align: center; }
+.chart-legend { display: flex; gap: 20px; margin-bottom: 12px; align-items: center; }
+.legend-swatch { width: 10px; height: 8px; border-radius: 1px; display: inline-block; vertical-align: middle; margin-right: 5px; }
+.legend-text { font-size: 11px; color: var(--muted); }
+
+/* Dual-bar comparison */
+.dual-bar-row { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.dual-bar-row:last-child { border-bottom: none; }
+.dual-bar-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.dual-bar-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.dual-bar-line { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.dual-period-tag { font-size: 8px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); width: 24px; flex-shrink: 0; }
+.dual-track { flex: 1; height: 5px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.dual-fill-apr { height: 5px; background: var(--accent); border-radius: 2px; }
+.dual-fill-mar { height: 5px; background: #94a3b8; border-radius: 2px; }
+.dual-pct { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: var(--text); width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
+.dual-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Cross tables */
+.cross-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.cross-title { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+
+@media print {
+  body { background: white; color: #0f172a; font-size: 11px; }
+  .header { background: #0c1520 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bar-fill, .dual-fill-apr, .dual-fill-mar, .b-apr, .b-mar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .insight-block { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .container { max-width: 100%; padding: 0; }
+  .two-col, .two-col-equal { grid-template-columns: 1fr 1fr; }
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .mom-strip { grid-template-columns: 1fr 1fr 1fr; }
+  .cross-grid { grid-template-columns: 1fr 1fr; }
+  .section { break-inside: avoid; page-break-inside: avoid; }
+  .methodology-card { box-shadow: none; border: 1px solid #e2e8f0; }
+  @page { margin: 1.5cm; size: A4; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="client-name">CEFAT</div>
+    <div class="report-type">Reporte de Desempeño Digital — Tráfico Web, Leads y Adquisición</div>
+    <span class="period-badge">1 – 30 Abril 2026</span>
+  </div>
+  <div class="header-right">
+    <div class="agency">Azteca Digital</div>
+    <div class="email">jorge.rodriguez@freelan.com.mx</div>
+    <div class="gen-date">Generado: 27 mayo 2026</div>
+    <div class="gen-date" style="margin-top:4px">Fuente: GA4 + HubSpot CRM</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <span class="label-accent">Comparativa Mensual — Abril vs Marzo 2026</span>
+    <div class="mom-strip">
+      <div class="mom-cell">
+        <div class="mom-period">Marzo 2026</div>
+        <div class="mom-row"><span class="mom-row-label">Sesiones web</span><span class="mom-row-val mono">3,608</span></div>
+        <div class="mom-row"><span class="mom-row-label">Leads HubSpot</span><span class="mom-row-val mono">527</span></div>
+        <div class="mom-row"><span class="mom-row-label">Conversiones web</span><span class="mom-row-val mono">264</span></div>
+        <div class="mom-row"><span class="mom-row-label">Bounce rate</span><span class="mom-row-val mono">41.0%</span></div>
+        <div class="mom-row"><span class="mom-row-label">Tráfico orgánico</span><span class="mom-row-val mono">969</span></div>
+        <div class="mom-row"><span class="mom-row-label">Duración media</span><span class="mom-row-val mono">2:28 min</span></div>
+      </div>
+      <div class="mom-cell highlight">
+        <div class="mom-period" style="color:var(--accent)">Abril 2026</div>
+        <div class="mom-row"><span class="mom-row-label">Sesiones web</span><span class="mom-row-val mono" style="color:var(--accent)">7,153</span></div>
+        <div class="mom-row"><span class="mom-row-label">Leads HubSpot</span><span class="mom-row-val mono" style="color:var(--accent)">715</span></div>
+        <div class="mom-row"><span class="mom-row-label">Conversiones web</span><span class="mom-row-val mono" style="color:var(--accent)">231</span></div>
+        <div class="mom-row"><span class="mom-row-label">Bounce rate</span><span class="mom-row-val mono" style="color:var(--accent)">63.4%</span></div>
+        <div class="mom-row"><span class="mom-row-label">Tráfico orgánico</span><span class="mom-row-val mono" style="color:var(--accent)">746</span></div>
+        <div class="mom-row"><span class="mom-row-label">Duración media</span><span class="mom-row-val mono" style="color:var(--accent)">1:28 min</span></div>
+      </div>
+      <div class="mom-cell mom-change-cell" style="gap:8px">
+        <div class="mom-period">Variación</div>
+        <div class="mom-change-item"><span class="mom-change-label">Sesiones</span><span class="mom-change-val up">+98.2%</span></div>
+        <div class="mom-change-item"><span class="mom-change-label">Leads CRM</span><span class="mom-change-val up">+35.7%</span></div>
+        <div class="mom-change-item"><span class="mom-change-label">Conv. web</span><span class="mom-change-val down">-12.5%</span></div>
+        <div class="mom-change-item"><span class="mom-change-label">Bounce rate</span><span class="mom-change-val down">+22.4pp</span></div>
+        <div class="mom-change-item"><span class="mom-change-label">Orgánico</span><span class="mom-change-val down">-23.0%</span></div>
+        <div class="mom-change-item"><span class="mom-change-label">Duración media</span><span class="mom-change-val down">-1:00 min</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">KPIs — Abril 2026</span>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value">715</div>
+        <div class="kpi-label">Leads HubSpot (total)</div>
+        <span class="kpi-badge badge-up">+35.7% vs marzo 527</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">7,153</div>
+        <div class="kpi-label">Sesiones web</div>
+        <span class="kpi-badge badge-up">+98.2% vs marzo 3,608</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">231</div>
+        <div class="kpi-label">Conversiones web (/gracias/)</div>
+        <span class="kpi-badge badge-down">-12.5% vs marzo 264</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">63.4%</div>
+        <div class="kpi-label">Bounce rate general</div>
+        <span class="kpi-badge badge-warn">+22.4pp vs marzo 41.0%</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">3.23%</div>
+        <div class="kpi-label">Conv. rate web</div>
+        <span class="kpi-badge badge-neutral">Benchmark: 2–5%</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">10,442</div>
+        <div class="kpi-label">Páginas vistas</div>
+        <span class="kpi-badge badge-up">+109.9% vs marzo</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Fuentes de Tráfico Web — GA4</span>
+    <div class="two-col">
+      <div>
+        <div class="channel-bar-row"><div class="channel-name">Paid Social</div><div class="bar-track"><div class="bar-fill" style="width:48.4%"></div></div><div class="channel-pct">48.4%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Cross-network</div><div class="bar-track"><div class="bar-fill green" style="width:22.5%"></div></div><div class="channel-pct">22.5%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Organic Search</div><div class="bar-track"><div class="bar-fill muted" style="width:10.4%"></div></div><div class="channel-pct">10.4%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Paid Search</div><div class="bar-track"><div class="bar-fill muted" style="width:7.7%"></div></div><div class="channel-pct">7.7%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Direct</div><div class="bar-track"><div class="bar-fill muted" style="width:7.2%"></div></div><div class="channel-pct">7.2%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Organic Social</div><div class="bar-track"><div class="bar-fill muted" style="width:1.5%"></div></div><div class="channel-pct">1.5%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Otros</div><div class="bar-track"><div class="bar-fill muted" style="width:2.3%"></div></div><div class="channel-pct">2.3%</div></div>
+      </div>
+      <div>
+        <table>
+          <thead>
+            <tr><th>Canal</th><th style="text-align:right">Abr</th><th style="text-align:right">Mar</th><th style="text-align:right">Var.</th><th style="text-align:right">Bounce Abr</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:700">Paid Social</td><td class="num" style="text-align:right">3,462</td><td class="num" style="text-align:right;color:var(--muted)">189</td><td class="num" style="text-align:right"><span class="delta-up">+18.3x</span></td><td class="num" style="text-align:right;color:var(--yellow)">89.0%</td></tr>
+            <tr><td style="font-weight:700;color:var(--green)">Cross-network</td><td class="num" style="text-align:right">1,607</td><td class="num" style="text-align:right;color:var(--muted)">1,295</td><td class="num" style="text-align:right"><span class="delta-up">+24.1%</span></td><td class="num" style="text-align:right;color:var(--green)">30.4%</td></tr>
+            <tr><td>Organic Search</td><td class="num" style="text-align:right">746</td><td class="num" style="text-align:right;color:var(--muted)">969</td><td class="num" style="text-align:right"><span class="delta-down">-23.0%</span></td><td class="num" style="text-align:right">31.8%</td></tr>
+            <tr><td>Paid Search</td><td class="num" style="text-align:right">551</td><td class="num" style="text-align:right;color:var(--muted)">433</td><td class="num" style="text-align:right"><span class="delta-up">+27.3%</span></td><td class="num" style="text-align:right">35.8%</td></tr>
+            <tr><td>Direct</td><td class="num" style="text-align:right">516</td><td class="num" style="text-align:right;color:var(--muted)">538</td><td class="num" style="text-align:right"><span class="delta-neutral">-4.1%</span></td><td class="num" style="text-align:right">76.0%</td></tr>
+            <tr><td>Organic Social</td><td class="num" style="text-align:right">108</td><td class="num" style="text-align:right;color:var(--muted)">135</td><td class="num" style="text-align:right"><span class="delta-down">-20.0%</span></td><td class="num" style="text-align:right">48.1%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Sesiones Diarias — GA4 Abril vs Marzo 2026</span>
+    <div class="chart-legend">
+      <span class="legend-text"><span class="legend-swatch" style="background:var(--accent)"></span>Abril 2026 — Total: 7,153 ses.</span>
+      <span class="legend-text"><span class="legend-swatch" style="background:#94a3b8"></span>Marzo 2026 — Total: 3,608 ses.</span>
+      <span class="legend-text" style="margin-left:8px;font-style:italic">Pico 27–29 abr: activación intensa de campaña Facebook</span>
+    </div>
+    <div class="chart-wrapper">
+      <div class="daily-chart" style="height:130px">
+        <div class="bar-group"><div class="b-apr" style="height:10px"></div><div class="b-mar" style="height:10px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:10px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:8px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:9px"></div><div class="b-mar" style="height:10px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:10px"></div><div class="b-mar" style="height:8px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:14px"></div><div class="b-mar" style="height:8px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:11px"></div><div class="b-mar" style="height:7px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:14px"></div><div class="b-mar" style="height:8px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:11px"></div><div class="b-mar" style="height:17px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:15px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:13px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:11px"></div><div class="b-mar" style="height:8px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:15px"></div><div class="b-mar" style="height:8px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:25px"></div><div class="b-mar" style="height:7px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:12px"></div><div class="b-mar" style="height:8px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:14px"></div><div class="b-mar" style="height:10px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:12px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:11px"></div><div class="b-mar" style="height:12px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:13px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:12px"></div><div class="b-mar" style="height:23px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:13px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:10px"></div><div class="b-mar" style="height:12px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:10px"></div><div class="b-mar" style="height:16px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:10px"></div><div class="b-mar" style="height:15px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:10px"></div><div class="b-mar" style="height:15px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:11px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:55px"></div><div class="b-mar" style="height:10px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:111px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:120px"></div><div class="b-mar" style="height:10px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:74px"></div><div class="b-mar" style="height:11px"></div></div>
+      </div>
+      <div class="chart-xaxis">
+        <div class="chart-day-label">1</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">5</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">10</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">15</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">20</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">25</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">30</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Leads por Fuente — HubSpot CRM</span>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Fuente "Sin conexión" (Offline) reatribuida a Paid Social/Meta — integración Manychat. Datos exactos del CRM: 715 contactos abril · 527 contactos marzo.</p>
+    <div class="two-col">
+      <div>
+        <div class="channel-bar-row"><div class="channel-name">Paid Social/Meta</div><div class="bar-track"><div class="bar-fill" style="width:66%"></div></div><div class="channel-pct">66.0%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Paid Search/Google</div><div class="bar-track"><div class="bar-fill yellow" style="width:21.3%"></div></div><div class="channel-pct">21.3%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Búsqueda Orgánica</div><div class="bar-track"><div class="bar-fill muted" style="width:7.3%"></div></div><div class="channel-pct">7.3%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Directo</div><div class="bar-track"><div class="bar-fill muted" style="width:4.8%"></div></div><div class="channel-pct">4.8%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Referidos</div><div class="bar-track"><div class="bar-fill muted" style="width:0.4%"></div></div><div class="channel-pct">0.4%</div></div>
+        <div class="channel-bar-row"><div class="channel-name">Social Media</div><div class="bar-track"><div class="bar-fill muted" style="width:0.3%"></div></div><div class="channel-pct">0.3%</div></div>
+      </div>
+      <div>
+        <table>
+          <thead>
+            <tr><th>Fuente CRM</th><th style="text-align:right">Abr</th><th style="text-align:right">Mar</th><th style="text-align:right">Var.</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:700">Paid Social/Meta</td><td class="num" style="text-align:right">472</td><td class="num" style="text-align:right;color:var(--muted)">280</td><td class="num" style="text-align:right"><span class="delta-up">+68.6%</span></td></tr>
+            <tr><td>Paid Search/Google</td><td class="num" style="text-align:right">152</td><td class="num" style="text-align:right;color:var(--muted)">124</td><td class="num" style="text-align:right"><span class="delta-up">+22.6%</span></td></tr>
+            <tr><td style="font-weight:700;color:var(--green)">Total Paid Media</td><td class="num" style="text-align:right;font-weight:700;color:var(--green)">624</td><td class="num" style="text-align:right;color:var(--muted)">404</td><td class="num" style="text-align:right"><span class="delta-up">+54.5%</span></td></tr>
+            <tr><td>Búsqueda Orgánica</td><td class="num" style="text-align:right">52</td><td class="num" style="text-align:right;color:var(--muted)">56</td><td class="num" style="text-align:right"><span class="delta-down">-7.1%</span></td></tr>
+            <tr><td>Directo</td><td class="num" style="text-align:right">34</td><td class="num" style="text-align:right;color:var(--muted)">55</td><td class="num" style="text-align:right"><span class="delta-down">-38.2%</span></td></tr>
+            <tr><td>Referidos + Social</td><td class="num" style="text-align:right">5</td><td class="num" style="text-align:right;color:var(--muted)">16</td><td class="num" style="text-align:right"><span class="delta-down">-68.8%</span></td></tr>
+            <tr><td style="font-weight:700">Total HubSpot</td><td class="num" style="text-align:right;font-weight:700">715</td><td class="num" style="text-align:right;color:var(--muted)">527</td><td class="num" style="text-align:right"><span class="delta-up">+35.7%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Embudo Unificado — GA4 + HubSpot CRM</span>
+    <div class="funnel-step">
+      <div class="funnel-source-tag tag-ga4">GA4</div>
+      <div class="funnel-label">Sesiones totales (web)</div>
+      <div class="funnel-values">
+        <div class="funnel-val-group"><div class="funnel-period-label">Abril</div><div class="funnel-val-num accent">7,153</div></div>
+        <div class="funnel-val-group"><div class="funnel-period-label">Marzo</div><div class="funnel-val-num" style="color:var(--muted)">3,608</div></div>
+      </div>
+      <div class="funnel-delta"><span class="delta-up">+98.2%</span></div>
+    </div>
+    <div class="funnel-step">
+      <div class="funnel-source-tag tag-ga4">GA4</div>
+      <div class="funnel-label">Sesiones LP principal (/lp-carrera-actuacion-2026/)</div>
+      <div class="funnel-values">
+        <div class="funnel-val-group"><div class="funnel-period-label">Abril</div><div class="funnel-val-num accent">4,716</div><div class="funnel-pct">65.9% del total</div></div>
+        <div class="funnel-val-group"><div class="funnel-period-label">Marzo</div><div class="funnel-val-num" style="color:var(--muted)">—</div></div>
+      </div>
+      <div class="funnel-delta"></div>
+    </div>
+    <div class="funnel-step">
+      <div class="funnel-source-tag tag-ga4">GA4</div>
+      <div class="funnel-label">Visitas a /contacto/ (alta intención)</div>
+      <div class="funnel-values">
+        <div class="funnel-val-group"><div class="funnel-period-label">Abril</div><div class="funnel-val-num accent">802</div><div class="funnel-pct">11.2% del total</div></div>
+        <div class="funnel-val-group"><div class="funnel-period-label">Marzo</div><div class="funnel-val-num" style="color:var(--muted)">—</div></div>
+      </div>
+      <div class="funnel-delta"></div>
+    </div>
+    <div class="funnel-step" style="border-left:2px solid #b91c1c">
+      <div class="funnel-source-tag tag-handoff">Web</div>
+      <div class="funnel-label" style="font-weight:800">Conversiones web — visitas a /gracias/</div>
+      <div class="funnel-values">
+        <div class="funnel-val-group"><div class="funnel-period-label">Abril</div><div class="funnel-val-num accent">231</div><div class="funnel-pct">3.23% del total</div></div>
+        <div class="funnel-val-group"><div class="funnel-period-label">Marzo</div><div class="funnel-val-num" style="color:var(--muted)">264</div></div>
+      </div>
+      <div class="funnel-delta"><span class="delta-down">-12.5%</span></div>
+    </div>
+    <div class="funnel-step" style="border-left:2px solid var(--green)">
+      <div class="funnel-source-tag tag-hs">CRM</div>
+      <div class="funnel-label" style="font-weight:800;color:var(--green)">Contactos totales en HubSpot CRM (web + Lead Ads + Manychat)</div>
+      <div class="funnel-values">
+        <div class="funnel-val-group"><div class="funnel-period-label">Abril</div><div class="funnel-val-num" style="color:var(--green)">715</div><div class="funnel-pct">Todos en etapa Lead</div></div>
+        <div class="funnel-val-group"><div class="funnel-period-label">Marzo</div><div class="funnel-val-num" style="color:var(--muted)">527</div></div>
+      </div>
+      <div class="funnel-delta"><span class="delta-up">+35.7%</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Creación de Leads Diaria — HubSpot CRM Abril vs Marzo 2026</span>
+    <div class="chart-legend">
+      <span class="legend-text"><span class="legend-swatch" style="background:var(--accent)"></span>Abril 2026 — 715 leads totales</span>
+      <span class="legend-text"><span class="legend-swatch" style="background:#94a3b8"></span>Marzo 2026 — 527 leads totales</span>
+      <span class="legend-text" style="margin-left:8px;font-style:italic">Días 12–16 abr: Semana Santa (0 leads). Pico: 22 abr.</span>
+    </div>
+    <div class="chart-wrapper">
+      <div class="daily-chart" style="height:90px">
+        <div class="bar-group"><div class="b-apr" style="height:16px"></div><div class="b-mar" style="height:29px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:16px"></div><div class="b-mar" style="height:33px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:18px"></div><div class="b-mar" style="height:20px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:19px"></div><div class="b-mar" style="height:15px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:21px"></div><div class="b-mar" style="height:9px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:24px"></div><div class="b-mar" style="height:11px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:15px"></div><div class="b-mar" style="height:14px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:25px"></div><div class="b-mar" style="height:9px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:29px"></div><div class="b-mar" style="height:17px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:25px"></div><div class="b-mar" style="height:7px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:2px"></div><div class="b-mar" style="height:16px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:0px;min-height:0"></div><div class="b-mar" style="height:13px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:0px;min-height:0"></div><div class="b-mar" style="height:6px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:0px;min-height:0"></div><div class="b-mar" style="height:13px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:0px;min-height:0"></div><div class="b-mar" style="height:6px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:0px;min-height:0"></div><div class="b-mar" style="height:8px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:18px"></div><div class="b-mar" style="height:6px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:29px"></div><div class="b-mar" style="height:3px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:21px"></div><div class="b-mar" style="height:26px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:32px"></div><div class="b-mar" style="height:22px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:57px"></div><div class="b-mar" style="height:37px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:80px"></div><div class="b-mar" style="height:21px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:51px"></div><div class="b-mar" style="height:31px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:46px"></div><div class="b-mar" style="height:21px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:47px"></div><div class="b-mar" style="height:25px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:28px"></div><div class="b-mar" style="height:21px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:23px"></div><div class="b-mar" style="height:24px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:37px"></div><div class="b-mar" style="height:18px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:37px"></div><div class="b-mar" style="height:29px"></div></div>
+        <div class="bar-group"><div class="b-apr" style="height:36px"></div><div class="b-mar" style="height:13px"></div></div>
+      </div>
+      <div class="chart-xaxis">
+        <div class="chart-day-label">1</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">5</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">10</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">15</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">20</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">25</div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div><div class="chart-day-label"></div>
+        <div class="chart-day-label">30</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Páginas Principales — Abril 2026</span>
+    <table>
+      <thead>
+        <tr><th>Página</th><th style="text-align:right">Vistas</th><th style="text-align:right">Sesiones</th><th style="text-align:right">Bounce</th><th style="text-align:right">Duración</th><th>Rol</th></tr>
+      </thead>
+      <tbody>
+        <tr><td style="font-weight:700;color:var(--accent)">/lp-carrera-actuacion-2026/</td><td class="num" style="text-align:right">5,091</td><td class="num" style="text-align:right">4,716</td><td class="num" style="text-align:right;color:var(--yellow)">74.1%</td><td class="num" style="text-align:right">0:35</td><td style="color:var(--muted)">LP principal paid</td></tr>
+        <tr><td>/</td><td class="num" style="text-align:right">1,644</td><td class="num" style="text-align:right">1,349</td><td class="num" style="text-align:right">33.1%</td><td class="num" style="text-align:right">1:15</td><td style="color:var(--muted)">Home — orgánico</td></tr>
+        <tr><td style="color:var(--green)">/contacto/</td><td class="num" style="text-align:right">1,152</td><td class="num" style="text-align:right">802</td><td class="num" style="text-align:right;color:var(--green)">9.7%</td><td class="num" style="text-align:right">1:10</td><td style="color:var(--muted)">Alta intención</td></tr>
+        <tr><td>/oferta-academica/</td><td class="num" style="text-align:right">746</td><td class="num" style="text-align:right">569</td><td class="num" style="text-align:right;color:var(--green)">8.1%</td><td class="num" style="text-align:right">1:55</td><td style="color:var(--muted)">Exploración</td></tr>
+        <tr><td>/alumnos/</td><td class="num" style="text-align:right">374</td><td class="num" style="text-align:right">342</td><td class="num" style="text-align:right;color:var(--green)">4.7%</td><td class="num" style="text-align:right">0:51</td><td style="color:var(--muted)">Portal alumno</td></tr>
+        <tr><td style="color:var(--green)">/gracias/</td><td class="num" style="text-align:right">259</td><td class="num" style="text-align:right">231</td><td class="num" style="text-align:right">20.8%</td><td class="num" style="text-align:right">1:23</td><td style="color:var(--green);font-weight:700">Conversión</td></tr>
+        <tr><td>/lp-next-gen-actors/</td><td class="num" style="text-align:right">86</td><td class="num" style="text-align:right">77</td><td class="num" style="text-align:right;color:var(--yellow)">54.5%</td><td class="num" style="text-align:right;color:var(--green);font-weight:700">22:53</td><td style="color:var(--muted)">Alta retención video</td></tr>
+        <tr><td>/cursos-de-actuacion-cdmx/</td><td class="num" style="text-align:right">153</td><td class="num" style="text-align:right">147</td><td class="num" style="text-align:right">28.6%</td><td class="num" style="text-align:right">2:02</td><td style="color:var(--muted)">SEO</td></tr>
+        <tr><td>/escuela-de-actuacion-costo/</td><td class="num" style="text-align:right">119</td><td class="num" style="text-align:right">115</td><td class="num" style="text-align:right">30.4%</td><td class="num" style="text-align:right">2:01</td><td style="color:var(--muted)">SEO</td></tr>
+        <tr><td>/mejores-escuelas-de-actuacion-cdmx/</td><td class="num" style="text-align:right">86</td><td class="num" style="text-align:right">74</td><td class="num" style="text-align:right">24.3%</td><td class="num" style="text-align:right">1:00</td><td style="color:var(--muted)">SEO</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Distribución CRM — HubSpot Abril vs Marzo 2026</span>
+    <div class="two-col-equal" style="margin-bottom:32px">
+
+      <div>
+        <span class="cross-title">Estado de Lead B</span>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Sin respuesta</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:60.4%"></div></div><span class="dual-pct">60.4%</span><span class="dual-count">432</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:45.2%"></div></div><span class="dual-pct">45.2%</span><span class="dual-count">240</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">No interesado</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:16.4%"></div></div><span class="dual-pct">16.4%</span><span class="dual-count">117</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:30.1%"></div></div><span class="dual-pct">30.1%</span><span class="dual-count">160</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">NSE</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:10.5%"></div></div><span class="dual-pct">10.5%</span><span class="dual-count">75</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:2.3%"></div></div><span class="dual-pct">2.3%</span><span class="dual-count">12</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Equivocado</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:5.3%"></div></div><span class="dual-pct">5.3%</span><span class="dual-count">38</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:16.0%"></div></div><span class="dual-pct">16.0%</span><span class="dual-count">85</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">En seguimiento</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:2.9%"></div></div><span class="dual-pct">2.9%</span><span class="dual-count">21</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:2.3%"></div></div><span class="dual-pct">2.3%</span><span class="dual-count">12</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Edad</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:2.4%"></div></div><span class="dual-pct">2.4%</span><span class="dual-count">17</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:1.5%"></div></div><span class="dual-pct">1.5%</span><span class="dual-count">8</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Interesado</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:1.0%"></div></div><span class="dual-pct">1.0%</span><span class="dual-count">7</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:0.4%"></div></div><span class="dual-pct">0.4%</span><span class="dual-count">2</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Inscrito</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:0.7%"></div></div><span class="dual-pct">0.7%</span><span class="dual-count">5</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:1.3%"></div></div><span class="dual-pct">1.3%</span><span class="dual-count">7</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">A futuro</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:0.4%"></div></div><span class="dual-pct">0.4%</span><span class="dual-count">3</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:0.8%"></div></div><span class="dual-pct">0.8%</span><span class="dual-count">4</span></div>
+        </div>
+      </div>
+
+      <div>
+        <span class="cross-title">Etapa de Vida CEFAT</span>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Lead no cal. Ventas</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:91.9%"></div></div><span class="dual-pct">91.9%</span><span class="dual-count">657</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:55.7%"></div></div><span class="dual-pct">55.7%</span><span class="dual-count">296</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Lead cal. Marketing</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:6.7%"></div></div><span class="dual-pct">6.7%</span><span class="dual-count">48</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:36.2%"></div></div><span class="dual-pct">36.2%</span><span class="dual-count">192</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Sin clasificar</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:0.1%"></div></div><span class="dual-pct">0.1%</span><span class="dual-count">1</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:5.1%"></div></div><span class="dual-pct">5.1%</span><span class="dual-count">27</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Cliente</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:0.7%"></div></div><span class="dual-pct">0.7%</span><span class="dual-count">5</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:1.5%"></div></div><span class="dual-pct">1.5%</span><span class="dual-count">8</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Lead no cal. Marketing</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:0.6%"></div></div><span class="dual-pct">0.6%</span><span class="dual-count">4</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:0%"></div></div><span class="dual-pct">0%</span><span class="dual-count">—</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Lead cal. Ventas</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:0%"></div></div><span class="dual-pct">0%</span><span class="dual-count">—</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:1.5%"></div></div><span class="dual-pct">1.5%</span><span class="dual-count">8</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="two-col-equal">
+      <div>
+        <span class="cross-title">Leads por Propietario</span>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Christel Mendoza</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:85.9%"></div></div><span class="dual-pct">85.9%</span><span class="dual-count">614</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:92.7%"></div></div><span class="dual-pct">92.7%</span><span class="dual-count">492</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Octavio López</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"><div class="dual-fill-apr" style="width:14.1%"></div></div><span class="dual-pct">14.1%</span><span class="dual-count">101</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:0.4%"></div></div><span class="dual-pct">0.4%</span><span class="dual-count">2</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">Liliana Suárez</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"></div><span class="dual-pct">—</span><span class="dual-count">—</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:6.8%"></div></div><span class="dual-pct">6.8%</span><span class="dual-count">36</span></div>
+        </div>
+        <div class="dual-bar-row">
+          <div class="dual-bar-header"><span class="dual-bar-name">César Sánchez</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Abr</span><div class="dual-track"></div><span class="dual-pct">—</span><span class="dual-count">—</span></div>
+          <div class="dual-bar-line"><span class="dual-period-tag">Mar</span><div class="dual-track"><div class="dual-fill-mar" style="width:0.2%"></div></div><span class="dual-pct">0.2%</span><span class="dual-count">1</span></div>
+        </div>
+      </div>
+
+      <div>
+        <span class="cross-title">Tasa de Conversión por Propietario</span>
+        <p style="font-size:11px;color:var(--muted);margin-bottom:12px">Conversión = Lead cal. Marketing + Cliente. La caída vs marzo refleja que los leads de abril son recientes (&lt;30 días) y aún no han sido calificados.</p>
+        <table>
+          <thead>
+            <tr><th>Propietario</th><th style="text-align:right">Leads abr</th><th style="text-align:right">Conv. abr</th><th style="text-align:right">Tasa abr</th><th style="text-align:right">Tasa mar</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">Christel Mendoza</td><td class="num" style="text-align:right">614</td><td class="num" style="text-align:right">22</td><td class="num" style="text-align:right;color:var(--yellow)">3.6%</td><td class="num" style="text-align:right;color:var(--muted)">38.2%</td></tr>
+            <tr><td style="font-weight:600">Octavio López</td><td class="num" style="text-align:right">101</td><td class="num" style="text-align:right">31</td><td class="num" style="text-align:right;color:var(--green)">30.7%</td><td class="num" style="text-align:right;color:var(--muted)">100.0%</td></tr>
+            <tr><td style="color:var(--muted)">Liliana Suárez</td><td class="num" style="text-align:right;color:var(--muted)">—</td><td class="num" style="text-align:right;color:var(--muted)">—</td><td class="num" style="text-align:right;color:var(--muted)">—</td><td class="num" style="text-align:right;color:var(--muted)">47.2%</td></tr>
+            <tr><td style="font-weight:700">Total</td><td class="num" style="text-align:right;font-weight:700">715</td><td class="num" style="text-align:right;font-weight:700">53</td><td class="num" style="text-align:right;font-weight:700;color:var(--yellow)">7.4%</td><td class="num" style="text-align:right;color:var(--muted)">39.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Análisis Cruzado CRM — Abril 2026</span>
+    <div class="cross-grid" style="margin-bottom:32px">
+
+      <div>
+        <span class="cross-title">Estado de Lead B × Etapa de Vida CEFAT</span>
+        <table>
+          <thead>
+            <tr><th>Estado</th><th style="text-align:right">LNV</th><th style="text-align:right">LCM</th><th style="text-align:right">LNM</th><th style="text-align:right">CLI</th><th style="text-align:right">Otro</th><th style="text-align:right">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sin respuesta</td><td class="num" style="text-align:right">418</td><td class="num" style="text-align:right">12</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">432</td></tr>
+            <tr><td>No interesado</td><td class="num" style="text-align:right">111</td><td class="num" style="text-align:right">5</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right;font-weight:700">117</td></tr>
+            <tr><td>NSE</td><td class="num" style="text-align:right">72</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">75</td></tr>
+            <tr><td>Equivocado</td><td class="num" style="text-align:right">38</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">38</td></tr>
+            <tr><td>En seguimiento</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">21</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">21</td></tr>
+            <tr><td>Edad</td><td class="num" style="text-align:right">17</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">17</td></tr>
+            <tr><td>Interesado</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">7</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">7</td></tr>
+            <tr><td>Inscrito</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">5</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">5</td></tr>
+            <tr><td>A futuro</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">3</td></tr>
+            <tr style="background:#f8f9fa"><td style="font-weight:700">Total</td><td class="num" style="text-align:right;font-weight:700">657</td><td class="num" style="text-align:right;font-weight:700">48</td><td class="num" style="text-align:right;font-weight:700">4</td><td class="num" style="text-align:right;font-weight:700">5</td><td class="num" style="text-align:right;font-weight:700">1</td><td class="num" style="text-align:right;font-weight:700">715</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:10px;color:var(--muted);margin-top:6px">LNV=Lead no cal. Ventas · LCM=Lead cal. Marketing · LNM=Lead no cal. Mktg · CLI=Cliente</p>
+      </div>
+
+      <div>
+        <span class="cross-title">Propietario × Etapa de Vida CEFAT</span>
+        <table>
+          <thead>
+            <tr><th>Propietario</th><th style="text-align:right">LNV</th><th style="text-align:right">LCM</th><th style="text-align:right">LNM</th><th style="text-align:right">CLI</th><th style="text-align:right">Otro</th><th style="text-align:right">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">Christel Mendoza</td><td class="num" style="text-align:right">587</td><td class="num" style="text-align:right">17</td><td class="num" style="text-align:right">4</td><td class="num" style="text-align:right">5</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right;font-weight:700">614</td></tr>
+            <tr><td style="font-weight:600">Octavio López</td><td class="num" style="text-align:right">70</td><td class="num" style="text-align:right">31</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">101</td></tr>
+            <tr style="background:#f8f9fa"><td style="font-weight:700">Total</td><td class="num" style="text-align:right;font-weight:700">657</td><td class="num" style="text-align:right;font-weight:700">48</td><td class="num" style="text-align:right;font-weight:700">4</td><td class="num" style="text-align:right;font-weight:700">5</td><td class="num" style="text-align:right;font-weight:700">1</td><td class="num" style="text-align:right;font-weight:700">715</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11px;color:var(--muted);margin-top:12px">Octavio concentra 31 de los 48 LCM (64.6%) con solo el 14.1% del volumen total de leads — tasa de conversión de calificación 5.4× mayor que Christel.</p>
+      </div>
+
+    </div>
+
+    <div class="cross-grid" style="margin-bottom:32px">
+
+      <div>
+        <span class="cross-title">Propietario × Estado de Lead B</span>
+        <table>
+          <thead>
+            <tr><th>Propietario</th><th style="text-align:right">SR</th><th style="text-align:right">NI</th><th style="text-align:right">NSE</th><th style="text-align:right">EQ</th><th style="text-align:right">ES</th><th style="text-align:right">Otros</th><th style="text-align:right">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">Christel</td><td class="num" style="text-align:right">380</td><td class="num" style="text-align:right">111</td><td class="num" style="text-align:right">63</td><td class="num" style="text-align:right">37</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">23</td><td class="num" style="text-align:right;font-weight:700">614</td></tr>
+            <tr><td style="font-weight:600">Octavio</td><td class="num" style="text-align:right">52</td><td class="num" style="text-align:right">6</td><td class="num" style="text-align:right">12</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right">21</td><td class="num" style="text-align:right">9</td><td class="num" style="text-align:right;font-weight:700">101</td></tr>
+            <tr style="background:#f8f9fa"><td style="font-weight:700">Total</td><td class="num" style="text-align:right;font-weight:700">432</td><td class="num" style="text-align:right;font-weight:700">117</td><td class="num" style="text-align:right;font-weight:700">75</td><td class="num" style="text-align:right;font-weight:700">38</td><td class="num" style="text-align:right;font-weight:700">21</td><td class="num" style="text-align:right;font-weight:700">32</td><td class="num" style="text-align:right;font-weight:700">715</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:10px;color:var(--muted);margin-top:6px">SR=Sin resp. · NI=No interesado · NSE=No sé · EQ=Equivocado · ES=En seguimiento · Otros incluye Edad, Interesado, Inscrito, A futuro</p>
+      </div>
+
+      <div>
+        <span class="cross-title">Fuente × Etapa de Vida CEFAT</span>
+        <table>
+          <thead>
+            <tr><th>Fuente</th><th style="text-align:right">LNV</th><th style="text-align:right">LCM</th><th style="text-align:right">LNM</th><th style="text-align:right">CLI</th><th style="text-align:right">Otro</th><th style="text-align:right">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">Paid Social/Meta</td><td class="num" style="text-align:right">442</td><td class="num" style="text-align:right">27</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">472</td></tr>
+            <tr><td style="font-weight:600">Paid Search/Google</td><td class="num" style="text-align:right">134</td><td class="num" style="text-align:right">14</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right;font-weight:700">152</td></tr>
+            <tr><td>Búsqueda Orgánica</td><td class="num" style="text-align:right">45</td><td class="num" style="text-align:right">4</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right;font-weight:700">52</td></tr>
+            <tr><td>Directo</td><td class="num" style="text-align:right">31</td><td class="num" style="text-align:right">3</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right">—</td><td class="num" style="text-align:right;font-weight:700">34</td></tr>
+            <tr><td style="color:var(--muted)">Ref. + Social Media</td><td class="num" style="text-align:right;color:var(--muted)">5</td><td class="num" style="text-align:right;color:var(--muted)">—</td><td class="num" style="text-align:right;color:var(--muted)">—</td><td class="num" style="text-align:right;color:var(--muted)">2</td><td class="num" style="text-align:right;color:var(--muted)">—</td><td class="num" style="text-align:right;font-weight:700;color:var(--muted)">5</td></tr>
+            <tr style="background:#f8f9fa"><td style="font-weight:700">Total</td><td class="num" style="text-align:right;font-weight:700">657</td><td class="num" style="text-align:right;font-weight:700">48</td><td class="num" style="text-align:right;font-weight:700">4</td><td class="num" style="text-align:right;font-weight:700">5</td><td class="num" style="text-align:right;font-weight:700">1</td><td class="num" style="text-align:right;font-weight:700">715</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="cross-grid">
+
+      <div>
+        <span class="cross-title">Fuente × Estado de Lead B</span>
+        <table>
+          <thead>
+            <tr><th>Fuente</th><th style="text-align:right">SR</th><th style="text-align:right">NI</th><th style="text-align:right">NSE</th><th style="text-align:right">EQ</th><th style="text-align:right">ES</th><th style="text-align:right">Otros</th><th style="text-align:right">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">Paid Social/Meta</td><td class="num" style="text-align:right">329</td><td class="num" style="text-align:right">64</td><td class="num" style="text-align:right">48</td><td class="num" style="text-align:right">11</td><td class="num" style="text-align:right">13</td><td class="num" style="text-align:right">7</td><td class="num" style="text-align:right;font-weight:700">472</td></tr>
+            <tr><td style="font-weight:600">Paid Search/Google</td><td class="num" style="text-align:right">63</td><td class="num" style="text-align:right">33</td><td class="num" style="text-align:right">19</td><td class="num" style="text-align:right">13</td><td class="num" style="text-align:right">5</td><td class="num" style="text-align:right">19</td><td class="num" style="text-align:right;font-weight:700">152</td></tr>
+            <tr><td>Búsqueda Orgánica</td><td class="num" style="text-align:right">25</td><td class="num" style="text-align:right">8</td><td class="num" style="text-align:right">5</td><td class="num" style="text-align:right">9</td><td class="num" style="text-align:right">1</td><td class="num" style="text-align:right">4</td><td class="num" style="text-align:right;font-weight:700">52</td></tr>
+            <tr><td>Directo</td><td class="num" style="text-align:right">14</td><td class="num" style="text-align:right">10</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right">4</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right">2</td><td class="num" style="text-align:right;font-weight:700">34</td></tr>
+            <tr style="background:#f8f9fa"><td style="font-weight:700">Total</td><td class="num" style="text-align:right;font-weight:700">431</td><td class="num" style="text-align:right;font-weight:700">115</td><td class="num" style="text-align:right;font-weight:700">74</td><td class="num" style="text-align:right;font-weight:700">37</td><td class="num" style="text-align:right;font-weight:700">21</td><td class="num" style="text-align:right;font-weight:700">32</td><td class="num" style="text-align:right;font-weight:700">710</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:10px;color:var(--muted);margin-top:6px">Las 4 fuentes principales (710 leads, 99.3% del total). Fuentes menores no desagregadas por estado.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div>
+          <span class="cross-title">Observaciones clave de los cruces</span>
+          <div style="padding:12px 16px;background:#f8fafc;border-left:3px solid #94a3b8;font-size:12px;line-height:1.6;color:var(--text)">
+            <strong>Octavio concentra calidad:</strong> gestiona 14.1% del volumen pero genera 64.6% de los LCM (31/48). Su pipeline activo (21 leads "En seguimiento") está ausente en Christel.
+          </div>
+        </div>
+        <div style="padding:12px 16px;background:#f0fdf4;border-left:3px solid var(--green);font-size:12px;line-height:1.6;color:var(--text)">
+          <strong>Paid Search convierte mejor que Paid Social:</strong> Paid Search tiene 14/152 LCM (9.2%) vs Paid Social 27/472 (5.7%). El costo por lead calificado de Paid Search es probablemente menor.
+        </div>
+        <div style="padding:12px 16px;background:#fff5f5;border-left:3px solid var(--accent);font-size:12px;line-height:1.6;color:var(--text)">
+          <strong>Sin respuesta domina Paid Social:</strong> 329/472 leads de Paid Social (69.7%) están sin respuesta, vs 63/152 en Paid Search (41.4%). El volumen de Facebook satura la capacidad de respuesta del equipo.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Análisis del Período</span>
+
+    <div class="insight-block positive">
+      <div class="insight-header">
+        <span class="insight-type-badge it-positive">Crecimiento</span>
+        <span class="insight-title">715 leads en abril — el mayor volumen mensual registrado, +35.7% vs marzo</span>
+      </div>
+      <div class="insight-finding">HubSpot registró 715 contactos nuevos en abril (vs 527 en marzo), impulsados por Facebook Lead Ads: Paid Social/Meta representa el 66.0% del total de leads (472), con +68.6% vs marzo. Total Paid Media asciende a 624 leads (87.3% del total).</div>
+      <div class="insight-consequence">Los Facebook Lead Ads se registran directamente en HubSpot sin pasar por el sitio web, explicando la diferencia de 484 leads entre GA4 (/gracias/) y CRM. La métrica oficial de leads es HubSpot.</div>
+      <div class="insight-signal">Prioridad: Alta — Confirmado por datos HubSpot CRM (total exacto: 715).</div>
+    </div>
+
+    <div class="insight-block attention">
+      <div class="insight-header">
+        <span class="insight-type-badge it-attention">Atención</span>
+        <span class="insight-title">El volumen de Paid Social satura la capacidad de respuesta: 69.7% de esos leads sin gestión</span>
+      </div>
+      <div class="insight-finding">De los 472 leads de Paid Social/Meta, 329 (69.7%) están en estado "Sin respuesta" — sin contacto registrado. En Paid Search solo el 41.4% (63/152) está sin respuesta. Christel, con 614 leads asignados, tiene 380 (61.9%) sin respuesta.</div>
+      <div class="insight-consequence">Un incremento de volumen sin aumento en capacidad de seguimiento produce más leads sin valor. El pico de captación de los días 21–25 de abril (57–80 leads/día) probablemente excedió la capacidad de respuesta en ese período.</div>
+      <div class="insight-signal">Prioridad: Alta — Confirmado por cruce Fuente × Estado y Propietario × Estado.</div>
+    </div>
+
+    <div class="insight-block caution">
+      <div class="insight-header">
+        <span class="insight-type-badge it-caution">Observación</span>
+        <span class="insight-title">La LP principal recibe el 66% del tráfico web con 74.1% de bounce y 35s de duración</span>
+      </div>
+      <div class="insight-finding">/lp-carrera-actuacion-2026/ concentró 4,716 sesiones (65.9%) con bounce de 74.1% y apenas 35 segundos de duración media. Cross-network (PMax) mantiene 69.6% engagement y 2:23 min de duración.</div>
+      <div class="insight-consequence">El tráfico de Facebook click-to-website llega a la LP y no convierte a /gracias/. Esta dinámica es independiente de Facebook Lead Ads, que sí funciona bien. El bounce de Paid Social mobile (89.0%) explica el incremento global de bounce rate de +22.4pp.</div>
+      <div class="insight-signal">Prioridad: Media — Confirmado por GA4.</div>
+    </div>
+
+    <div class="insight-block caution">
+      <div class="insight-header">
+        <span class="insight-type-badge it-caution">Tendencia a Monitorear</span>
+        <span class="insight-title">Tráfico orgánico cayó 23% MoM — las páginas SEO muestran el mejor engagement del sitio</span>
+      </div>
+      <div class="insight-finding">Organic Search bajó de 969 a 746 sesiones (-23.0%), mientras /cursos-de-actuacion-cdmx/ (bounce 28.6%, 2:02 min) y /escuela-de-actuacion-costo/ (30.4%, 2:01 min) tienen el mejor engagement de todo el sitio.</div>
+      <div class="insight-consequence">La caída orgánica en un mes de alta inversión paid puede ser estacional o puede reflejar pérdida de posiciones. Las páginas SEO existentes convierten mejor en engagement; fortalecer este canal reduce la dependencia del presupuesto paid.</div>
+      <div class="insight-signal">Prioridad: Media — Confirmado por GA4. Causa: pendiente de análisis SEO.</div>
+    </div>
+
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Comparativa con Benchmark</span>
+    <table>
+      <thead>
+        <tr><th>Métrica</th><th style="text-align:right">Abril 2026</th><th style="text-align:right">Marzo 2026</th><th style="text-align:right">Benchmark industria</th><th>Estado</th><th>Fuente benchmark</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bounce rate general</td><td class="num" style="text-align:right;color:var(--yellow)">63.4%</td><td class="num" style="text-align:right;color:var(--muted)">41.0%</td><td class="num" style="text-align:right">45–55%</td><td><span class="kpi-badge badge-warn">Por encima del rango</span></td><td style="color:var(--muted)">Educación México, GA4 Benchmarks 2025</td></tr>
+        <tr><td>Conv. rate web (paid)</td><td class="num" style="text-align:right;color:var(--green)">3.23%</td><td class="num" style="text-align:right;color:var(--muted)">7.32%</td><td class="num" style="text-align:right">2–5%</td><td><span class="kpi-badge badge-neutral">Dentro del rango</span></td><td style="color:var(--muted)">Educación privada México, WordStream 2025</td></tr>
+        <tr><td>Duración media sesión</td><td class="num" style="text-align:right;color:var(--yellow)">1:28 min</td><td class="num" style="text-align:right;color:var(--muted)">2:28 min</td><td class="num" style="text-align:right">1:30–2:30 min</td><td><span class="kpi-badge badge-warn">Límite inferior</span></td><td style="color:var(--muted)">Sitios educativos B2C México, GA4 2025</td></tr>
+        <tr><td>% tráfico orgánico</td><td class="num" style="text-align:right;color:var(--yellow)">10.4%</td><td class="num" style="text-align:right;color:var(--muted)">26.9%</td><td class="num" style="text-align:right">30–45%</td><td><span class="kpi-badge badge-down">Por debajo</span></td><td style="color:var(--muted)">Sitios educativos México, SEMrush 2025</td></tr>
+        <tr><td>Crecimiento de leads MoM</td><td class="num" style="text-align:right;color:var(--green)">+35.7%</td><td class="num" style="text-align:right;color:var(--muted)">—</td><td class="num" style="text-align:right">+5–15% MoM</td><td><span class="kpi-badge badge-bueno">Por encima</span></td><td style="color:var(--muted)">Educación privada México, HubSpot 2025</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <span class="label-accent">Metodología</span>
+    <div class="methodology-card">
+      <div class="method-row"><div class="method-key">Fuentes de datos</div><div class="method-val">Google Analytics 4 (GA4) + HubSpot CRM</div></div>
+      <div class="method-row"><div class="method-key">GA4 Property ID</div><div class="method-val">properties/358743188 — Cefat GA4</div></div>
+      <div class="method-row"><div class="method-key">GA4 Account</div><div class="method-val">accounts/1725851 (Azteca Digital)</div></div>
+      <div class="method-row"><div class="method-key">Período analizado</div><div class="method-val">2026-04-01 → 2026-04-30 vs 2026-03-01 → 2026-03-31</div></div>
+      <div class="method-row"><div class="method-key">Conversiones web GA4</div><div class="method-val">Visitas a /gracias/ — dato exacto: 231 sesiones (Abr) · 264 sesiones (Mar)</div></div>
+      <div class="method-row"><div class="method-key">Leads HubSpot — total</div><div class="method-val">Dato exacto del CRM: 715 (Abr) · 527 (Mar)</div></div>
+      <div class="method-row"><div class="method-key">Leads HubSpot — distribución por fuente</div><div class="method-val">Datos exactos extraídos del CRM (todos los registros del período). Abr: 715 contactos · Mar: análisis sobre 531 registros (4 registros de diferencia con el total reportado de 527; error de extracción &lt;0.8%).</div></div>
+      <div class="method-row"><div class="method-key">Fuente "Sin conexión" (Offline)</div><div class="method-val">Reatribuida a Paid Social/Meta. Origen: integración Manychat — contactos captados vía Facebook Messenger se registran como OFFLINE en HubSpot. Incluidos en el total de 472 Paid Social/Meta de abril.</div></div>
+      <div class="method-row"><div class="method-key">Tasa de conversión CRM</div><div class="method-val">Definición: contactos con Etapa de Vida = Lead cal. Marketing + Cliente. Abr: 53/715 = 7.4% · Mar: 208/531 = 39.2%. La diferencia refleja antigüedad del lead, no calidad de campaña.</div></div>
+      <div class="method-row"><div class="method-key">Gráficas diarias</div><div class="method-val">Barras proporcionales al volumen diario relativo. Alturas normalizadas para visualización de tendencia; totales mensuales son datos exactos.</div></div>
+      <div class="method-row"><div class="method-key">Discrepancia GA4 vs HubSpot</div><div class="method-val">GA4: 231 conversiones web · HubSpot: 715 contactos · Delta +484 atribuido a Facebook Lead Ads y Manychat (flujo directo a CRM sin pasar por el sitio web).</div></div>
+      <div class="method-row"><div class="method-key">Benchmarks</div><div class="method-val">GA4 Industry Benchmarks 2025 · WordStream Paid Benchmarks 2025 · SEMrush Organic 2025 · HubSpot Lead Growth Report 2025</div></div>
+      <div class="method-row"><div class="method-key">Herramienta</div><div class="method-val">Claude Code · MCP Analytics API + MCP HubSpot · 27 mayo 2026</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
