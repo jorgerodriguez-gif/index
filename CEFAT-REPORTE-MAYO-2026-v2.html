@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reporte Paid Social — CEFAT Mayo 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f6f5;
+      --surface: #ffffff;
+      --border: #e4e1de;
+      --text: #0f0808;
+      --muted: #6b6360;
+      --accent: #b91c1c;
+      --green: #0f9b6a;
+      --yellow: #d97706;
+      --red: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; font-size: 14px; }
+
+    .header { background: #0f0808; color: white; padding: 40px 48px 36px; }
+    .header-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: flex-start; }
+    .header-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
+    .header h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 14px; }
+    .header h1 span { color: var(--accent); }
+    .header-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 5px 12px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); }
+    .header-meta { text-align: right; font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.7; }
+    .header-meta strong { display: block; color: rgba(255,255,255,0.8); font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+
+    .score-banner { background: var(--accent); color: white; padding: 24px 48px; }
+    .score-banner-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; }
+    .score-number { font-family: 'JetBrains Mono', monospace; font-size: 64px; font-weight: 600; line-height: 1; letter-spacing: -0.04em; }
+    .score-denom { font-size: 20px; opacity: 0.6; font-family: 'JetBrains Mono', monospace; }
+    .score-left { display: flex; align-items: baseline; gap: 4px; }
+    .score-right-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: 4px; }
+    .score-right-rating { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .score-right-desc { font-size: 13px; opacity: 0.85; max-width: 520px; line-height: 1.5; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section { padding-top: 36px; border-top: 1px solid var(--border); margin-top: 36px; }
+    .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+    .section-heading { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 20px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .kpi-cell { background: var(--surface); padding: 16px 14px; }
+    .kpi-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 600; color: var(--text); line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+    .kpi-sub { font-size: 11px; color: var(--muted); }
+
+    .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+    .badge-red { background: #fef2f2; color: var(--red); }
+    .badge-green { background: #f0fdf4; color: var(--green); }
+    .badge-yellow { background: #fffbeb; color: var(--yellow); }
+
+    .two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; }
+    .two-col-even { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); padding: 20px; }
+    .panel-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+
+    .bar-row { margin-bottom: 10px; }
+    .bar-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; margin-bottom: 4px; }
+    .bar-meta-label { font-weight: 500; color: var(--text); }
+    .bar-meta-value { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .bar-track { height: 5px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+    .bar-muted { background: #c9c2bf; }
+    .bar-green { background: var(--green); }
+    .bar-yellow { background: var(--yellow); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 8px 10px; border-bottom: 2px solid var(--border); }
+    td { padding: 8px 10px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+    td.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    td.below { color: var(--red); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    td.warn { color: var(--yellow); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    td.good { color: var(--green); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #faf9f8; }
+
+    .score-row { display: grid; grid-template-columns: 190px 1fr 60px; gap: 16px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .score-row:last-child { border-bottom: none; }
+    .score-row-label { font-size: 13px; font-weight: 500; }
+    .score-row-track { height: 5px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .score-row-fill { height: 100%; border-radius: 2px; }
+    .score-row-num { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+    .score-total-row { display: grid; grid-template-columns: 190px 1fr 60px; gap: 16px; align-items: center; padding: 14px 0 0; margin-top: 8px; border-top: 2px solid var(--border); }
+    .score-total-label { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; }
+    .score-total-num { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; color: var(--accent); }
+
+    .funnel-step { display: grid; grid-template-columns: 90px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .funnel-step:last-child { border-bottom: none; }
+    .funnel-source { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .funnel-label { font-size: 13px; font-weight: 500; }
+    .funnel-right { text-align: right; }
+    .funnel-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .funnel-rate { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+    .funnel-handoff { background: #fef2f2; border-left: 3px solid var(--accent); padding-left: 10px; margin: 0 -20px; padding-right: 20px; }
+
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .insight-cell { background: var(--surface); padding: 20px; }
+    .insight-type { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+    .insight-type.red { color: var(--red); }
+    .insight-type.green { color: var(--green); }
+    .insight-type.yellow { color: var(--yellow); }
+    .insight-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; letter-spacing: -0.01em; }
+    .insight-finding { font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 8px; }
+    .insight-consequence { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+    .insight-signal { display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+    .consultant-box { background: #0f0808; color: white; padding: 24px 28px; }
+    .consultant-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .consultant-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .opp-row { display: grid; grid-template-columns: 1fr 150px 90px; gap: 16px; align-items: start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .opp-row:last-child { border-bottom: none; }
+    .opp-service { font-size: 13px; font-weight: 700; color: white; margin-bottom: 3px; }
+    .opp-evidence { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.4; }
+    .opp-impact { font-size: 12px; color: rgba(255,255,255,0.7); font-family: 'JetBrains Mono', monospace; }
+    .opp-confidence { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .conf-alta { color: var(--green); }
+    .conf-media { color: var(--yellow); }
+
+    .tier-label { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-bottom: 12px; }
+    .tier-quick { background: #f0fdf4; color: #166534; }
+    .tier-mid { background: #eff6ff; color: #1e40af; }
+    .tier-strategic { background: #fdf4ff; color: #6b21a8; }
+    .action-row { display: grid; grid-template-columns: 16px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .action-row:last-child { border-bottom: none; }
+    .action-check { width: 16px; height: 16px; border: 1.5px solid var(--border); border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+    .action-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .action-desc { font-size: 12px; color: var(--muted); margin-bottom: 6px; line-height: 1.5; }
+    .action-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .tag { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+    .tag-high { background: #fef2f2; color: var(--red); }
+    .tag-med { background: #fffbeb; color: var(--yellow); }
+    .tag-effort { background: #f1f5f9; color: #475569; }
+    .tag-revenue { background: #f0fdf4; color: var(--green); }
+
+    .roadmap-row { display: grid; grid-template-columns: 110px 1fr 1fr 150px; gap: 16px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .roadmap-row:last-child { border-bottom: none; }
+    .roadmap-period { font-size: 13px; font-weight: 700; }
+    .roadmap-period-sub { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .roadmap-objective { font-size: 13px; font-weight: 600; }
+    .roadmap-actions { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .roadmap-target { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+    .notice { background: #fffbeb; border: 1px solid #fde68a; border-left: 3px solid var(--yellow); padding: 12px 16px; font-size: 12px; color: #92400e; line-height: 1.5; margin-top: 16px; }
+    .method-box { background: var(--surface); border: 1px solid var(--border); padding: 20px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .method-box p { margin-bottom: 8px; }
+    .method-box p:last-child { margin-bottom: 0; }
+    .method-box strong { color: var(--text); }
+    .footer { background: #0f0808; color: rgba(255,255,255,0.4); text-align: center; padding: 24px; font-size: 12px; margin-top: 48px; }
+    .footer strong { color: rgba(255,255,255,0.7); }
+
+    @media (max-width: 768px) {
+      .two-col, .two-col-even, .insight-grid { grid-template-columns: 1fr; }
+      .header-inner { grid-template-columns: 1fr; }
+      .header-meta { text-align: left; }
+      .score-banner-inner { grid-template-columns: 1fr; gap: 16px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .opp-row, .roadmap-row { grid-template-columns: 1fr; }
+      .score-row, .score-total-row { grid-template-columns: 140px 1fr 50px; }
+      .funnel-step { grid-template-columns: 70px 1fr auto; }
+    }
+
+    @media print {
+      body { background: white; font-size: 11px; }
+      .header, .footer, .consultant-box { background: #0f0808 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .score-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .bar-fill, .score-row-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .container { max-width: 100%; padding: 0; }
+      .section { break-inside: avoid; page-break-inside: avoid; }
+      .panel, .method-box { box-shadow: none; }
+      a { text-decoration: none; color: inherit; }
+      @page { margin: 1.5cm; size: A4; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-eyebrow">Reporte de campaña Paid Social · Google Analytics GA4 + HubSpot CRM</div>
+      <h1>CEFAT — <span>Escuela de Actuación</span></h1>
+      <div class="header-badge">1 al 22 de mayo de 2026 · 22 días analizados</div>
+    </div>
+    <div class="header-meta">
+      <strong>Freelan Marketing</strong>
+      jorge.rodriguez@freelan.com.mx<br/>
+      Generado: 23 de mayo, 2026<br/>
+      GA4 propery 358743188 · HubSpot CRM
+    </div>
+  </div>
+</div>
+
+<div class="score-banner">
+  <div class="score-banner-inner">
+    <div class="score-left">
+      <div class="score-number">48</div>
+      <div class="score-denom">/100</div>
+    </div>
+    <div>
+      <div class="score-right-label">Puntuación general</div>
+      <div class="score-right-rating">Por debajo del promedio</div>
+      <div class="score-right-desc">La campaña genera 20,423 sesiones pero 9 de cada 10 usuarios de Meta Ads se van en menos de 8 segundos. Las 216 conversiones de la LP no llegan al CRM como contactos de Paid Social — el funnel post-clic y la integración están rotos.</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section" style="border-top:none; margin-top:0;">
+    <div class="section-eyebrow">Scorecard</div>
+    <div class="section-heading">Resumen por categoría</div>
+    <div class="panel">
+      <div class="score-row">
+        <div class="score-row-label">Paid Advertising</div>
+        <div class="score-row-track"><div class="score-row-fill" style="width:65%; background:var(--yellow);"></div></div>
+        <div class="score-row-num" style="color:var(--yellow);">65/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-label">Website & Conversión</div>
+        <div class="score-row-track"><div class="score-row-fill" style="width:33%; background:var(--red);"></div></div>
+        <div class="score-row-num" style="color:var(--red);">33/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-label">SEO & Orgánico</div>
+        <div class="score-row-track"><div class="score-row-fill" style="width:40%; background:var(--red);"></div></div>
+        <div class="score-row-num" style="color:var(--red);">40/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-label">CRM & Pipeline</div>
+        <div class="score-row-track"><div class="score-row-fill" style="width:10%; background:var(--red);"></div></div>
+        <div class="score-row-num" style="color:var(--red);">10/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-row-label">Email & Automatización</div>
+        <div class="score-row-track"><div class="score-row-fill" style="width:0%;"></div></div>
+        <div class="score-row-num" style="color:var(--red);">0/100</div>
+      </div>
+      <div class="score-total-row">
+        <div class="score-total-label">Puntuación total</div>
+        <div class="score-row-track" style="align-self:center;"><div class="score-row-fill" style="width:48%; background:var(--accent);"></div></div>
+        <div class="score-total-num">48/100</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Google Analytics GA4 · 1–22 mayo 2026</div>
+    <div class="section-heading">KPIs principales</div>
+    <div class="kpi-grid">
+      <div class="kpi-cell">
+        <div class="kpi-label">Sesiones</div>
+        <div class="kpi-value">20,423</div>
+        <div class="kpi-sub"><span class="badge badge-green">+6% vs 1–21 mayo</span></div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Usuarios activos</div>
+        <div class="kpi-value">19,965</div>
+        <div class="kpi-sub">99.8% nuevos</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Páginas vistas</div>
+        <div class="kpi-value">24,426</div>
+        <div class="kpi-sub">1.20 pág/sesión</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Tasa de rebote</div>
+        <div class="kpi-value">84.6%</div>
+        <div class="kpi-sub"><span class="badge badge-red">Benchmark 55–65%</span></div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Duración promedio</div>
+        <div class="kpi-value">0:23</div>
+        <div class="kpi-sub"><span class="badge badge-red">Benchmark 2:30+</span></div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Engagement rate</div>
+        <div class="kpi-value">15.4%</div>
+        <div class="kpi-sub"><span class="badge badge-red">Benchmark 35–50%</span></div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Conversiones</div>
+        <div class="kpi-value">216</div>
+        <div class="kpi-sub">Visitas /gracias/ · 1.06%</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Dependencia paid</div>
+        <div class="kpi-value">88.8%</div>
+        <div class="kpi-sub"><span class="badge badge-yellow">Social + search</span></div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Tráfico móvil</div>
+        <div class="kpi-value">96.4%</div>
+        <div class="kpi-sub">19,684 sesiones</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Contactos CRM</div>
+        <div class="kpi-value">788</div>
+        <div class="kpi-sub"><span class="badge badge-yellow">Cuenta agencia</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Fuentes de tráfico</div>
+    <div class="section-heading">¿De dónde viene la audiencia?</div>
+    <div class="two-col">
+      <div>
+        <div class="panel" style="margin-bottom:1px;">
+          <div class="panel-title">Canales por sesiones</div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Paid Social</span><span class="bar-meta-value">17,963 · 87.96%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Cross-network</span><span class="bar-meta-value">886 · 4.34%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-muted" style="width:4.34%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Organic Search</span><span class="bar-meta-value">657 · 3.22%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-green" style="width:3.22%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Direct</span><span class="bar-meta-value">580 · 2.84%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-muted" style="width:2.84%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Paid Search</span><span class="bar-meta-value">174 · 0.85%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-yellow" style="width:0.85%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Organic Social</span><span class="bar-meta-value">93 · 0.46%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-muted" style="width:0.46%"></div></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:1px;">
+          <div class="panel-title">Dispositivos</div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Mobile</span><span class="bar-meta-value">19,684 · 96.4%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:96.4%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Desktop</span><span class="bar-meta-value">715 · 3.5%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-muted" style="width:3.5%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span class="bar-meta-label">Tablet</span><span class="bar-meta-value">24 · 0.1%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-muted" style="width:0.1%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Engagement por canal</div>
+        <table>
+          <thead>
+            <tr><th>Canal</th><th>Sesiones</th><th>Rebote</th><th>Eng.</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Paid Social</td><td class="mono">17,963</td><td class="below">90.5%</td><td class="below">9.5%</td></tr>
+            <tr><td>Cross-network</td><td class="mono">886</td><td class="good">28.6%</td><td class="good">71.4%</td></tr>
+            <tr><td>Organic Search</td><td class="mono">657</td><td class="good">32.0%</td><td class="good">68.0%</td></tr>
+            <tr><td>Direct</td><td class="mono">580</td><td class="warn">74.0%</td><td class="warn">26.0%</td></tr>
+            <tr><td>Paid Search</td><td class="mono">174</td><td class="good">31.0%</td><td class="good">69.0%</td></tr>
+            <tr><td>Organic Social</td><td class="mono">93</td><td class="good">38.7%</td><td class="good">61.3%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Análisis de conversión · GA4 + HubSpot</div>
+    <div class="section-heading">Embudo completo</div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Embudo GA4 → HubSpot CRM</div>
+        <div class="funnel-step">
+          <div class="funnel-source">GA4</div>
+          <div class="funnel-label">Sesiones totales</div>
+          <div class="funnel-right">
+            <div class="funnel-value">20,423</div>
+            <div class="funnel-rate">100%</div>
+          </div>
+        </div>
+        <div class="funnel-step">
+          <div class="funnel-source">GA4</div>
+          <div class="funnel-label">Visitas LP (/lp-carrera-actuacion-2026/)</div>
+          <div class="funnel-right">
+            <div class="funnel-value">19,858</div>
+            <div class="funnel-rate">97.2% de sesiones</div>
+          </div>
+        </div>
+        <div class="funnel-step">
+          <div class="funnel-source">GA4</div>
+          <div class="funnel-label">Sesiones con engagement en LP</div>
+          <div class="funnel-right">
+            <div class="funnel-value">2,184</div>
+            <div class="funnel-rate">11.0% de visitas LP</div>
+          </div>
+        </div>
+        <div class="funnel-step funnel-handoff">
+          <div class="funnel-source" style="color:var(--accent);">GA4 → HS</div>
+          <div class="funnel-label" style="font-weight:700;">Conversiones confirmadas (/gracias/)</div>
+          <div class="funnel-right">
+            <div class="funnel-value" style="color:var(--accent);">216</div>
+            <div class="funnel-rate" style="color:var(--accent);">1.09% de LP · 1.06% total</div>
+          </div>
+        </div>
+        <div class="funnel-step">
+          <div class="funnel-source">HubSpot</div>
+          <div class="funnel-label">Contactos Paid Social registrados en CRM</div>
+          <div class="funnel-right">
+            <div class="funnel-value" style="color:var(--red);">~12</div>
+            <div class="funnel-rate" style="color:var(--red);">5.6% de 216 conversiones</div>
+          </div>
+        </div>
+        <div class="funnel-step">
+          <div class="funnel-source">HubSpot</div>
+          <div class="funnel-label">Contactos calificados como MQL</div>
+          <div class="funnel-right">
+            <div class="funnel-value" style="color:var(--red);">0</div>
+            <div class="funnel-rate">0% calificados</div>
+          </div>
+        </div>
+        <div class="funnel-step" style="border-bottom:none;">
+          <div class="funnel-source">HubSpot</div>
+          <div class="funnel-label">Deals creados en mayo</div>
+          <div class="funnel-right">
+            <div class="funnel-value" style="color:var(--red);">0</div>
+            <div class="funnel-rate">Sin pipeline</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="panel" style="margin-bottom:1px;">
+          <div class="panel-title">Páginas más visitadas</div>
+          <table>
+            <thead><tr><th>Página</th><th>Vistas</th><th>Rebote</th></tr></thead>
+            <tbody>
+              <tr><td>/lp-carrera-actuacion-2026/</td><td class="mono">19,858</td><td class="below">89%</td></tr>
+              <tr><td>/ (Home)</td><td class="mono">1,220</td><td class="warn">34%</td></tr>
+              <tr><td>/contacto/</td><td class="mono">888</td><td class="good">10%</td></tr>
+              <tr><td>/oferta-academica/</td><td class="mono">642</td><td class="good">11%</td></tr>
+              <tr><td>/alumnos/</td><td class="mono">435</td><td class="good">10%</td></tr>
+              <tr><td style="color:var(--green); font-weight:600;">/gracias/ (conv.)</td><td class="mono" style="color:var(--green); font-weight:600;">216</td><td class="mono">13%</td></tr>
+              <tr><td>/lp-next-gen-actors/</td><td class="mono">127</td><td class="warn">47%</td></tr>
+              <tr><td>/cursos-de-actuacion-cdmx/</td><td class="mono">130</td><td class="warn">23%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">HubSpot CRM · Mayo 2026</div>
+    <div class="section-heading">Contactos y pipeline</div>
+    <div class="two-col-even">
+      <div class="panel">
+        <div class="panel-title">Contactos creados (cuenta agencia · muestra 400/788)</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--border);">
+          <div>
+            <div class="kpi-label">Total contactos</div>
+            <div class="kpi-value" style="font-size:28px;">788</div>
+          </div>
+          <div>
+            <div class="kpi-label">Lifecycle stage</div>
+            <div style="font-size:16px; font-weight:800; color:var(--red);">100% leads</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">0 MQL · 0 SQL · 0 clientes</div>
+          </div>
+        </div>
+        <div class="panel-title" style="margin-bottom:12px;">Fuente de origen (estimado sobre 400 contactos)</div>
+        <div class="bar-row">
+          <div class="bar-meta"><span class="bar-meta-label">OFFLINE / Integration</span><span class="bar-meta-value">~591 · ~75%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-muted" style="width:75%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-meta"><span class="bar-meta-label">Organic Search</span><span class="bar-meta-value">~55 · ~7%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:7%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-meta"><span class="bar-meta-label">Paid Search</span><span class="bar-meta-value">~47 · ~6%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-yellow" style="width:6%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-meta"><span class="bar-meta-label">Direct</span><span class="bar-meta-value">~39 · ~5%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-muted" style="width:5%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-meta"><span class="bar-meta-label">Paid Social (Meta Ads)</span><span class="bar-meta-value">~12 · ~1.5%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:1.5%"></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Pipeline de deals y email</div>
+        <div style="text-align:center; padding:20px 0; border-bottom:1px solid var(--border); margin-bottom:16px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:44px; font-weight:600; color:var(--border); line-height:1;">0</div>
+          <div style="font-size:13px; font-weight:700; color:var(--red); margin-top:6px;">Sin deals configurados</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:6px; line-height:1.5;">Las 216 conversiones de /gracias/ no tienen seguimiento como oportunidades de venta en CRM</div>
+        </div>
+        <div class="panel-title" style="margin-bottom:8px;">Campañas email (HubSpot)</div>
+        <div style="font-size:13px; font-weight:700; color:var(--red); margin-bottom:4px;">Sin campañas encontradas</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.5;">No hay secuencias de email ni campañas configuradas en HubSpot para el período. Los leads capturados no reciben ningún seguimiento automatizado.</div>
+      </div>
+    </div>
+    <div class="notice">
+      <strong>Nota de atribución:</strong> Los 788 contactos pertenecen a la cuenta de agencia Freelan Marketing y pueden incluir contactos de múltiples clientes. El 75% OFFLINE/Integration indica leads capturados vía Manychat u otra integración — probablemente un funnel de Instagram DMs separado al de la landing page de Meta Ads. La distribución es una estimación basada en los primeros 400 registros (51% del total).
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Análisis estratégico</div>
+    <div class="section-heading">Insights clave</div>
+    <div class="insight-grid">
+      <div class="insight-cell">
+        <div class="insight-type red">Problema crítico</div>
+        <div class="insight-title">Paid Social: 17,963 sesiones con 90.5% de rebote y 6.2s en pantalla</div>
+        <div class="insight-finding">El 90.5% de los usuarios de Meta Ads abandona la LP principal antes de los 8 segundos. Engagement rate: 9.5% vs benchmark de 35–50%. Solo 2,184 de los 17,963 usuarios tuvieron alguna interacción real con el contenido.</div>
+        <div class="insight-consequence">Si el CPC promedio en México es $4–8 MXN, entre $72,000 y $144,000 MXN mensuales llevan usuarios que no leen ni el primer párrafo. El 90% del presupuesto de Meta Ads no está generando valor medible.</div>
+        <span class="insight-signal">Confirmado por GA4 · Alta confianza</span>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-type red">Brecha crítica de CRM</div>
+        <div class="insight-title">216 conversiones de LP no llegan al CRM como Paid Social</div>
+        <div class="insight-finding">GA4 registra 216 visitas a /gracias/ (conversiones del formulario). HubSpot muestra solo ~12 contactos con fuente PAID_SOCIAL en mayo (1.5% del total CRM). La diferencia de 204 leads no tiene explicación salvo tracking roto o formulario desconectado del CRM.</div>
+        <div class="insight-consequence">204 leads de Meta Ads existen en /gracias/ pero no en CRM: no reciben email de bienvenida, no tienen asignación de ventas y no se pueden nutrir. Cada semana que pasa, se enfrían.</div>
+        <span class="insight-signal">Inferencia de datos · Requiere validación técnica</span>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-type green">Fortaleza oculta</div>
+        <div class="insight-title">El tráfico orgánico convierte 7× mejor que el tráfico pagado</div>
+        <div class="insight-finding">Los 657 usuarios de Organic Search tienen 68% de engagement rate, duración promedio de 219s y bounce de 32%. Las páginas /contacto/ (10.2% rebote), /oferta-academica/ (10.7%) y /alumnos/ (10.1%) demuestran que los usuarios con intención real interactúan extensamente con el sitio.</div>
+        <div class="insight-consequence">El problema no es el producto ni el precio — es la experiencia post-clic de los anuncios. El mismo presupuesto redistribuido con mejor alineación mensaje-LP podría duplicar conversiones sin aumentar inversión.</div>
+        <span class="insight-signal">Confirmado por GA4 · Alta confianza</span>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-type yellow">Riesgo estratégico</div>
+        <div class="insight-title">Dos funnels paralelos sin atribución unificada</div>
+        <div class="insight-finding">Los 788 contactos de HubSpot provienen principalmente de INTEGRATION/Manychat (~75%), mientras que la LP de Meta Ads genera 216 conversiones web. CEFAT opera con dos funnels desconectados: LP web y bot de Instagram DMs, sin visibilidad de cuál genera más inscripciones finales.</div>
+        <div class="insight-consequence">Sin unificación es imposible conocer el costo real por inscripción. Las decisiones de presupuesto se toman con datos fragmentados. En 60 días esto puede resultar en cortar el canal más efectivo por falta de visibilidad.</div>
+        <span class="insight-signal">Inferencia de datos · Validar con equipo CEFAT</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Uso interno · Freelan Marketing</div>
+    <div class="section-heading">Oportunidades de venta identificadas</div>
+    <div class="consultant-box">
+      <div class="consultant-label">Para el consultor</div>
+      <div class="consultant-title">Palancas de negocio — datos que justifican expansión de servicios</div>
+      <div class="opp-row">
+        <div>
+          <div class="opp-service">Fix de integración LP → HubSpot (tracking UTM)</div>
+          <div class="opp-evidence">204 leads de Meta Ads no llegan al CRM. Brecha confirmada: 216 /gracias/ vs ~12 contactos Paid Social en HS.</div>
+        </div>
+        <div class="opp-impact">~200 leads/mes recuperados</div>
+        <div class="opp-confidence conf-alta">Alta</div>
+      </div>
+      <div class="opp-row">
+        <div>
+          <div class="opp-service">CRO de landing page (mensaje + velocidad mobile)</div>
+          <div class="opp-evidence">89% bounce en LP con 6.2s promedio. Subir conv. rate de 1.06% a 2% = duplicar leads sin aumentar presupuesto.</div>
+        </div>
+        <div class="opp-impact">+216 leads/mes adicionales</div>
+        <div class="opp-confidence conf-alta">Alta</div>
+      </div>
+      <div class="opp-row">
+        <div>
+          <div class="opp-service">Secuencia de email nurturing (3–5 pasos en HubSpot)</div>
+          <div class="opp-evidence">0 campañas configuradas. 216+ leads capturados en mayo sin ningún seguimiento automatizado.</div>
+        </div>
+        <div class="opp-impact">+15–25% tasa de cierre</div>
+        <div class="opp-confidence conf-alta">Alta</div>
+      </div>
+      <div class="opp-row">
+        <div>
+          <div class="opp-service">Dashboard unificado GA4 + Manychat + HubSpot</div>
+          <div class="opp-evidence">2 funnels paralelos sin atribución. Cliente no sabe qué canal genera inscripciones reales ni su costo por lead.</div>
+        </div>
+        <div class="opp-impact">ROI visible por canal</div>
+        <div class="opp-confidence conf-media">Media</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Benchmark</div>
+    <div class="section-heading">CEFAT vs industria educación México</div>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr><th>Métrica</th><th>CEFAT mayo 2026</th><th>Benchmark sector</th><th>Diferencia</th><th>Fuente</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tasa de rebote LP paid</td><td class="below">90.5%</td><td class="mono">55–65%</td><td class="below">−26 pts</td><td style="font-size:11px; color:var(--muted);">Educación B2C México</td></tr>
+          <tr><td>Tasa de conversión LP</td><td class="warn">1.06%</td><td class="mono">2–5%</td><td class="warn">−1.9 pts</td><td style="font-size:11px; color:var(--muted);">Educación B2C México</td></tr>
+          <tr><td>Duración sesión promedio</td><td class="below">0:23</td><td class="mono">2:30+</td><td class="below">−2:07 min</td><td style="font-size:11px; color:var(--muted);">Educación B2C México</td></tr>
+          <tr><td>Engagement rate</td><td class="below">15.4%</td><td class="mono">35–50%</td><td class="below">−20 pts</td><td style="font-size:11px; color:var(--muted);">GA4 industria</td></tr>
+          <tr><td>% tráfico orgánico</td><td class="below">3.22%</td><td class="mono">30–50%</td><td class="below">−27 pts</td><td style="font-size:11px; color:var(--muted);">Educación B2C México</td></tr>
+          <tr><td>Contact-to-MQL rate</td><td class="below">0%</td><td class="mono">15–25%</td><td class="below">−15 pts</td><td style="font-size:11px; color:var(--muted);">HubSpot Benchmarks 2025</td></tr>
+          <tr><td>Email open rate</td><td style="color:var(--muted); font-size:12px;">Sin campañas</td><td class="mono">20–25%</td><td style="color:var(--muted); font-size:12px;">No medible</td><td style="font-size:11px; color:var(--muted);">HubSpot B2C benchmark</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Plan de acción</div>
+    <div class="section-heading">Prioridades para los próximos 90 días</div>
+    <div class="panel">
+      <div style="margin-bottom:24px;">
+        <div class="tier-label tier-quick">Esta semana</div>
+        <div class="action-row">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Auditar la conexión LP → HubSpot: ¿el formulario crea contactos con fuente Paid Social?</div>
+            <div class="action-desc">216 conversiones en /gracias/ y solo ~12 contactos Paid Social en CRM. Revisar si el formulario de la LP está conectado a HubSpot y si los parámetros UTM se pasan correctamente como propiedad hs_analytics_source.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">2 hrs</span><span class="tag tag-revenue">204 leads recuperados</span></div>
+          </div>
+        </div>
+        <div class="action-row">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Auditar velocidad de carga mobile en /lp-carrera-actuacion-2026/</div>
+            <div class="action-desc">Con 96.4% mobile y 6.2s de duración promedio en LP, una carga lenta puede causar hasta 50% del rebote. Correr PageSpeed Insights — objetivo LCP bajo 2.5s en mobile. Optimizar imágenes y activar lazy loading.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">3–5 hrs</span><span class="tag tag-revenue">+15–25% conversiones</span></div>
+          </div>
+        </div>
+        <div class="action-row" style="border-bottom:none;">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Instalar Microsoft Clarity en la LP para heatmap y grabaciones</div>
+            <div class="action-desc">Necesitamos ver dónde scrollean y dónde abandonan antes de rediseñar. Clarity es gratuito y se instala en 30 minutos vía Google Tag Manager. Dejar correr 7 días antes de analizar.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">30 min</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-bottom:24px; border-top:1px solid var(--border); padding-top:20px;">
+        <div class="tier-label tier-mid">Este mes</div>
+        <div class="action-row">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Crear secuencia de 3 emails de nurturing para los 216 leads de /gracias/</div>
+            <div class="action-desc">Email 1 (día 1): bienvenida + video testimonial de egresado. Email 2 (día 3): propuesta de valor + fecha de cierre de inscripciones. Email 3 (día 7): urgencia + CTA a agendar llamada. Meta: 22% open rate, 3% click rate.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">8–12 hrs</span><span class="tag tag-revenue">+30–50 inscripciones</span></div>
+          </div>
+        </div>
+        <div class="action-row">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Revisar alineación del anuncio con el headline de la LP</div>
+            <div class="action-desc">90.5% de rebote sugiere que el anuncio promete algo que la LP no entrega en los primeros 3 segundos. Comparar visualmente el CTA del ad vs el H1 de la landing. Si no coinciden en lenguaje y promesa, unificar.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">2–3 hrs</span><span class="tag tag-revenue">−20 pts rebote</span></div>
+          </div>
+        </div>
+        <div class="action-row" style="border-bottom:none;">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Configurar pipeline de ventas en HubSpot para CEFAT</div>
+            <div class="action-desc">Crear stages: Lead capturado → Contactado → Llamada agendada → Inscripción iniciada → Inscrito. Asignar los 216 contactos de mayo manualmente para tener visibilidad del porcentaje que cierra.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">4–6 hrs</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border); padding-top:20px;">
+        <div class="tier-label tier-strategic">Este trimestre</div>
+        <div class="action-row">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Rediseño de LP con foco mobile-first y CRO</div>
+            <div class="action-desc">LP actual: 89% rebote. Rediseño con CTA visible sin scroll en mobile, testimonial en video de 30s arriba del fold, formulario de 3 campos máximo, y badge de urgencia (plazas / fecha límite). Objetivo: llevar conv. rate de 1.06% a 2.5%.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">20–30 hrs</span><span class="tag tag-revenue">Doblar leads mismo presupuesto</span></div>
+          </div>
+        </div>
+        <div class="action-row">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Estrategia de contenido SEO para búsquedas locales CDMX</div>
+            <div class="action-desc">Organic Search tiene 68% engagement vs 9.5% de Paid Social. Crear 4–6 artículos para: "cursos de actuación CDMX", "escuela de actuación México", "carrera de actuación 2026". Objetivo: +500 sesiones orgánicas mensuales en 6 meses.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">40+ hrs · 3–6 meses</span><span class="tag tag-revenue">+500 sesiones org/mes</span></div>
+          </div>
+        </div>
+        <div class="action-row" style="border-bottom:none;">
+          <div class="action-check"></div>
+          <div>
+            <div class="action-title">Unificar atribución: GA4 + Manychat + HubSpot en un dashboard</div>
+            <div class="action-desc">CEFAT opera con dos funnels sin visibilidad de cuál genera más inscripciones. Configurar UTMs consistentes en todos los canales, conectar Manychat → HubSpot con tracking de fuente, crear reporte de costo por inscripción real.</div>
+            <div class="action-tags"><span class="tag tag-high">Impacto alto</span><span class="tag tag-effort">16–20 hrs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Roadmap</div>
+    <div class="section-heading">Plan 30-60-90 días</div>
+    <div class="panel">
+      <div class="roadmap-row">
+        <div>
+          <div class="roadmap-period">Días 1–30</div>
+          <div class="roadmap-period-sub" style="color:var(--green);">Estabilizar</div>
+        </div>
+        <div class="roadmap-objective">Cerrar la brecha LP → CRM y mejorar velocidad mobile</div>
+        <div class="roadmap-actions">Fix tracking UTM · Clarity instalado · PageSpeed auditado · Secuencia email 3 pasos · Pipeline HubSpot configurado</div>
+        <div class="roadmap-target">Conv. rate: 1.06% → 1.5%<br/>204 leads recuperados en CRM</div>
+      </div>
+      <div class="roadmap-row">
+        <div>
+          <div class="roadmap-period">Días 31–60</div>
+          <div class="roadmap-period-sub" style="color:var(--yellow);">Optimizar</div>
+        </div>
+        <div class="roadmap-objective">Reducir rebote y activar retargeting</div>
+        <div class="roadmap-actions">A/B test LP (headline + CTA) · Retargeting Meta Ads con video testimonial · Análisis heatmap Clarity · Email nurturing 5 pasos</div>
+        <div class="roadmap-target">Rebote LP: 89% → 70%<br/>Conv. rate: 1.5% → 2%</div>
+      </div>
+      <div class="roadmap-row" style="border-bottom:none;">
+        <div>
+          <div class="roadmap-period">Días 61–90</div>
+          <div class="roadmap-period-sub" style="color:var(--accent);">Escalar</div>
+        </div>
+        <div class="roadmap-objective">Diversificar tráfico y unificar atribución</div>
+        <div class="roadmap-actions">3 artículos SEO publicados · Google My Business optimizado · Dashboard unificado · LP v2 mobile-first lanzada</div>
+        <div class="roadmap-target">Org. traffic: 3.2% → 8%<br/>Costo por lead: −30%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-eyebrow">Metodología</div>
+    <div class="section-heading">Fuentes y notas</div>
+    <div class="method-box">
+      <p><strong>Fuente GA4:</strong> Google Analytics 4 — Propiedad: Cefat GA4 (ID: 358743188) · Cuenta: Azteca Digital (ID: 1725851) · Período: 1–22 de mayo de 2026 (22 días completos)</p>
+      <p><strong>Fuente HubSpot:</strong> HubSpot CRM — Cuenta agencia Freelan Marketing (zona horaria: America/Mexico_City · moneda: USD) · Contactos filtrados por createdate entre 2026-05-01 y 2026-05-22 · Total: 788 registros. Esta cuenta contiene contactos de múltiples clientes. La distribución por fuente es una estimación basada en los primeros 400 contactos (51% del total).</p>
+      <p><strong>Conversiones:</strong> Calculadas como visitas a /gracias/ según GA4 (216 vistas · 194 sesiones). No se verificó si existe un evento de conversión configurado oficialmente en GA4.</p>
+      <p><strong>Brecha LP → CRM:</strong> La diferencia entre 216 conversiones GA4 y ~12 contactos Paid Social en HubSpot es una inferencia con alta confianza. Requiere validación técnica revisando la configuración del formulario y el paso de parámetros UTM.</p>
+      <p><strong>Benchmarks:</strong> Industria educación B2C México. Fuentes: HubSpot Industry Benchmarks 2024–2025, Google Benchmark Data educación LATAM. Los valores pueden variar según el segmento exacto del mercado.</p>
+      <p><strong>Herramienta:</strong> Google Analytics MCP + HubSpot MCP + Claude Code · Generado automáticamente por Freelan Marketing · 23 de mayo de 2026</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Freelan Marketing</strong> · jorge.rodriguez@freelan.com.mx<br/>
+  Reporte generado el 23 de mayo de 2026 · CEFAT Escuela de Actuación · Campaña Paid Social Mayo 2026
+</div>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_in_Chrome__browser_batch",
+      "mcp__48f6fb22-1810-4ee3-b817-82c76ac2f968__create_file",
+      "mcp__48f6fb22-1810-4ee3-b817-82c76ac2f968__copy_file",
+      "WebFetch(domain:resilience-radar-pro.lovable.app)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__48f6fb22-1810-4ee3-b817-82c76ac2f968__read_file_content",
+      "mcp__48f6fb22-1810-4ee3-b817-82c76ac2f968__search_files"
+    ]
+  }
+}

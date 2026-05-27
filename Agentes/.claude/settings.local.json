@@ -1,0 +1,52 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -fsSL https://raw.githubusercontent.com/zubair-trabzada/ai-marketing-claude/main/install.sh -o /tmp/install.sh)",
+      "Read(//tmp/**)",
+      "Bash(bash /tmp/install.sh)",
+      "Bash(xcode-select --install)",
+      "Bash(curl -fsSL https://raw.githubusercontent.com/zubair-trabzada/ai-marketing-claude/main/install.sh)",
+      "Bash(bash)",
+      "Bash(git ls-remote *)",
+      "Bash(brew install *)",
+      "WebFetch(domain:www.grupoei.com.mx)",
+      "WebFetch(domain:blog.grupoei.com.mx)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_evaluate",
+      "mcp__plugin_playwright_playwright__browser_tabs",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "Bash(curl -s https://www.grupoei.com.mx/robots.txt)",
+      "Bash(curl -s https://www.grupoei.com.mx/sitemap.xml)",
+      "Bash(curl -s https://www.grupoei.com.mx/servicios-aduaneros -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s https://www.grupoei.com.mx/blog/)",
+      "WebSearch",
+      "Bash(curl -s -L https://www.grupoei.com.mx/servicios-aduanales)",
+      "Bash(curl -s -L https://www.grupoei.com.mx/acerca-de)",
+      "Bash(curl -I https://www.grupoei.com.mx/servicios-aduanales)",
+      "Bash(curl -s https://www.grupoei.com.mx/preguntas-frecuentes)",
+      "Bash(curl -s https://www.grupoei.com.mx/agencia-aduanal)",
+      "mcp__plugin_playwright_playwright__browser_close",
+      "Bash(curl -I https://www.grupoei.com.mx/agencia-aduanal)",
+      "Bash(curl -s \"https://www.grupoei.com.mx/sitemap.xml\")",
+      "Bash(curl -I https://blog.grupoei.com.mx/)",
+      "Bash(curl -s https://www.grupoei.com.mx/)",
+      "Bash(curl -s https://www.grupoei.com.mx/soluciones-logisticas-inteligentes)",
+      "Bash(curl -s https://www.grupoei.com.mx/en-us/)",
+      "Bash(cat > *)",
+      "Bash(ls -la /Users/jorgerodriguez/Desktop/ | grep -i \"claude\")",
+      "Read(//Users/jorgerodriguez/Desktop/**)",
+      "Bash(pandoc --version)",
+      "Bash(python3)",
+      "Bash(pip3 install *)",
+      "Bash(find /Users/jorgerodriguez -name \"*AUDIT-ES*\" -type f 2>/dev/null)",
+      "Read(//Users/jorgerodriguez/**)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  }
+}

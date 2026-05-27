@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEFAT — Flujo Conversacional V2.0</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f0f1a; color: #e2e8f0; min-height: 100vh; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 32px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .logo-icon { width: 48px; height: 48px; background: linear-gradient(135deg, #e94560, #0f3460); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .logo-text h1 { font-size: 22px; font-weight: 700; color: #fff; }
+  .logo-text p { font-size: 13px; color: #94a3b8; margin-top: 2px; }
+  .badge { background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; }
+
+  /* Nav tabs */
+  .nav { background: #13131f; border-bottom: 1px solid rgba(255,255,255,0.06); overflow-x: auto; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; padding: 0 24px; }
+  .nav-tab {
+    padding: 16px 20px; font-size: 13px; font-weight: 500; color: #64748b;
+    cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent;
+    transition: all 0.2s; user-select: none;
+  }
+  .nav-tab:hover { color: #cbd5e1; }
+  .nav-tab.active { color: #e94560; border-bottom-color: #e94560; }
+
+  /* Content */
+  .content { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: #1e1e2e; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 28px; margin-bottom: 20px;
+  }
+  .card-title { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-title span { font-size: 18px; }
+
+  /* Flow visual */
+  .flow-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .flow-step {
+    width: 100%; max-width: 580px; background: #252540; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px; padding: 20px 24px; position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .flow-step:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+  .flow-step .step-num { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #64748b; margin-bottom: 6px; }
+  .flow-step .step-title { font-size: 15px; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
+  .flow-step .step-desc { font-size: 13px; color: #94a3b8; }
+  .flow-arrow { font-size: 22px; color: #475569; margin: 6px 0; }
+  .flow-branch { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 760px; margin: 6px 0; }
+  .branch-item { background: #252540; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; }
+  .branch-item .branch-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
+  .branch-item .branch-title { font-size: 14px; font-weight: 600; color: #f1f5f9; }
+  .branch-item .branch-desc { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+  .step-blue .step-num, .branch-blue { color: #60a5fa; }
+  .step-blue { border-left: 3px solid #60a5fa; }
+  .step-green .step-num { color: #34d399; }
+  .step-green { border-left: 3px solid #34d399; }
+  .step-purple .step-num { color: #a78bfa; }
+  .step-purple { border-left: 3px solid #a78bfa; }
+  .step-orange .step-num { color: #fb923c; }
+  .step-orange { border-left: 3px solid #fb923c; }
+  .step-red .step-num { color: #f87171; }
+  .step-red { border-left: 3px solid #f87171; }
+  .branch-green { color: #34d399; border-color: rgba(52,211,153,0.3); }
+  .branch-blue2 { color: #60a5fa; border-color: rgba(96,165,250,0.3); }
+
+  /* WhatsApp chat bubble */
+  .chat-window {
+    background: #111827; border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08); max-width: 440px;
+  }
+  .chat-header {
+    background: #075e54; padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+  }
+  .chat-avatar { width: 36px; height: 36px; background: #128c7e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .chat-info h4 { font-size: 14px; font-weight: 600; color: #fff; }
+  .chat-info p { font-size: 11px; color: rgba(255,255,255,0.7); }
+  .chat-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #0b141a; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+  .msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.55; position: relative; }
+  .msg-bot { background: #202c33; color: #e9edef; border-radius: 12px 12px 12px 2px; align-self: flex-start; }
+  .msg-user { background: #005c4b; color: #e9edef; border-radius: 12px 12px 2px 12px; align-self: flex-end; }
+  .msg-time { font-size: 10px; color: rgba(255,255,255,0.4); text-align: right; margin-top: 4px; }
+  .msg-label { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; color: #25d366; }
+
+  /* Step grid for paso-by-paso */
+  .paso-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .paso-grid { grid-template-columns: 1fr; } }
+
+  /* Comparison table */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .compare-table th { background: #1a1a2e; color: #94a3b8; padding: 12px 16px; text-align: left; font-weight: 600; font-size: 12px; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .compare-table td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .val-old { color: #f87171; }
+  .val-new { color: #34d399; font-weight: 600; }
+  .val-metric { color: #60a5fa; font-weight: 700; }
+
+  /* Tone card */
+  .tone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .tone-section h3 { font-size: 13px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .tone-bad h3 { color: #f87171; }
+  .tone-good h3 { color: #34d399; }
+  .tone-item { padding: 8px 12px; border-radius: 8px; font-size: 13px; margin-bottom: 6px; }
+  .tone-bad .tone-item { background: rgba(248,113,113,0.08); color: #fca5a5; border-left: 2px solid #f87171; }
+  .tone-good .tone-item { background: rgba(52,211,153,0.08); color: #6ee7b7; border-left: 2px solid #34d399; }
+
+  /* Checklist */
+  .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-box { width: 20px; height: 20px; border: 2px solid #475569; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+  .checklist-item p { font-size: 14px; color: #cbd5e1; }
+  .checklist-item small { display: block; font-size: 12px; color: #64748b; margin-top: 2px; }
+
+  /* Metrics */
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+  .metric-card { background: #252540; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px; text-align: center; }
+  .metric-val { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .metric-label { font-size: 12px; color: #64748b; }
+  .metric-target { font-size: 11px; margin-top: 4px; }
+  .m-green .metric-val { color: #34d399; }
+  .m-blue .metric-val { color: #60a5fa; }
+  .m-purple .metric-val { color: #a78bfa; }
+  .m-orange .metric-val { color: #fb923c; }
+
+  /* Section label */
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: #e94560; margin-bottom: 20px; text-transform: uppercase; }
+
+  /* Tag pill */
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .pill-green { background: rgba(52,211,153,0.15); color: #34d399; }
+  .pill-blue { background: rgba(96,165,250,0.15); color: #60a5fa; }
+  .pill-red { background: rgba(248,113,113,0.15); color: #f87171; }
+
+  /* Copy block */
+  .copy-block {
+    background: #0d1117; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+    padding: 14px 16px; font-family: 'Courier New', monospace; font-size: 13px;
+    color: #e2e8f0; white-space: pre-wrap; line-height: 1.6; position: relative;
+    margin-top: 8px;
+  }
+  .copy-block::before { content: 'COPY'; position: absolute; top: 8px; right: 10px; font-size: 9px; font-weight: 700; letter-spacing: 1px; color: #475569; font-family: sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🎬</div>
+      <div class="logo-text">
+        <h1>CEFAT — Flujo Conversacional</h1>
+        <p>Rediseño V2.0 · Chatbot Admisiones · Manychat</p>
+      </div>
+    </div>
+    <div class="badge">V2.0 PREMIUM</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <div class="nav-tab active" onclick="show('vision')">Visión General</div>
+    <div class="nav-tab" onclick="show('flujo')">Flujo Paso a Paso</div>
+    <div class="nav-tab" onclick="show('mensajes')">Mensajes WhatsApp</div>
+    <div class="nav-tab" onclick="show('variantes')">Variantes</div>
+    <div class="nav-tab" onclick="show('tono')">Tono & Estilo</div>
+    <div class="nav-tab" onclick="show('comparacion')">V1 vs V2</div>
+    <div class="nav-tab" onclick="show('checklist')">Implementación</div>
+    <div class="nav-tab" onclick="show('metricas')">Métricas</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- PANEL: Visión General -->
+  <div id="panel-vision" class="panel active">
+    <div class="section-label">Visión General del Rediseño</div>
+
+    <div class="card" style="background: linear-gradient(135deg, #1a1a2e, #0f3460); border-color: rgba(233,69,96,0.3);">
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+        <div style="font-size: 40px;">💬</div>
+        <div>
+          <h2 style="font-size: 20px; color: #fff; margin-bottom: 4px;">De proceso administrativo a conversación</h2>
+          <p style="color: #94a3b8; font-size: 14px;">El flujo V2 siente como hablar con un asesor amigable, no como llenar un formulario.</p>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+          <div style="font-size: 28px; font-weight: 700; color: #34d399;">60%</div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Menos pasos</div>
+        </div>
+        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+          <div style="font-size: 28px; font-weight: 700; color: #60a5fa;">80%</div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Menos opciones</div>
+        </div>
+        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+          <div style="font-size: 28px; font-weight: 700; color: #a78bfa;">70%</div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Textos más cortos</div>
+        </div>
+        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+          <div style="font-size: 28px; font-weight: 700; color: #e94560;">0%</div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Mención de precios</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🗺️</span> Mapa del Flujo (Ultra Simplificado)</div>
+      <div class="flow-wrapper">
+
+        <div class="flow-step step-green">
+          <div class="step-num">ENTRADA</div>
+          <div class="step-title">Usuario escribe algo</div>
+          <div class="step-desc">Palabras clave: "hola", "cursos", "quiero estudiar", o cualquier mensaje</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step step-blue">
+          <div class="step-num">PASO 1 — SALUDO</div>
+          <div class="step-title">Bot: Bienvenida cálida</div>
+          <div class="step-desc">"¡Hola! 👋 Bienvenido a CEFAT. ¿Qué te trae por aquí hoy?"</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step step-blue">
+          <div class="step-num">PASO 2 — ESCUCHA</div>
+          <div class="step-title">Bot: Valida emocionalmente</div>
+          <div class="step-desc">Responde según lo que dijo el usuario. Hace UNA pregunta natural.</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step step-purple">
+          <div class="step-num">PASO 3 — POSICIONAMIENTO</div>
+          <div class="step-title">Bot: ¿Corto o programa completo?</div>
+          <div class="step-desc">Solo 2 opciones. Personalizado según si es primera vez o tiene experiencia.</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step step-orange">
+          <div class="step-num">PASO 4 — DATOS (GRADUAL)</div>
+          <div class="step-title">Bot: Nombre → Correo → Teléfono</div>
+          <div class="step-desc">Una pregunta a la vez. Siente conversación, no formulario.</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step step-blue">
+          <div class="step-num">PASO 5 — PROPUESTA</div>
+          <div class="step-title">Bot: ¿Info o llamada?</div>
+          <div class="step-desc">2 opciones claras. Ambas llevan a conversión. Sin opción de "salir".</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-branch">
+          <div class="branch-item branch-green">
+            <div class="branch-label">OPCIÓN A</div>
+            <div class="branch-title">📨 Enviar información</div>
+            <div class="branch-desc">Catálogo + videos + fechas de inicio</div>
+          </div>
+          <div class="branch-item branch-blue2">
+            <div class="branch-label">OPCIÓN B</div>
+            <div class="branch-title">📞 Asesor te llama</div>
+            <div class="branch-desc">Confirmación + pregunta para el asesor</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step step-green">
+          <div class="step-num">FIN</div>
+          <div class="step-title">Prospecto en pipeline</div>
+          <div class="step-desc">Contacto creado en HubSpot + notificación al equipo</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="card">
+        <div class="card-title"><span>✅</span> Qué priorizamos</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #34d399; font-size: 16px;">✓</span><span style="color: #cbd5e1; font-size: 13.5px;">Conversación natural y cálida</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #34d399; font-size: 16px;">✓</span><span style="color: #cbd5e1; font-size: 13.5px;">Máximo 2 preguntas por paso</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #34d399; font-size: 16px;">✓</span><span style="color: #cbd5e1; font-size: 13.5px;">Textos cortos (máximo 2-3 líneas)</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #34d399; font-size: 16px;">✓</span><span style="color: #cbd5e1; font-size: 13.5px;">Emocionar y generar confianza</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #34d399; font-size: 16px;">✓</span><span style="color: #cbd5e1; font-size: 13.5px;">Fluidez conversacional, experiencia premium</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>❌</span> Qué eliminamos</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #f87171; font-size: 16px;">✗</span><span style="color: #cbd5e1; font-size: 13.5px;">Menús numerados largos (4+ opciones)</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #f87171; font-size: 16px;">✗</span><span style="color: #cbd5e1; font-size: 13.5px;">Textos administrativos</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #f87171; font-size: 16px;">✗</span><span style="color: #cbd5e1; font-size: 13.5px;">Información de precios o costos</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #f87171; font-size: 16px;">✗</span><span style="color: #cbd5e1; font-size: 13.5px;">Confirmaciones innecesarias</span></div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="color: #f87171; font-size: 16px;">✗</span><span style="color: #cbd5e1; font-size: 13.5px;">Validaciones que sientes robóticas</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: Flujo Paso a Paso -->
+  <div id="panel-flujo" class="panel">
+    <div class="section-label">Conversación Paso a Paso</div>
+
+    <!-- Paso 1 -->
+    <div class="card">
+      <div class="card-title"><span>1️⃣</span> Paso 1: Entrada y Saludo</div>
+      <div class="paso-grid">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">EL USUARIO ESCRIBE:</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+            <span class="pill pill-blue">"Hola"</span>
+            <span class="pill pill-blue">"Cursos"</span>
+            <span class="pill pill-blue">"Quiero estudiar"</span>
+            <span class="pill pill-blue">"Información"</span>
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">POR QUÉ FUNCIONA:</p>
+          <div style="font-size: 13px; color: #94a3b8; display: flex; flex-direction: column; gap: 6px;">
+            <div>✅ Cálido y accesible desde el primer mensaje</div>
+            <div>✅ No abruma con opciones al inicio</div>
+            <div>✅ Pregunta abierta → el usuario se expresa libremente</div>
+            <div>✅ Genera conversación, no menú</div>
+          </div>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">BOT RESPONDE:</p>
+          <div class="chat-window">
+            <div class="chat-header">
+              <div class="chat-avatar">🎬</div>
+              <div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div>
+            </div>
+            <div class="chat-body">
+              <div class="msg msg-bot">
+                ¡Hola! 👋 Bienvenido a CEFAT.<br><br>¿Qué te trae por aquí hoy?
+                <div class="msg-time">10:32 ✓✓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 2 -->
+    <div class="card">
+      <div class="card-title"><span>2️⃣</span> Paso 2: Escuchar y Entender</div>
+      <div class="paso-grid">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">EL USUARIO PUEDE DECIR CUALQUIER COSA:</p>
+          <div style="font-size: 13.5px; color: #94a3b8; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+            <div style="padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">"Quiero ser actor"</div>
+            <div style="padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">"Tengo dudas sobre los cursos"</div>
+            <div style="padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">"Me interesa formarme en TV"</div>
+            <div style="padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">"Información sobre las carreras"</div>
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">POR QUÉ FUNCIONA:</p>
+          <div style="font-size: 13px; color: #94a3b8; display: flex; flex-direction: column; gap: 6px;">
+            <div>✅ Escucha activa: valida la emoción del usuario</div>
+            <div>✅ Sin decisiones forzadas ni menús</div>
+            <div>✅ Sigue la conversación natural del usuario</div>
+          </div>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">EJEMPLO — si dice que quiere ser actor:</p>
+          <div class="chat-window" style="margin-bottom: 12px;">
+            <div class="chat-header">
+              <div class="chat-avatar">🎬</div>
+              <div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div>
+            </div>
+            <div class="chat-body">
+              <div class="msg msg-user">Quiero ser actor<div class="msg-time">10:33</div></div>
+              <div class="msg msg-bot">Eso suena emocionante 🎬<br><br>¿Es tu primera vez explorando esto o ya tienes experiencia?<div class="msg-time">10:33 ✓✓</div></div>
+            </div>
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">EJEMPLO — si pide información:</p>
+          <div class="chat-window">
+            <div class="chat-header">
+              <div class="chat-avatar">🎬</div>
+              <div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div>
+            </div>
+            <div class="chat-body">
+              <div class="msg msg-user">Información sobre sus programas<div class="msg-time">10:33</div></div>
+              <div class="msg msg-bot">Claro, te ayudamos.<br><br>¿Hay algo específico que te gustaría saber?<div class="msg-time">10:33 ✓✓</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 3 -->
+    <div class="card">
+      <div class="card-title"><span>3️⃣</span> Paso 3: Entender su Situación</div>
+      <div class="paso-grid">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">LÓGICA DEL BOT:</p>
+          <div style="font-size: 13px; color: #94a3b8; margin-bottom: 16px;">
+            El bot adapta su respuesta según si el usuario es principiante o tiene experiencia. Solo 2 opciones de formato.
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">POR QUÉ FUNCIONA:</p>
+          <div style="font-size: 13px; color: #94a3b8; display: flex; flex-direction: column; gap: 6px;">
+            <div>✅ Hace sentir visto (personalizado)</div>
+            <div>✅ Solo 2 opciones (baja fricción)</div>
+            <div>✅ Lenguaje conversacional</div>
+            <div>✅ Valida el contexto del prospecto</div>
+          </div>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">SI ES PRIMERA VEZ:</p>
+          <div class="chat-window" style="margin-bottom: 12px;">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-bot">¡Perfecto! Hay un lugar para ti en CEFAT.<br><br>¿Buscas algo práctico/corto o prefieres un programa más completo?<div class="msg-time">10:35 ✓✓</div></div>
+            </div>
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">SI YA TIENE EXPERIENCIA:</p>
+          <div class="chat-window">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-bot">Con esa experiencia, seguro encuentras exactamente lo que necesitas aquí.<br><br>¿Qué formato te atrae más: formación rápida o un programa completo?<div class="msg-time">10:35 ✓✓</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 4 -->
+    <div class="card">
+      <div class="card-title"><span>4️⃣</span> Paso 4: Captura de Datos (Gradual)</div>
+      <div class="paso-grid">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">PRINCIPIO CLAVE:</p>
+          <div style="font-size: 13.5px; color: #94a3b8; margin-bottom: 16px; padding: 12px; background: rgba(251,146,60,0.08); border-radius: 8px; border-left: 3px solid #fb923c;">
+            Una pregunta = una respuesta.<br>No formulario, sino conversación.
+          </div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">POR QUÉ FUNCIONA:</p>
+          <div style="font-size: 13px; color: #94a3b8; display: flex; flex-direction: column; gap: 6px;">
+            <div>✅ Una pregunta a la vez (no abruma)</div>
+            <div>✅ Explica brevemente por qué pide cada dato</div>
+            <div>✅ Siente conversacional, no encuesta</div>
+            <div>✅ Tonos ligeramente distintos en cada mensaje</div>
+          </div>
+        </div>
+        <div>
+          <div class="chat-window">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-bot">Perfecto. Ahora necesito algunos datos para poder ayudarte mejor.<br><br>¿Cuál es tu nombre?<div class="msg-time">10:36 ✓✓</div></div>
+              <div class="msg msg-user">Juan Pérez<div class="msg-time">10:37</div></div>
+              <div class="msg msg-bot">¡Gusto, Juan!<br><br>¿Cuál es tu correo? (Te mandaremos todo lo que necesitas saber)<div class="msg-time">10:37 ✓✓</div></div>
+              <div class="msg msg-user">juan@email.com<div class="msg-time">10:38</div></div>
+              <div class="msg msg-bot">Excelente.<br><br>¿Cuál es tu teléfono? (Por si nuestro asesor quiere hablar directo contigo)<div class="msg-time">10:38 ✓✓</div></div>
+              <div class="msg msg-user">5512345678<div class="msg-time">10:39</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 5 -->
+    <div class="card">
+      <div class="card-title"><span>5️⃣</span> Paso 5: Propuesta y Siguiente Paso</div>
+      <div class="paso-grid">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">LÓGICA DE LA PROPUESTA DUAL:</p>
+          <div style="font-size: 13px; color: #94a3b8; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+            <div style="padding: 10px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">Solo 2 opciones claras</div>
+            <div style="padding: 10px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">Ambas llevan a conversión (no hay "salir")</div>
+            <div style="padding: 10px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">Le devuelve el control al usuario</div>
+            <div style="padding: 10px 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">Cierre natural de la captación</div>
+          </div>
+        </div>
+        <div>
+          <div class="chat-window">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-bot">¡Listo, Juan! 🎯<br><br>Tengo tu información. Ahora hay dos caminos:<br><br>1️⃣ Te puedo enviar toda la info sobre programas<br>2️⃣ O uno de nuestros asesores te llama en 30 min<br><br>¿Cuál prefieres?<div class="msg-time">10:40 ✓✓</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 6 -->
+    <div class="card">
+      <div class="card-title"><span>6️⃣</span> Paso 6: Escalada Suave</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">OPCIÓN A — Enviar información:</p>
+          <div class="chat-window">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-user">1 — la info<div class="msg-time">10:41</div></div>
+              <div class="msg msg-bot">Perfecto. Te enviaremos:<br><br>✓ Catálogo de programas<br>✓ Videos de nuestros estudiantes<br>✓ Próximas fechas de inicio<br><br>¿Algo más que quieras saber ahora?<div class="msg-time">10:41 ✓✓</div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">OPCIÓN B — Llamada de asesor:</p>
+          <div class="chat-window">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-user">2 — que me llamen<div class="msg-time">10:41</div></div>
+              <div class="msg msg-bot">Genial. Uno de nuestros asesores académicos te llamará en 30 minutos.<br><br>Mientras tanto: ¿hay algo específico que quieras preguntarle?<div class="msg-time">10:41 ✓✓</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: Mensajes WhatsApp -->
+  <div id="panel-mensajes" class="panel">
+    <div class="section-label">Copies Listos para Usar</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+
+      <div class="card">
+        <div class="card-title"><span>👋</span> Saludo Inicial</div>
+        <div class="copy-block">¡Hola! 👋 Bienvenido a CEFAT.
+
+¿Qué te trae por aquí hoy?</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🎬</span> Validación Emocional</div>
+        <div class="copy-block">Eso suena emocionante 🎬
+
+¿Es tu primera vez explorando esto?</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🤔</span> Decisión de Formato</div>
+        <div class="copy-block">Perfecto. ¿Prefieres algo práctico/corto
+o un programa más completo?</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>📋</span> Captura de Datos</div>
+        <div class="copy-block">Perfecto. Ahora necesito algunos datos
+para ayudarte mejor.
+
+¿Cuál es tu nombre?</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>📧</span> Pedir Correo</div>
+        <div class="copy-block">¡Gusto, [NOMBRE]!
+
+¿Cuál es tu correo?
+(Te mandaremos todo lo que necesitas saber)</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>📱</span> Pedir Teléfono</div>
+        <div class="copy-block">Excelente.
+
+¿Cuál es tu teléfono?
+(Por si nuestro asesor quiere hablar directo contigo)</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🎯</span> Propuesta Final</div>
+        <div class="copy-block">¡Listo, [NOMBRE]! 🎯
+
+Tengo tu información. Ahora hay dos caminos:
+
+1️⃣ Te puedo enviar toda la info sobre programas
+2️⃣ O uno de nuestros asesores te llama en 30 min
+
+¿Cuál prefieres?</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>📨</span> Cierre — Envío de Info</div>
+        <div class="copy-block">Perfecto. Te enviaremos:
+
+✓ Catálogo de programas
+✓ Videos de nuestros estudiantes
+✓ Próximas fechas de inicio
+
+¿Algo más que quieras saber ahora?</div>
+      </div>
+
+      <div class="card" style="grid-column: 1 / -1;">
+        <div class="card-title"><span>📞</span> Cierre — Llamada de Asesor</div>
+        <div class="copy-block">Genial. Uno de nuestros asesores académicos te llamará en 30 minutos.
+
+Mientras tanto: ¿hay algo específico que quieras preguntarle?</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL: Variantes -->
+  <div id="panel-variantes" class="panel">
+    <div class="section-label">Variantes según Contexto</div>
+
+    <div class="card">
+      <div class="card-title"><span>❓</span> Variante: "Tengo dudas"</div>
+      <div class="paso-grid">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">LÓGICA:</p>
+          <div style="font-size: 13px; color: #94a3b8; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
+            <div>✅ Valida sus dudas sin forzar respuesta</div>
+            <div>✅ Escalada natural hacia humano</div>
+            <div>✅ Mantiene conversación fluida</div>
+          </div>
+        </div>
+        <div>
+          <div class="chat-window">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-user">Tengo dudas<div class="msg-time">11:05</div></div>
+              <div class="msg msg-bot">Sin problema, ¿sobre qué?<div class="msg-time">11:05 ✓✓</div></div>
+              <div class="msg msg-user">Sobre cómo es el programa<div class="msg-time">11:06</div></div>
+              <div class="msg msg-bot">Cuéntame más, ¿qué te gustaría saber?<div class="msg-time">11:06 ✓✓</div></div>
+              <div class="msg msg-user">Si puedo trabajar mientras estudio<div class="msg-time">11:07</div></div>
+              <div class="msg msg-bot">Excelente pregunta. Muchos de nuestros estudiantes lo hacen.<br>Justamente eso es algo que nuestro asesor puede explicarte mejor.<br><br>¿Te dejo su número o prefieres que te llame?<div class="msg-time">11:07 ✓✓</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🕐</span> Variante: "Quiero saber horarios"</div>
+      <div class="paso-grid">
+        <div>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">LÓGICA:</p>
+          <div style="font-size: 13px; color: #94a3b8; display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
+            <div>✅ Responde la pregunta sin dar lista</div>
+            <div>✅ Contextualiza (no hay respuesta única)</div>
+            <div>✅ Escalada natural al asesor</div>
+            <div>✅ Usuario decide cómo seguir</div>
+          </div>
+        </div>
+        <div>
+          <div class="chat-window">
+            <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+            <div class="chat-body">
+              <div class="msg msg-user">Quiero saber los horarios<div class="msg-time">14:20</div></div>
+              <div class="msg msg-bot">Claro. Los horarios dependen del programa que elijas.<br><br>¿Cuál te interesa más: algo flexible, fines de semana, o dedicación completa?<div class="msg-time">14:20 ✓✓</div></div>
+              <div class="msg msg-user">Flexible<div class="msg-time">14:21</div></div>
+              <div class="msg msg-bot">Perfecto. El asesor te mostrará exactamente qué opciones tienes.<br><br>¿Te envío la info o prefieres hablar directamente con él?<div class="msg-time">14:21 ✓✓</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🔄</span> Variante: Usuario no esperado / respuesta libre</div>
+      <p style="font-size: 13.5px; color: #94a3b8; margin-bottom: 16px;">Cuando el usuario escribe algo que no encaja con el flujo principal, el bot escala naturalmente sin romperse.</p>
+      <div style="max-width: 440px;">
+        <div class="chat-window">
+          <div class="chat-header"><div class="chat-avatar">🎬</div><div class="chat-info"><h4>CEFAT</h4><p>en línea</p></div></div>
+          <div class="chat-body">
+            <div class="msg msg-user">Oye, ¿tienen convenio con la SEP?<div class="msg-time">16:05</div></div>
+            <div class="msg msg-bot">Buena pregunta. Eso es algo que nuestro equipo puede explicarte mucho mejor.<br><br>¿Prefieres que te enviemos información o que un asesor te contacte?<div class="msg-time">16:05 ✓✓</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: Tono & Estilo -->
+  <div id="panel-tono" class="panel">
+    <div class="section-label">Tonalidad y Emoción</div>
+
+    <div class="card">
+      <div class="card-title"><span>🎭</span> Reglas de Tono</div>
+      <div class="tone-grid">
+        <div class="tone-section tone-bad">
+          <h3>❌ EVITAR</h3>
+          <div class="tone-item">"Agradecemos tu interés"</div>
+          <div class="tone-item">"Por favor proporciona..."</div>
+          <div class="tone-item">"De conformidad con..."</div>
+          <div class="tone-item">"Se ha registrado exitosamente"</div>
+          <div class="tone-item">Emojis en cada línea</div>
+          <div class="tone-item">TEXTO EN MAYÚSCULAS</div>
+          <div class="tone-item">Menús con 4+ opciones</div>
+          <div class="tone-item">Mensajes de 10+ líneas</div>
+        </div>
+        <div class="tone-section tone-good">
+          <h3>✅ USAR</h3>
+          <div class="tone-item">"¡Gusto, Juan!"</div>
+          <div class="tone-item">"Eso suena emocionante 🎬"</div>
+          <div class="tone-item">"¿Hay algo más que quieras saber?"</div>
+          <div class="tone-item">"Perfecto. Ahora..."</div>
+          <div class="tone-item">1-2 emojis por mensaje</div>
+          <div class="tone-item">Oraciones cortas</div>
+          <div class="tone-item">2 opciones máximo</div>
+          <div class="tone-item">Mensajes de 2-3 líneas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📐</span> Estructura de Mensaje Ideal</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+          <p style="font-size: 13px; color: #f87171; font-weight: 600; margin-bottom: 12px;">❌ ANTES (V1)</p>
+          <div class="copy-block" style="border-color: rgba(248,113,113,0.3);">¡Excelente! Te compartimos nuestros cursos 👇
+
+📌 CURSOS DISPONIBLES:
+📚 Actuación Básica (4 semanas)
+Inicio: Próximo lunes | $2,500
+
+📚 Técnica de Cámara (6 semanas)
+Inicio: Próximo lunes | $3,000
+
+📚 Guión para TV (8 semanas)
+Inicio: 2 de Junio | $3,500
+
+¿Cuál te interesa?
+Responde con el número (1, 2, 3)</div>
+        </div>
+        <div>
+          <p style="font-size: 13px; color: #34d399; font-weight: 600; margin-bottom: 12px;">✅ AHORA (V2)</p>
+          <div class="copy-block" style="border-color: rgba(52,211,153,0.3);">¿Qué te interesa más:
+algo rápido o un programa completo?</div>
+          <p style="font-size: 12px; color: #64748b; margin-top: 12px;">• Sin precios<br>• Sin lista de cursos<br>• Sin múltiples opciones<br>• El asesor da los detalles</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color: rgba(248,113,113,0.3); background: #1e1020;">
+      <div class="card-title"><span>🚫</span> Regla de Oro — NUNCA mencionar dinero</div>
+      <p style="font-size: 14px; color: #fca5a5; line-height: 1.7; margin-bottom: 16px;">
+        El cliente indicó <strong>explícitamente</strong> que el chatbot NO debe compartir:
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <div style="padding: 10px 14px; background: rgba(248,113,113,0.1); border-radius: 8px; text-align: center; font-size: 13px; color: #f87171;">❌ Costos</div>
+        <div style="padding: 10px 14px; background: rgba(248,113,113,0.1); border-radius: 8px; text-align: center; font-size: 13px; color: #f87171;">❌ Inversión</div>
+        <div style="padding: 10px 14px; background: rgba(248,113,113,0.1); border-radius: 8px; text-align: center; font-size: 13px; color: #f87171;">❌ Colegiaturas</div>
+        <div style="padding: 10px 14px; background: rgba(248,113,113,0.1); border-radius: 8px; text-align: center; font-size: 13px; color: #f87171;">❌ Mensualidades</div>
+        <div style="padding: 10px 14px; background: rgba(248,113,113,0.1); border-radius: 8px; text-align: center; font-size: 13px; color: #f87171;">❌ Precios</div>
+        <div style="padding: 10px 14px; background: rgba(248,113,113,0.1); border-radius: 8px; text-align: center; font-size: 13px; color: #f87171;">❌ $ cualquier monto</div>
+      </div>
+      <p style="font-size: 13px; color: #94a3b8; margin-top: 16px;">
+        <strong>Por qué:</strong> El dinero es barrera conversacional. Los precios cambian. El asesor puede negociar/explicar financiamiento. El prospecto avanza sin fricción.
+      </p>
+    </div>
+  </div>
+
+  <!-- PANEL: Comparación -->
+  <div id="panel-comparacion" class="panel">
+    <div class="section-label">V1 vs V2</div>
+
+    <div class="card">
+      <div class="card-title"><span>📊</span> Comparación Cuantitativa</div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Aspecto</th>
+            <th>V1 (Anterior)</th>
+            <th>V2 (Nuevo)</th>
+            <th>Mejora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Pasos totales</td><td class="val-old">9+</td><td class="val-new">5-6</td><td class="val-metric">40% menos</td></tr>
+          <tr><td>Decisiones/menús</td><td class="val-old">4+ opciones por menú</td><td class="val-new">Máx 2 opciones</td><td class="val-metric">80% menos</td></tr>
+          <tr><td>Textos por mensaje</td><td class="val-old">5-10 líneas</td><td class="val-new">2-3 líneas</td><td class="val-metric">70% más corto</td></tr>
+          <tr><td>Tono</td><td class="val-old">Corporativo/frío</td><td class="val-new">Conversacional</td><td class="val-metric">Premium</td></tr>
+          <tr><td>Mención de precios</td><td class="val-old">Sí, con montos</td><td class="val-new">NINGUNA</td><td class="val-metric">0% precios</td></tr>
+          <tr><td>Sensación</td><td class="val-old">Administrativo</td><td class="val-new">Conversación</td><td class="val-metric">Natural</td></tr>
+          <tr><td>Fricción</td><td class="val-old">Alta</td><td class="val-new">Baja</td><td class="val-metric">60% menos</td></tr>
+          <tr><td>Tiempo promedio</td><td class="val-old">5-8 minutos</td><td class="val-new">2-3 minutos</td><td class="val-metric">60% más rápido</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="card">
+        <div class="card-title"><span>🔴</span> V1 — Menú Típico</div>
+        <div class="copy-block" style="border-color: rgba(248,113,113,0.3);">¡Hola! 👋 Bienvenido a CEFAT
+
+Somos el Centro de Formación Actoral de TV Azteca.
+Ofrecemos cursos, talleres y carreras en:
+📽️ Actuación | 💡 Televisión | 🎬 Cine
+
+¿Cuál es tu interés?
+
+1️⃣ Cursos
+2️⃣ Talleres
+3️⃣ Carreras profesionales
+4️⃣ Consultoría</div>
+        <p style="font-size: 12px; color: #f87171; margin-top: 10px;">9 líneas · 4 opciones · frío · corporativo</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🟢</span> V2 — Conversacional</div>
+        <div class="copy-block" style="border-color: rgba(52,211,153,0.3);">¡Hola! 👋 Bienvenido a CEFAT.
+
+¿Qué te trae por aquí hoy?</div>
+        <p style="font-size: 12px; color: #34d399; margin-top: 10px;">2 líneas · pregunta abierta · cálido · natural</p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="card">
+        <div class="card-title"><span>🔴</span> V1 — Captura de Datos</div>
+        <div class="copy-block" style="border-color: rgba(248,113,113,0.3);">¿Cuál es tu nombre completo?
+¿Cuál es tu correo?
+¿Cuál es tu teléfono?
+¿Disponibilidad de tiempo?
+¿Nivel de experiencia?
+
+(Todo en un solo mensaje — abrumador)</div>
+        <p style="font-size: 12px; color: #f87171; margin-top: 10px;">5 preguntas juntas · siente formulario</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🟢</span> V2 — Captura Gradual</div>
+        <div class="copy-block" style="border-color: rgba(52,211,153,0.3);">Mensaje 1: "¿Cuál es tu nombre?"
+↓ (esperar respuesta)
+
+Mensaje 2: "¿Tu correo?"
+↓ (esperar respuesta)
+
+Mensaje 3: "¿Teléfono?"</div>
+        <p style="font-size: 12px; color: #34d399; margin-top: 10px;">Una por una · siente conversación</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: Checklist -->
+  <div id="panel-checklist" class="panel">
+    <div class="section-label">Checklist de Implementación</div>
+
+    <div class="card">
+      <div class="card-title"><span>✅</span> Pasos para Implementar en Manychat</div>
+
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Eliminar todos los menús numerados con 4+ opciones</p><small>Reemplazar con preguntas abiertas o máx. 2 opciones</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Acortar todos los textos a máximo 3 líneas por mensaje</p><small>Si hay más info, moverla al siguiente mensaje o al asesor</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Eliminar TODA mención de precios, costos, inversión o montos</p><small>Incluye palabras como "inversión", "colegiatura", "mensualidad"</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Cambiar el tono a conversacional (informal, cálido, cercano)</p><small>Usar frases como "¡Gusto!" en vez de "Hemos registrado tu solicitud"</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Implementar preguntas abiertas en los primeros pasos</p><small>No forzar al usuario a elegir de una lista inmediatamente</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Configurar captura gradual de datos (una pregunta a la vez)</p><small>Nombre → esperar → Correo → esperar → Teléfono</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Implementar propuesta dual al final (Info o Llamada)</p><small>Ambas opciones deben llevar a conversión, sin opción de "salir"</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Configurar integración HubSpot para crear contacto al finalizar</p><small>Tag automático + notificación al equipo CEFAT</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Testear con usuarios reales (¿se siente natural?)</p><small>Pedir feedback: "¿Sentiste que era una conversación o un formulario?"</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Medir: velocidad, tasa de abandono, tasa de escalada</p><small>Targets: 75%+ completación, 2-3 min promedio, 80%+ escalada</small></div>
+      </div>
+      <div class="checklist-item">
+        <div class="check-box"></div>
+        <div><p>Iterar según feedback del equipo de asesores</p><small>¿Qué preguntas hacen los prospectos que el bot no cubre?</small></div>
+      </div>
+    </div>
+
+    <div class="card" style="background: linear-gradient(135deg, #1a2e1a, #0f3d0f); border-color: rgba(52,211,153,0.2);">
+      <div class="card-title"><span>🚀</span> Timeline Sugerido</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div style="padding: 16px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #34d399; margin-bottom: 6px;">SEMANA 1</div>
+          <div style="font-size: 13px; color: #cbd5e1;">Configurar flujo base en Manychat con los 6 pasos</div>
+        </div>
+        <div style="padding: 16px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #60a5fa; margin-bottom: 6px;">SEMANA 2</div>
+          <div style="font-size: 13px; color: #cbd5e1;">Integración HubSpot + testing interno + ajustes</div>
+        </div>
+        <div style="padding: 16px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #fb923c; margin-bottom: 6px;">LIVE</div>
+          <div style="font-size: 13px; color: #cbd5e1;">Activar flujo + monitoreo + iteración continua</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: Métricas -->
+  <div id="panel-metricas" class="panel">
+    <div class="section-label">Métricas de Éxito</div>
+
+    <div class="metrics-grid" style="margin-bottom: 20px;">
+      <div class="metric-card m-green">
+        <div class="metric-val">75%+</div>
+        <div class="metric-label">Tasa de completación</div>
+        <div class="metric-target" style="color: #34d399;">inicio → escalada</div>
+      </div>
+      <div class="metric-card m-blue">
+        <div class="metric-val">2-3</div>
+        <div class="metric-label">Minutos promedio</div>
+        <div class="metric-target" style="color: #60a5fa;">tiempo en flujo</div>
+      </div>
+      <div class="metric-card m-purple">
+        <div class="metric-val">80%+</div>
+        <div class="metric-label">Escalada a asesor</div>
+        <div class="metric-target" style="color: #a78bfa;">prospectos activos</div>
+      </div>
+      <div class="metric-card m-orange">
+        <div class="metric-val">+30%</div>
+        <div class="metric-label">Conversión final</div>
+        <div class="metric-target" style="color: #fb923c;">vs. V1 actual</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📈</span> Impacto por Mejora</div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 13px; color: #cbd5e1;">Velocidad del flujo</span>
+            <span style="font-size: 13px; color: #34d399; font-weight: 600;">60% más rápido</span>
+          </div>
+          <div style="height: 6px; background: #252540; border-radius: 3px; overflow: hidden;">
+            <div style="height: 100%; width: 60%; background: linear-gradient(90deg, #34d399, #059669); border-radius: 3px;"></div>
+          </div>
+          <p style="font-size: 12px; color: #64748b; margin-top: 4px;">V1: 5-8 min → V2: 2-3 min. Menos tiempo = más conversiones completadas</p>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 13px; color: #cbd5e1;">Reducción de fricción</span>
+            <span style="font-size: 13px; color: #60a5fa; font-weight: 600;">60% menos abandono</span>
+          </div>
+          <div style="height: 6px; background: #252540; border-radius: 3px; overflow: hidden;">
+            <div style="height: 100%; width: 60%; background: linear-gradient(90deg, #60a5fa, #2563eb); border-radius: 3px;"></div>
+          </div>
+          <p style="font-size: 12px; color: #64748b; margin-top: 4px;">V1: 4+ decisiones, múltiples menús → V2: 2-3 decisiones, preguntas abiertas</p>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 13px; color: #cbd5e1;">Naturalidad percibida</span>
+            <span style="font-size: 13px; color: #a78bfa; font-weight: 600;">Asesor amigable</span>
+          </div>
+          <div style="height: 6px; background: #252540; border-radius: 3px; overflow: hidden;">
+            <div style="height: 100%; width: 90%; background: linear-gradient(90deg, #a78bfa, #7c3aed); border-radius: 3px;"></div>
+          </div>
+          <p style="font-size: 12px; color: #64748b; margin-top: 4px;">V1: Siente chatbot corporativo → V2: Siente asesor amigable. Mayor confianza y engagement</p>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 13px; color: #cbd5e1;">Escalabilidad del flujo</span>
+            <span style="font-size: 13px; color: #fb923c; font-weight: 600;">Fácil mantener</span>
+          </div>
+          <div style="height: 6px; background: #252540; border-radius: 3px; overflow: hidden;">
+            <div style="height: 100%; width: 80%; background: linear-gradient(90deg, #fb923c, #ea580c); border-radius: 3px;"></div>
+          </div>
+          <p style="font-size: 12px; color: #64748b; margin-top: 4px;">V1: Muchas rutas/lógica complicada → V2: Flujo lineal simple. Fácil de mantener e iterar</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card" style="background: linear-gradient(135deg, #1a1a2e, #0f3460); border-color: rgba(233,69,96,0.3);">
+      <div style="text-align: center; padding: 20px;">
+        <div style="font-size: 32px; margin-bottom: 12px;">🎬</div>
+        <h2 style="font-size: 18px; color: #fff; margin-bottom: 8px;">V1 era un proceso administrativo.</h2>
+        <h2 style="font-size: 18px; color: #e94560; margin-bottom: 20px;">V2 es una conversación.</h2>
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <span class="pill pill-green">60% menos pasos</span>
+          <span class="pill pill-blue">80% menos opciones</span>
+          <span class="pill pill-green">70% textos más cortos</span>
+          <span class="pill pill-red">0% precios</span>
+          <span class="pill pill-blue">100% conversacional</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function show(panel) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + panel).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

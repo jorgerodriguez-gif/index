@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta CEFAT - Automatización Manychat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .metadata {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            font-size: 0.9em;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            opacity: 0.8;
+            font-size: 0.85em;
+        }
+
+        .meta-value {
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin: 20px 0 15px 0;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight h3 {
+            margin-top: 0;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f8f9ff;
+        }
+
+        .flow-diagram {
+            background: #f5f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px 5px 5px 0;
+            font-weight: 600;
+        }
+
+        .metric {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 5px;
+            border: 2px solid #667eea;
+        }
+
+        .metric-emoji {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 20px);
+            background: #667eea;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-item-content {
+            background: #f5f7ff;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .timeline-item-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .timeline-item-date {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.3);
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background: #f5f7ff;
+            padding: 30px 40px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .emoji {
+            margin-right: 5px;
+        }
+
+        .price-highlight {
+            background: #fff3cd;
+            border: 2px dashed #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+
+        .success-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <h1>🤖 Propuesta de Automatización</h1>
+            <p class="subtitle">Manychat + HubSpot para CEFAT</p>
+            <div class="metadata">
+                <div class="meta-item">
+                    <div class="meta-label">CLIENTE</div>
+                    <div class="meta-value">Centro de Formación Actoral de TV Azteca</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">FECHA</div>
+                    <div class="meta-value">21 de Mayo, 2026</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">VÁLIDO HASTA</div>
+                    <div class="meta-value">4 de Junio, 2026</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- RESUMEN EJECUTIVO -->
+            <section>
+                <h2><span class="emoji">📋</span>Resumen Ejecutivo</h2>
+
+                <p>CEFAT está perdiendo prospectos de calidad debido a respuestas lentas y manuales. Actualmente, tu coordinador académico gestiona todas las consultas por WhatsApp, lo que genera retrasos, baja tasa de agendamiento y abandono de prospectos.</p>
+
+                <div class="highlight">
+                    <h3>💡 Nuestra Solución</h3>
+                    <p>Un flujo Manychat integrado con HubSpot que automatiza la atención inicial, clasifica prospectos, agenda llamadas y mantiene seguimiento automático <strong>24/7</strong>.</p>
+                </div>
+
+                <h3>🎯 Resultados Esperados</h3>
+                <div class="success-metrics">
+                    <div class="metric-card">
+                        <div class="metric-number">60%</div>
+                        <div class="metric-label">Reducción tiempo respuesta</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">35%</div>
+                        <div class="metric-label">Aumento agendamiento</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">50%</div>
+                        <div class="metric-label">Menos preguntas repetidas</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">25%</div>
+                        <div class="metric-label">Menor abandono prospectos</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SITUACIÓN ACTUAL -->
+            <section>
+                <h2><span class="emoji">⚠️</span>Situación Actual de CEFAT</h2>
+
+                <h3>Desafíos Identificados</h3>
+                <table>
+                    <tr>
+                        <th>Desafío</th>
+                        <th>Impacto</th>
+                        <th>Causa Raíz</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Bajo % conversión</strong> prospectos → inscripción</td>
+                        <td>📉 Ingresos reducidos</td>
+                        <td>Respuestas lentas, sin seguimiento</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Respuestas manuales lentas</strong> a consultas</td>
+                        <td>⏰ Pérdida de oportunidades</td>
+                        <td>Único coordinador para todas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Falta calificación</strong> automática de leads</td>
+                        <td>❌ Tiempo desperdiciado</td>
+                        <td>Sin sistema de scoring</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pérdida de reconexiones</strong> sin contacto</td>
+                        <td>🔄 Abandono de oportunidades</td>
+                        <td>Sin seguimiento automático</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Coordinador saturado</strong> con FAQs</td>
+                        <td>😫 Agotamiento equipo</td>
+                        <td>Respuestas manuales repetitivas</td>
+                    </tr>
+                </table>
+
+                <h3>Flujo Actual (Ineficiente)</h3>
+                <div class="flow-diagram">Meta Ads (Instagram/Facebook)
+         ↓
+    WhatsApp Manual
+         ↓
+Coordinador responde (¿0-6 hrs?)
+         ↓
+    Respuestas inconsistentes
+         ↓
+  Sin seguimiento automático
+         ↓
+    Abandono de prospectos ❌</div>
+            </section>
+
+            <!-- SOLUCIÓN PROPUESTA -->
+            <section>
+                <h2><span class="emoji">✨</span>Solución Propuesta</h2>
+                <p><strong>Automatizar el 80% de la atención inicial</strong> de prospectos, permitiendo que tu coordinador se enfoque en casos complejos y cierre de ventas.</p>
+
+                <h3>Cómo Funciona el Flujo</h3>
+                <div class="flow-diagram">Prospecto llena formulario en Meta Ads
+         ↓
+Manychat detecta: ¿NUEVO o RETORNO?
+         ↓
+┌─────────────────────────────────────┐
+│ NUEVOS PROSPECTOS                   │
+├─────────────────────────────────────┤
+│ ✓ Saludo personalizado              │
+│ ✓ Menú interactivo (4 opciones)    │
+│ ✓ Responder FAQs (15+ preguntas)   │
+│ ✓ Capturar datos (nombre, tel)     │
+│ ✓ Ofrecimiento de agendamiento     │
+│ ✓ Descargar PDF con FAQs           │
+│ ✓ Crear contacto en HubSpot        │
+│ ✓ Tag: "prospecto-nuevo"           │
+└─────────────────────────────────────┘
+         ↓
+         O
+         ↓
+┌─────────────────────────────────────┐
+│ RECONEXIONES (Retornos)             │
+├─────────────────────────────────────┤
+│ ✓ Reconocer al prospecto            │
+│ ✓ Saludo personalizado              │
+│ ✓ Ofrecimiento actualizado          │
+│ ✓ Agendar llamada o escalar         │
+│ ✓ Tag: "reconexión"                 │
+└─────────────────────────────────────┘
+         ↓
+    ¿Caso Complejo?
+         ↓
+┌─────────────────────────────────────┐
+│ ESCALADAS A COORDINADOR             │
+├─────────────────────────────────────┤
+│ • Consultas complejas               │
+│ • Prospectos listos para cerrar     │
+│ • Solicitudes especiales            │
+│ • Transfer a agente humano          │
+│ • Notificación instantánea ⚡      │
+└─────────────────────────────────────┘
+         ↓
+Agendamiento automático o Call transfer
+         ↓
+┌─────────────────────────────────────┐
+│ SEGUIMIENTO AUTOMÁTICO              │
+├─────────────────────────────────────┤
+│ • 24 hrs sin respuesta: Follow-up 1 │
+│ • 48 hrs sin respuesta: Follow-up 2 │
+│ • Tag: "prospecto-inactivo"         │
+│ • Re-engagement después semana      │
+└─────────────────────────────────────┘</div>
+
+                <h3>🎯 Capacidades Técnicas Incluidas</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Menú Interactivo</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">4 opciones principales (Programas, Costos, Proceso, Horarios)</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Respuestas Automáticas</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">15+ preguntas frecuentes configuradas</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ HubSpot Meetings</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Agendamiento directo en calendario</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Transfer Humano</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Escalada suave sin perder contexto</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Descargas Automáticas</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">PDF con FAQ, brochure, proceso admisión</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Integración CRM</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Crear/actualizar contactos automáticamente</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Sistema de Tags</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Segmentación por estado automática</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Detección Inteligente</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Evita repetir preguntas ya respondidas</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Flujo Unificado</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Un solo flujo para nuevos y reconexiones</p>
+                    </div>
+                    <div style="background: #f5f7ff; padding: 15px; border-radius: 6px;">
+                        <strong style="color: #667eea;">✓ Notificaciones</strong>
+                        <p style="font-size: 0.9em; margin-top: 5px;">Alertas instantáneas al equipo de ventas</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ENTREGABLES -->
+            <section>
+                <h2><span class="emoji">📦</span>Entregables</h2>
+                <table>
+                    <tr>
+                        <th>Entregable</th>
+                        <th>Descripción</th>
+                        <th>Entrega</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Configuración Manychat</strong></td>
+                        <td>Diseño completo del flujo automático</td>
+                        <td>Semana 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integración HubSpot</strong></td>
+                        <td>Sincronización de contactos y meetings</td>
+                        <td>Semana 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Respuestas Automáticas</strong></td>
+                        <td>15+ FAQ configuradas y testeadas</td>
+                        <td>Semana 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Testing & QA</strong></td>
+                        <td>Validación en todos los canales</td>
+                        <td>Semana 2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Capacitación</strong></td>
+                        <td>Documentación y sesión en vivo</td>
+                        <td>Semana 2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Go-Live</strong></td>
+                        <td>Puesta en producción y monitoreo</td>
+                        <td>Semana 2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Optimización Inicial</strong></td>
+                        <td>Ajustes basados en primeros datos</td>
+                        <td>Post-launch (7 días)</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- METODOLOGÍA -->
+            <section>
+                <h2><span class="emoji">🚀</span>Metodología de Implementación</h2>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-item-content">
+                            <div class="timeline-item-title">Fase 1: Análisis & Diseño</div>
+                            <div class="timeline-item-date">Días 1-3</div>
+                            <p style="font-size: 0.9em; margin-top: 8px;">
+                                Mapeo de flujos, FAQs, arquitectura Manychat, integración HubSpot, revisión y aprobación
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-item-content">
+                            <div class="timeline-item-title">Fase 2: Configuración</div>
+                            <div class="timeline-item-date">Días 4-7</div>
+                            <p style="font-size: 0.9em; margin-top: 8px;">
+                                Setup Manychat, integración HubSpot, respuestas automáticas, transfer, testing interno
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-item-content">
+                            <div class="timeline-item-title">Fase 3: Testing & Capacitación</div>
+                            <div class="timeline-item-date">Días 8-13</div>
+                            <p style="font-size: 0.9em; margin-top: 8px;">
+                                QA en todos los canales, sesión de capacitación, documentación, ajustes finales
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-item-content">
+                            <div class="timeline-item-title">Fase 4: Go-Live & Soporte</div>
+                            <div class="timeline-item-date">Días 14-15</div>
+                            <p style="font-size: 0.9em; margin-top: 8px;">
+                                Lanzamiento en producción, monitoreo 24/7, optimización inicial (7 días)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IMPACTO -->
+            <section>
+                <h2><span class="emoji">📈</span>Impacto & Resultados</h2>
+
+                <h3>Métricas de Éxito</h3>
+                <table>
+                    <tr>
+                        <th>Métrica</th>
+                        <th>Actual</th>
+                        <th>Target</th>
+                        <th>Mejora</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Tiempo respuesta inicial</strong></td>
+                        <td>2-6 horas</td>
+                        <td>&lt; 1 minuto</td>
+                        <td style="color: #667eea; font-weight: 600;">↓ 60%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tasa agendamiento</strong></td>
+                        <td>~20%</td>
+                        <td>~27%</td>
+                        <td style="color: #667eea; font-weight: 600;">↑ 35%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Carga coordinador</strong></td>
+                        <td>100% FAQs</td>
+                        <td>~50% casos complejos</td>
+                        <td style="color: #667eea; font-weight: 600;">↓ 50%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Abandono prospectos</strong></td>
+                        <td>~30%</td>
+                        <td>~22.5%</td>
+                        <td style="color: #667eea; font-weight: 600;">↓ 25%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Satisfacción prospecto</strong></td>
+                        <td>Media (respuestas lentas)</td>
+                        <td>Alta (respuestas instantáneas)</td>
+                        <td style="color: #667eea; font-weight: 600;">⬆️ Mejor UX</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- VENTAJAS -->
+            <section>
+                <h2><span class="emoji">💡</span>Ventajas de Nuestra Solución</h2>
+
+                <div class="benefits">
+                    <div class="benefit-card">
+                        <h4>⚡ Respuestas Instantáneas 24/7</h4>
+                        <p>Prospectos reciben respuesta inmediata en cualquier hora, aumentando percepción de profesionalismo y reduciendo abandono por falta de atención rápida.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <h4>🎯 Coordinador Enfocado en Ventas</h4>
+                        <p>Deja de responder FAQs repetitivas, se dedica a casos complejos y cierre de sales, reduciendo agotamiento del equipo.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <h4>📊 Calificación Automática</h4>
+                        <p>Sistema de tags para segmentar por estado permite priorizar leads calientes vs. fríos y facilita seguimiento estratégico.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <h4>🔄 Seguimiento Automático</h4>
+                        <p>Prospectos inactivos reciben follow-ups automáticos, recupera oportunidades perdidas sin intervención manual.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <h4>🗃️ Integración CRM Completa</h4>
+                        <p>Todos los datos en HubSpot automáticamente, histórico de conversación disponible, mejor visibilidad del pipeline.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <h4>📱 Experiencia Omnicanal</h4>
+                        <p>Funciona en WhatsApp, Instagram y Facebook. Prospecto elige su canal preferido con contexto unificado.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TIMELINE -->
+            <section>
+                <h2><span class="emoji">📅</span>Timeline de Implementación</h2>
+
+                <table>
+                    <tr>
+                        <th>Fase</th>
+                        <th>Actividad</th>
+                        <th>Duración</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1. Análisis & Diseño</strong></td>
+                        <td>Mapeo, arquitectura, aprobación</td>
+                        <td>3 días</td>
+                        <td>Lunes 24 Mayo</td>
+                        <td>Miércoles 26 Mayo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Configuración</strong></td>
+                        <td>Setup Manychat + HubSpot</td>
+                        <td>4 días</td>
+                        <td>Jueves 27 Mayo</td>
+                        <td>Martes 1 Junio</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Testing & Capacitación</strong></td>
+                        <td>QA, training, documentación</td>
+                        <td>5 días</td>
+                        <td>Miércoles 2 Junio</td>
+                        <td>Martes 8 Junio</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Go-Live & Soporte</strong></td>
+                        <td>Lanzamiento, monitoreo, optimización</td>
+                        <td>7 días</td>
+                        <td>Miércoles 9 Junio</td>
+                        <td>Martes 15 Junio</td>
+                    </tr>
+                    <tr style="background: linear-gradient(135deg, #667eea15, #764ba215);">
+                        <td><strong>TOTAL</strong></td>
+                        <td><strong>Implementación Completa</strong></td>
+                        <td><strong>2 SEMANAS</strong></td>
+                        <td><strong>24 Mayo</strong></td>
+                        <td><strong>15 Junio</strong></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- INVERSIÓN -->
+            <section>
+                <h2><span class="emoji">💰</span>Inversión & Términos</h2>
+
+                <div class="price-highlight">
+                    🔔 Sección de inversión - Agregar monto acordado aquí
+                </div>
+
+                <h3>✅ Incluido en la Propuesta</h3>
+                <ul>
+                    <li>Diseño e implementación del flujo Manychat</li>
+                    <li>Integración completa con HubSpot</li>
+                    <li>Configuración de 15+ respuestas automáticas</li>
+                    <li>Sistema de tags y segmentación</li>
+                    <li>Capacitación del equipo</li>
+                    <li>Documentación completa</li>
+                    <li>Testing en todos los canales</li>
+                    <li>Soporte durante go-live (7 días)</li>
+                    <li>Optimización inicial post-launch</li>
+                </ul>
+
+                <h3>⚠️ NO Incluido</h3>
+                <ul>
+                    <li>Cambios significativos fuera del scope después de day 10</li>
+                    <li>Hosting o cuentas adicionales (CEFAT mantiene su Manychat)</li>
+                    <li>Soporte post go-live (después de 7 días)</li>
+                    <li>Capacitación adicional a nuevos usuarios</li>
+                </ul>
+            </section>
+
+            <!-- PRÓXIMOS PASOS -->
+            <section>
+                <h2><span class="emoji">🎯</span>Próximos Pasos</h2>
+
+                <ol style="font-size: 1.05em; line-height: 2;">
+                    <li><strong>Aprobación de esta propuesta</strong> ← Estamos aquí</li>
+                    <li><strong>Kickoff call</strong> - Alineación final de expectativas (30 mins)</li>
+                    <li><strong>Envío de información</strong> - Acceso a Manychat, HubSpot, Meta Business</li>
+                    <li><strong>Inicio de implementación</strong> - Lunes 24 de Mayo</li>
+                    <li><strong>Go-Live</strong> - Martes 15 de Junio</li>
+                    <li><strong>Optimización & Ajustes</strong> - Semanas 3-4 (post go-live)</li>
+                </ol>
+            </section>
+
+            <!-- CTA -->
+            <div class="cta-section">
+                <h2>¡Listo para Automatizar tu Proceso de Ventas?</h2>
+                <p>Aprueba esta propuesta y comenzamos el lunes. En 2 semanas, CEFAT tendrá un sistema automatizado 24/7 que captura, califica y nutre prospectos sin intervención manual.</p>
+                <a href="mailto:contact@example.com" class="btn">📧 Confirmar Propuesta</a>
+                <a href="tel:+5215551234567" class="btn">📱 Llamar para Confirmar</a>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p><strong>[Nombre Agencia]</strong> | [Email] | [Teléfono]</p>
+            <p>Propuesta válida por 14 días (hasta 4 de Junio, 2026)</p>
+            <p style="margin-top: 15px; border-top: 1px solid #ddd; padding-top: 15px; font-size: 0.85em;">
+                Esta propuesta es confidencial y preparada específicamente para CEFAT. Se prohíbe su distribución sin autorización.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

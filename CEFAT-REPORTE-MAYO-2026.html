@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reporte de Marketing — CEFAT Mayo 2026</title>
+  <style>
+    :root {
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --accent2: #0f3460;
+      --green: #16c784;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --light: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--light);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
+      color: white;
+      padding: 48px 40px 40px;
+    }
+    .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+    .brand { font-size: 13px; opacity: .6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+    .header h1 { font-size: 36px; font-weight: 800; }
+    .header h1 span { color: var(--accent); }
+    .header-meta { text-align: right; font-size: 13px; opacity: .7; }
+    .header-meta strong { display: block; font-size: 15px; opacity: 1; }
+    .period-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    /* SCORE BANNER */
+    .score-banner {
+      background: var(--accent);
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .score-number { font-size: 52px; font-weight: 900; line-height: 1; }
+    .score-label { font-size: 13px; opacity: .85; text-transform: uppercase; letter-spacing: 1px; }
+    .score-rating { font-size: 20px; font-weight: 700; }
+    .score-desc { font-size: 14px; opacity: .85; max-width: 480px; }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-heading {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    /* KPI GRID */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+    .kpi-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .kpi-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .kpi-value { font-size: 28px; font-weight: 800; color: var(--primary); }
+    .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .kpi-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 6px;
+    }
+    .badge-green { background: #dcfce7; color: #16a34a; }
+    .badge-red { background: #fee2e2; color: #dc2626; }
+    .badge-yellow { background: #fef3c7; color: #d97706; }
+
+    /* CARDS */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      margin-bottom: 20px;
+    }
+    .card-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--primary); }
+
+    /* TWO COLUMNS */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media(max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* BAR CHART */
+    .bar-row { margin-bottom: 12px; }
+    .bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+    .bar-label span:first-child { color: var(--text); font-weight: 500; }
+    .bar-label span:last-child { color: var(--muted); }
+    .bar-track { background: var(--border); border-radius: 4px; height: 8px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+    .bar-accent { background: var(--accent); }
+    .bar-accent2 { background: var(--accent2); }
+    .bar-green { background: var(--green); }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); border-bottom: 2px solid var(--border); }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+
+    /* INSIGHT CARDS */
+    .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .insight-card {
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid;
+    }
+    .insight-card.red { background: #fff5f5; border-color: var(--red); }
+    .insight-card.green { background: #f0fdf4; border-color: var(--green); }
+    .insight-card.yellow { background: #fffbeb; border-color: var(--yellow); }
+    .insight-card.blue { background: #eff6ff; border-color: #3b82f6; }
+    .insight-icon { font-size: 22px; margin-bottom: 8px; }
+    .insight-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .insight-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ACTION PLAN */
+    .action-tier { margin-bottom: 28px; }
+    .tier-label {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+    .tier-quick { background: #dcfce7; color: #15803d; }
+    .tier-mid { background: #dbeafe; color: #1d4ed8; }
+    .tier-strategic { background: #f3e8ff; color: #7c3aed; }
+    .action-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .action-item:last-child { border-bottom: none; }
+    .action-check {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .action-content { flex: 1; }
+    .action-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .action-desc { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .action-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .tag-impact-high { background: #fee2e2; color: #dc2626; }
+    .tag-impact-med { background: #fef3c7; color: #d97706; }
+    .tag-effort { background: #e0e7ff; color: #4338ca; }
+    .tag-revenue { background: #dcfce7; color: #16a34a; }
+
+    /* SCORE TABLE */
+    .score-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .score-row:last-child { border-bottom: none; }
+    .score-cat { font-size: 14px; font-weight: 500; min-width: 180px; }
+    .score-bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 8px; }
+    .score-bar-fill { height: 100%; border-radius: 4px; }
+    .score-num { font-size: 14px; font-weight: 700; min-width: 45px; text-align: right; }
+
+    /* FUNNEL */
+    .funnel { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .funnel-step {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 8px;
+      text-align: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .funnel-step small { display: block; font-weight: 400; font-size: 12px; opacity: .85; }
+    .funnel-arrow { color: var(--muted); font-size: 18px; }
+
+    /* FOOTER */
+    .footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+      opacity: .8;
+    }
+    .footer strong { opacity: 1; }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 2px solid var(--border); margin: 40px 0; }
+
+    /* HIGHLIGHT BOX */
+    .highlight {
+      background: linear-gradient(135deg, var(--accent2) 0%, var(--primary) 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .highlight h3 { font-size: 18px; margin-bottom: 8px; }
+    .highlight p { opacity: .85; font-size: 14px; }
+    .highlight ul { margin-top: 12px; padding-left: 20px; }
+    .highlight ul li { font-size: 14px; opacity: .85; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="brand">Reporte de Marketing Digital</div>
+      <h1>CEFAT — <span>Escuela de Actuación</span></h1>
+      <div class="period-badge">📅 Mayo 2026 · 1 al 21 de mayo · 21 días analizados</div>
+    </div>
+    <div class="header-meta">
+      <strong>Freelan Marketing</strong>
+      jorge.rodriguez@freelan.com.mx<br/>
+      Generado: 21 de mayo, 2026<br/>
+      Fuente: Google Analytics GA4
+    </div>
+  </div>
+</div>
+
+<!-- SCORE BANNER -->
+<div class="score-banner">
+  <div>
+    <div class="score-label">Puntuación General</div>
+    <div class="score-number">52</div>
+  </div>
+  <div>
+    <div class="score-rating">⚠️ Below Average</div>
+    <div style="font-size:13px; opacity:.85; margin-top:4px;">Hay oportunidades claras de crecimiento</div>
+  </div>
+  <div class="score-desc">
+    CEFAT genera volumen significativo de tráfico pagado, pero la baja tasa de engagement (15.1%) y el alto rebote (84.9%) indican que la experiencia post-clic necesita optimización urgente. Las 200 conversiones estimadas son una base sólida para escalar.
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SCORECARD -->
+  <div class="section">
+    <div class="section-title">Scorecard</div>
+    <div class="section-heading">Resumen de Categorías</div>
+    <div class="card">
+      <div class="score-row">
+        <div class="score-cat">Paid Advertising</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:68%; background:var(--yellow);"></div></div>
+        <div class="score-num" style="color:var(--yellow);">68/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-cat">Website & Conversión</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:40%; background:var(--red);"></div></div>
+        <div class="score-num" style="color:var(--red);">40/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-cat">SEO & Orgánico</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:35%; background:var(--red);"></div></div>
+        <div class="score-num" style="color:var(--red);">35/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-cat">Contenido & Mensajes</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:55%; background:var(--yellow);"></div></div>
+        <div class="score-num" style="color:var(--yellow);">55/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-cat">Social Media</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:60%; background:var(--yellow);"></div></div>
+        <div class="score-num" style="color:var(--yellow);">60/100</div>
+      </div>
+      <div class="score-row">
+        <div class="score-cat">Email & Automatización</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:30%; background:var(--red);"></div></div>
+        <div class="score-num" style="color:var(--red);">30/100</div>
+      </div>
+      <div class="score-row" style="margin-top:8px; padding-top:16px;">
+        <div class="score-cat" style="font-weight:800; font-size:16px;">⭐ Puntuación Total</div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:52%; background:var(--accent);"></div></div>
+        <div class="score-num" style="color:var(--accent); font-size:18px; font-weight:900;">52/100</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="section">
+    <div class="section-title">Google Analytics · Mayo 1–21, 2026</div>
+    <div class="section-heading">KPIs Principales</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Sesiones</div>
+        <div class="kpi-value">19,260</div>
+        <div class="kpi-badge badge-green">↑ Volumen alto</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Usuarios</div>
+        <div class="kpi-value">18,888</div>
+        <div class="kpi-sub">99.9% nuevos</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Páginas Vistas</div>
+        <div class="kpi-value">23,010</div>
+        <div class="kpi-sub">1.2 páginas/sesión</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tasa de Rebote</div>
+        <div class="kpi-value">84.9%</div>
+        <div class="kpi-badge badge-red">⚠ Alta</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Duración Prom.</div>
+        <div class="kpi-value">0:23</div>
+        <div class="kpi-badge badge-red">⚠ Muy baja</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Engagement</div>
+        <div class="kpi-value">15.1%</div>
+        <div class="kpi-badge badge-red">⚠ Bajo</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Conversiones Est.</div>
+        <div class="kpi-value">~200</div>
+        <div class="kpi-sub">Visitas a /gracias/</div>
+        <div class="kpi-badge badge-yellow">1.07% conv. rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tráfico Pagado</div>
+        <div class="kpi-value">88%</div>
+        <div class="kpi-badge badge-yellow">Dependencia alta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUENTES DE TRÁFICO -->
+  <div class="section">
+    <div class="section-title">Fuentes de Tráfico</div>
+    <div class="section-heading">¿De dónde viene tu audiencia?</div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Canales por Sesiones</div>
+        <div class="bar-row">
+          <div class="bar-label"><span>Paid Social</span><span>16,996 · 88.2%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-accent" style="width:88%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span>Cross-network</span><span>822 · 4.3%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-accent2" style="width:4.3%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span>Organic Search</span><span>615 · 3.2%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:3.2%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span>Direct</span><span>548 · 2.8%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:2.8%; background:#8b5cf6;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span>Paid Search</span><span>164 · 0.9%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:0.9%; background:#f59e0b;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><span>Organic Social</span><span>89 · 0.5%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:0.5%; background:#10b981;"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Análisis por Canal</div>
+        <table>
+          <thead><tr><th>Canal</th><th>Sesiones</th><th>Usuarios</th></tr></thead>
+          <tbody>
+            <tr><td>Paid Social</td><td>16,996</td><td>16,965</td></tr>
+            <tr><td>Cross-network</td><td>822</td><td>702</td></tr>
+            <tr><td>Organic Search</td><td>615</td><td>499</td></tr>
+            <tr><td>Direct</td><td>548</td><td>530</td></tr>
+            <tr><td>Paid Search</td><td>164</td><td>141</td></tr>
+            <tr><td>Organic Social</td><td>89</td><td>84</td></tr>
+            <tr><td>Referral</td><td>14</td><td>13</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNNEL DE CONVERSIÓN -->
+  <div class="section">
+    <div class="section-title">Análisis de Conversión</div>
+    <div class="section-heading">Embudo de la Campaña Principal</div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Embudo Estimado (LP Actuación 2026)</div>
+        <div class="funnel">
+          <div class="funnel-step" style="background:var(--accent2);">
+            16,996 Usuarios desde Paid Social
+            <small>Alcance de la campaña de Meta Ads</small>
+          </div>
+          <div class="funnel-arrow">▼</div>
+          <div class="funnel-step" style="background:#1d4ed8; width:90%">
+            18,757 Vistas en LP de Actuación
+            <small>Algunos usuarios vuelven a la página</small>
+          </div>
+          <div class="funnel-arrow">▼</div>
+          <div class="funnel-step" style="background:#7c3aed; width:65%">
+            ~1,774 con Scroll significativo
+            <small>9.4% leyó el contenido de la LP</small>
+          </div>
+          <div class="funnel-arrow">▼</div>
+          <div class="funnel-step" style="background:#b91c1c; width:40%">
+            ~791 Clics en CTA
+            <small>4.2% hizo clic en algún botón</small>
+          </div>
+          <div class="funnel-arrow">▼</div>
+          <div class="funnel-step" style="background:var(--green); width:25%">
+            ~200 Conversiones (/gracias/)
+            <small>1.07% tasa de conversión final</small>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title">Páginas Más Visitadas</div>
+          <table>
+            <thead><tr><th>Página</th><th>Vistas</th></tr></thead>
+            <tbody>
+              <tr><td>/lp-carrera-actuacion-2026/</td><td><strong>18,757</strong></td></tr>
+              <tr><td>/ (Home)</td><td>1,143</td></tr>
+              <tr><td>/contacto/</td><td>809</td></tr>
+              <tr><td>/oferta-academica/</td><td>592</td></tr>
+              <tr><td>/alumnos/</td><td>412</td></tr>
+              <tr><td>/gracias/ ✅</td><td>200</td></tr>
+              <tr><td>/lp-next-gen-actors/</td><td>124</td></tr>
+              <tr><td>/cursos-de-actuacion-cdmx/</td><td>114</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card" style="margin-top:20px;">
+          <div class="card-title">Dispositivos</div>
+          <div class="bar-row">
+            <div class="bar-label"><span>📱 Mobile</span><span>18,511 · 96.1%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-accent" style="width:96%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label"><span>🖥️ Desktop</span><span>670 · 3.5%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-accent2" style="width:3.5%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label"><span>📟 Tablet</span><span>22 · 0.1%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-green" style="width:0.1%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section">
+    <div class="section-title">Análisis Estratégico</div>
+    <div class="section-heading">Insights Clave para el Cliente</div>
+    <div class="insight-grid">
+      <div class="insight-card green">
+        <div class="insight-icon">🚀</div>
+        <div class="insight-title">La campaña genera volumen</div>
+        <div class="insight-text">19,260 sesiones en 21 días con Paid Social es una señal de que la campaña de Meta Ads está funcionando en términos de alcance y clic. La máquina está prendida.</div>
+      </div>
+      <div class="insight-card red">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-title">Experiencia post-clic fallando</div>
+        <div class="insight-text">84.9% de rebote y 23 segundos de duración promedio indican que muchos usuarios llegan a la LP y se van sin interactuar. El anuncio promete algo que la página no entrega de inmediato.</div>
+      </div>
+      <div class="insight-card yellow">
+        <div class="insight-icon">📱</div>
+        <div class="insight-title">96% mobile — es crítico</div>
+        <div class="insight-text">Prácticamente todo el tráfico viene de celular. Si la landing page no carga rápido en mobile o el formulario no es fácil de llenar en pantalla pequeña, se están perdiendo conversiones.</div>
+      </div>
+      <div class="insight-card green">
+        <div class="insight-icon">✅</div>
+        <div class="insight-title">~200 conversiones reales</div>
+        <div class="insight-text">Las 200 visitas a /gracias/ representan leads reales capturados. Con un ticket promedio de inscripción de $X, esto puede ser un número muy rentable dependiendo del costo por lead.</div>
+      </div>
+      <div class="insight-card red">
+        <div class="insight-icon">🔒</div>
+        <div class="insight-title">99.9% dependencia de paid</div>
+        <div class="insight-text">Solo 615 sesiones orgánicas de 19,260 totales. Si se apaga el presupuesto de ads, el tráfico cae a casi cero. El SEO y el orgánico son prácticamente inexistentes hoy.</div>
+      </div>
+      <div class="insight-card blue">
+        <div class="insight-icon">💡</div>
+        <div class="insight-title">Segunda LP sin tráfico</div>
+        <div class="insight-text">/lp-next-gen-actors/ tiene solo 124 vistas. Si hay presupuesto asignado a esta campaña, está rindiendo muy por debajo de la LP principal. Oportunidad de redistribuir o pausar.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PARA EL CONSULTOR -->
+  <div class="section">
+    <div class="section-title">Para el Consultor</div>
+    <div class="section-heading">Oportunidades que Puedes Vender</div>
+    <div class="highlight">
+      <h3>💼 Palancas de negocio identificadas</h3>
+      <p>Estas son las áreas donde puedes mostrar valor inmediato y justificar una expansión de servicios:</p>
+      <ul>
+        <li><strong>CRO de landing page:</strong> Subir el conv. rate de 1.07% a 2% = duplicar los leads con el mismo presupuesto</li>
+        <li><strong>SEO básico:</strong> 615 sesiones orgánicas actuales — hay espacio enorme para crecer sin depender solo de paid</li>
+        <li><strong>Email/nurturing:</strong> 200 leads capturados sin ningún seguimiento automatizado identificado → oportunidad de conversión diferida</li>
+        <li><strong>Retargeting:</strong> Del 85% que rebotó, muchos son recuperables con una campaña de retargeting segmentada</li>
+      </ul>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">💰 Impacto de Revenue Estimado</div>
+        <table>
+          <thead><tr><th>Iniciativa</th><th>Impacto Estimado</th><th>Confianza</th></tr></thead>
+          <tbody>
+            <tr><td>Optimizar CRO de LP (+1%)</td><td>+200 leads/mes</td><td>Alta</td></tr>
+            <tr><td>Velocidad mobile</td><td>+15–20% conversiones</td><td>Alta</td></tr>
+            <tr><td>Email nurturing (200 leads)</td><td>+20–40 inscripciones</td><td>Media</td></tr>
+            <tr><td>Retargeting al 85% rebote</td><td>+50–80 leads</td><td>Media</td></tr>
+            <tr><td>SEO local (6 meses)</td><td>+500 sesiones org/mes</td><td>Media</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Benchmark de Industria (Educación)</div>
+        <table>
+          <thead><tr><th>Métrica</th><th>CEFAT</th><th>Benchmark</th><th>Gap</th></tr></thead>
+          <tbody>
+            <tr><td>Tasa de rebote</td><td style="color:var(--red)">84.9%</td><td>55–65%</td><td style="color:var(--red)">-20pts</td></tr>
+            <tr><td>Conv. rate LP</td><td style="color:var(--yellow)">1.07%</td><td>2–5%</td><td style="color:var(--yellow)">-1.5pts</td></tr>
+            <tr><td>Duración sesión</td><td style="color:var(--red)">0:23</td><td>2:30+</td><td style="color:var(--red)">-2min</td></tr>
+            <tr><td>Engagement rate</td><td style="color:var(--red)">15.1%</td><td>35–50%</td><td style="color:var(--red)">-20pts</td></tr>
+            <tr><td>% tráfico orgánico</td><td style="color:var(--red)">3.2%</td><td>30–50%</td><td style="color:var(--red)">-27pts</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION PLAN -->
+  <div class="section">
+    <div class="section-title">Plan de Acción</div>
+    <div class="section-heading">Prioridades para el Mes</div>
+
+    <div class="card">
+      <div class="action-tier">
+        <div class="tier-label tier-quick">⚡ Quick Wins — Esta Semana</div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Auditar velocidad de carga mobile de la LP</div>
+            <div class="action-desc">Con 96% mobile y 23s de duración, una LP lenta está matando conversiones. Usar PageSpeed Insights y optimizar imágenes + lazy loading.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-high">Impacto Alto</span>
+              <span class="tag tag-effort">2–4 hrs</span>
+              <span class="tag tag-revenue">+15–20% leads</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Revisar alignment anuncio → landing page</div>
+            <div class="action-desc">El 84.9% de rebote sugiere que el mensaje del anuncio y la LP no están alineados. Comparar el copy del ad con el headline de la landing page y unificar la propuesta de valor.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-high">Impacto Alto</span>
+              <span class="tag tag-effort">1–2 hrs</span>
+              <span class="tag tag-revenue">+30% engagement</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Instalar heatmap en /lp-carrera-actuacion-2026/</div>
+            <div class="action-desc">Herramienta como Hotjar o Microsoft Clarity (gratuita) para entender dónde hacen clic y hasta dónde scrollean antes de irse.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-med">Impacto Medio</span>
+              <span class="tag tag-effort">1 hr</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-tier">
+        <div class="tier-label tier-mid">📅 Este Mes</div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Crear flujo de email nurturing para los 200 leads</div>
+            <div class="action-desc">Los leads que llegaron a /gracias/ no tienen ningún seguimiento automatizado visible. Crear secuencia de 3–5 emails: bienvenida, propuesta de valor, testimonios, llamada a la acción de inscripción.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-high">Impacto Alto</span>
+              <span class="tag tag-effort">8–12 hrs</span>
+              <span class="tag tag-revenue">+20–40 inscripciones</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Activar campaña de retargeting al 85% que rebotó</div>
+            <div class="action-desc">Segmentar audiencia de rebote en Meta Ads con un anuncio diferente: testimonio en video de egresado o urgencia por fecha de cierre de inscripciones.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-high">Impacto Alto</span>
+              <span class="tag tag-effort">4–6 hrs</span>
+              <span class="tag tag-revenue">+50–80 leads</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Pausar o reforzar /lp-next-gen-actors/</div>
+            <div class="action-desc">Esta LP tiene solo 124 vistas vs 18,757 de la principal. Evaluar si tiene presupuesto propio y decidir: pausar y consolidar budget en la LP que convierte, o reforzar su campaña.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-med">Impacto Medio</span>
+              <span class="tag tag-effort">1–2 hrs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-tier">
+        <div class="tier-label tier-strategic">🎯 Este Trimestre</div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Estrategia de SEO local para actuación CDMX</div>
+            <div class="action-desc">Solo 615 sesiones orgánicas de 19,260 totales (3.2%). Crear contenido SEO para búsquedas como "cursos de actuación CDMX", "escuela de actuación México", "carrera de actuación 2026". Reducir dependencia de paid.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-high">Impacto Alto</span>
+              <span class="tag tag-effort">40+ hrs · 3–6 meses</span>
+              <span class="tag tag-revenue">+500 sesiones org/mes</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-check"></div>
+          <div class="action-content">
+            <div class="action-title">Rediseño de landing page con foco en mobile y conversión</div>
+            <div class="action-desc">La LP actual genera 84.9% de rebote. Un rediseño con: CTA visible sin scroll, testimonios en video cortos, formulario simplificado (máximo 3 campos), y prueba social visible arriba del fold puede duplicar la tasa de conversión.</div>
+            <div class="action-tags">
+              <span class="tag tag-impact-high">Impacto Alto</span>
+              <span class="tag tag-effort">20–30 hrs</span>
+              <span class="tag tag-revenue">Doblar leads con mismo budget</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section">
+    <div class="section-title">Roadmap</div>
+    <div class="section-heading">Plan 30-60-90 Días</div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Período</th><th>Objetivo</th><th>Acciones Clave</th><th>Meta</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Días 1–30</strong><br/><small style="color:var(--green)">Quick wins</small></td>
+            <td>Mejorar conversión de LP</td>
+            <td>Velocidad mobile, alineación de mensaje, heatmap, email nurturing básico</td>
+            <td>Conv. rate: 1% → 1.8%</td>
+          </tr>
+          <tr>
+            <td><strong>Días 31–60</strong><br/><small style="color:var(--yellow)">Optimización</small></td>
+            <td>Reducir rebote + retargeting</td>
+            <td>Campaña retargeting, A/B test en LP, secuencia email completa, análisis por cohorte</td>
+            <td>Rebote: 85% → 70%</td>
+          </tr>
+          <tr>
+            <td><strong>Días 61–90</strong><br/><small style="color:var(--accent)">Escala</small></td>
+            <td>Diversificar tráfico</td>
+            <td>SEO técnico, Google My Business, contenido orgánico, rediseño LP v2</td>
+            <td>Org. traffic: 3% → 10%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- METODOLOGÍA -->
+  <div class="section">
+    <div class="section-title">Metodología</div>
+    <div class="section-heading">Fuentes y Notas</div>
+    <div class="card" style="font-size:13px; color:var(--muted);">
+      <p><strong style="color:var(--text)">Fuente de datos:</strong> Google Analytics 4 — Propiedad: Cefat GA4 (ID: 358743188) · Cuenta: Azteca Digital (ID: 1725851)</p>
+      <p style="margin-top:8px;"><strong style="color:var(--text)">Período analizado:</strong> 1 al 21 de mayo de 2026 (21 días). Las proyecciones mensuales son estimadas basadas en la tendencia actual.</p>
+      <p style="margin-top:8px;"><strong style="color:var(--text)">Conversiones:</strong> Estimadas en base a visitas a /gracias/ — no se verifica si existe un goal configurado en GA4 como evento de conversión oficial.</p>
+      <p style="margin-top:8px;"><strong style="color:var(--text)">Benchmarks:</strong> Basados en industria de educación y escuelas de artes en México. Las cifras pueden variar según el segmento exacto.</p>
+      <p style="margin-top:8px;"><strong style="color:var(--text)">Puntuaciones:</strong> Basadas en métricas de GA4 disponibles. Las categorías de Social Media, SEO y Email tienen puntuaciones estimadas por falta de acceso directo a esas plataformas.</p>
+      <p style="margin-top:8px;"><strong style="color:var(--text)">Herramienta:</strong> Google Analytics MCP + Claude Code · Generado automáticamente por Freelan Marketing.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>Freelan Marketing</strong> · jorge.rodriguez@freelan.com.mx<br/>
+  Reporte generado el 21 de mayo de 2026 · CEFAT · Mayo 2026
+</div>
+
+</body>
+</html>

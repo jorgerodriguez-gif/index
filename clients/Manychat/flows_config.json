@@ -1,0 +1,92 @@
+{
+  "flows": [
+    {
+      "name": "Welcome Flow",
+      "description": "Flujo de bienvenida para nuevos suscriptores",
+      "trigger": "welcome",
+      "steps": [
+        {
+          "type": "message",
+          "text": "¡Hola! Bienvenido a nuestro bot.",
+          "delay": 0
+        },
+        {
+          "type": "message",
+          "text": "Soy tu asistente virtual y estoy aquí para ayudarte.",
+          "delay": 2000
+        },
+        {
+          "type": "action",
+          "action": "set_custom_field",
+          "field": "subscribed_date",
+          "value": "now"
+        }
+      ]
+    },
+    {
+      "name": "Lead Capture Flow",
+      "description": "Capturar datos de leads",
+      "trigger": "button_click",
+      "steps": [
+        {
+          "type": "message",
+          "text": "Para ayudarte mejor, ¿Cuál es tu nombre?"
+        },
+        {
+          "type": "action",
+          "action": "capture_field",
+          "field": "first_name"
+        },
+        {
+          "type": "message",
+          "text": "Y tu email por favor:"
+        },
+        {
+          "type": "action",
+          "action": "capture_field",
+          "field": "email"
+        },
+        {
+          "type": "message",
+          "text": "¡Gracias! Te contactaremos pronto."
+        }
+      ]
+    },
+    {
+      "name": "Email Sequence Flow",
+      "description": "Secuencia automática de emails",
+      "trigger": "custom_event",
+      "steps": [
+        {
+          "type": "message",
+          "text": "Primera parte de nuestra secuencia...",
+          "delay": 0
+        },
+        {
+          "type": "delay",
+          "time": 3600
+        },
+        {
+          "type": "message",
+          "text": "Segunda parte (después de 1 hora)...",
+          "delay": 0
+        },
+        {
+          "type": "delay",
+          "time": 86400
+        },
+        {
+          "type": "message",
+          "text": "Tercera parte (después de 24 horas)...",
+          "delay": 0
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "language": "es",
+    "timezone": "America/Mexico_City",
+    "autoSave": true,
+    "takeScreenshots": true
+  }
+}

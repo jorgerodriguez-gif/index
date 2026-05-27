@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thought Leadership — Grupo Ei</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Variables ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #01324c;
+      --navy-80:#014063;
+      --red:    #dd4526;
+      --bg:     #edf3f5;
+      --white:  #ffffff;
+      --gray-50:#f8fafc;
+      --gray-100:#f1f5f9;
+      --gray-200:#e2e8f0;
+      --gray-400:#94a3b8;
+      --gray-600:#475569;
+      --gray-800:#1e293b;
+      --sidebar-w: 260px;
+      --transition: 0.28s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--gray-800);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ───────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      overflow-y: auto;
+      transition: transform var(--transition);
+    }
+
+    .sidebar-logo {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .logo-img-wrap {
+      background: white;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-img {
+      width: 148px;
+      height: auto;
+      display: block;
+    }
+
+    .sidebar-label {
+      padding: 20px 24px 10px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .sidebar-nav { flex: 1; padding: 0 12px 24px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      margin-bottom: 2px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      text-decoration: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .nav-item.active {
+      background: rgba(221,69,38,0.18);
+      color: white;
+    }
+
+    .nav-item.active .nav-num {
+      background: var(--red);
+      color: white;
+    }
+
+    .nav-num {
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .sidebar-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer p {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.5;
+    }
+
+    /* ── Hamburger ─────────────────────────────────────── */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 16px; left: 16px;
+      width: 42px; height: 42px;
+      background: var(--navy);
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 18px; height: 2px;
+      background: white;
+      border-radius: 2px;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(1,50,76,0.5);
+      z-index: 90;
+      backdrop-filter: blur(2px);
+    }
+
+    /* ── Main Content ──────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── Sections ──────────────────────────────────────── */
+    .section {
+      padding: 80px 64px;
+      max-width: 960px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .section.visible { opacity: 1; transform: translateY(0); }
+
+    .section + .section {
+      border-top: 1px solid var(--gray-200);
+    }
+
+    /* ── Section Header ─────────────────────────────────── */
+    .module-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .module-tag::before {
+      content: '';
+      display: block;
+      width: 14px; height: 2px;
+      background: var(--red);
+      border-radius: 1px;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      max-width: 580px;
+      margin-bottom: 48px;
+    }
+
+    /* ── Hero ───────────────────────────────────────────── */
+    .hero {
+      background: var(--navy);
+      padding: 72px 64px;
+      margin-bottom: 0;
+      border-bottom: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -60px;
+      width: 320px; height: 320px;
+      background: var(--red);
+      opacity: 0.06;
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: 120px;
+      width: 160px; height: 160px;
+      background: var(--red);
+      opacity: 0.08;
+      border-radius: 50%;
+    }
+
+    .hero .module-tag { color: rgba(221,69,38,0.9); }
+    .hero .module-tag::before { background: rgba(221,69,38,0.7); }
+
+    .hero-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      color: white;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 14px;
+      max-width: 600px;
+    }
+
+    .hero-title span { color: var(--red); }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+      max-width: 500px;
+      margin-bottom: 36px;
+    }
+
+    .hero-stat {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 20px 24px;
+      max-width: 560px;
+    }
+
+    .hero-stat-icon {
+      width: 40px; height: 40px;
+      background: rgba(221,69,38,0.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hero-stat-icon svg { width: 20px; height: 20px; stroke: var(--red); fill: none; stroke-width: 2; }
+
+    .hero-stat-text {
+      font-size: 14.5px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.55;
+    }
+
+    .hero-stat-text strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    /* ── Goal Cards ─────────────────────────────────────── */
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .goal-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 24px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .goal-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(1,50,76,0.08);
+    }
+
+    .goal-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .goal-icon svg { width: 20px; height: 20px; stroke-width: 1.8; }
+
+    .goal-icon.navy { background: rgba(1,50,76,0.08); }
+    .goal-icon.navy svg { stroke: var(--navy); fill: none; }
+    .goal-icon.red { background: rgba(221,69,38,0.08); }
+    .goal-icon.red svg { stroke: var(--red); fill: none; }
+
+    .goal-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .goal-desc {
+      font-size: 13.5px;
+      color: var(--gray-600);
+      line-height: 1.55;
+    }
+
+    /* ── Stepper ─────────────────────────────────────────── */
+    .stepper {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: calc(50% + 22px);
+      right: calc(-50% + 22px);
+      height: 2px;
+      background: var(--gray-200);
+    }
+
+    .step-num {
+      width: 40px; height: 40px;
+      background: var(--navy);
+      color: white;
+      border-radius: 50%;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .step-desc {
+      font-size: 12.5px;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    /* ── Plan Compare ────────────────────────────────────── */
+    .plan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .plan-card {
+      border-radius: 14px;
+      padding: 28px;
+      border: 2px solid transparent;
+    }
+
+    .plan-card.plan-a {
+      background: var(--navy);
+      color: white;
+    }
+
+    .plan-card.plan-b {
+      background: white;
+      border-color: var(--gray-200);
+    }
+
+    .plan-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .plan-a .plan-badge {
+      background: var(--red);
+      color: white;
+    }
+
+    .plan-b .plan-badge {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    .plan-freq {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .plan-a .plan-freq { color: white; }
+    .plan-b .plan-freq { color: var(--navy); }
+
+    .plan-impact {
+      font-size: 13.5px;
+      margin-bottom: 16px;
+    }
+
+    .plan-a .plan-impact { color: rgba(255,255,255,0.65); }
+    .plan-b .plan-impact { color: var(--gray-600); }
+
+    .plan-note {
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    .plan-a .plan-note { color: rgba(255,255,255,0.5); }
+    .plan-b .plan-note { color: var(--gray-400); }
+
+    /* ── Profile Cards ───────────────────────────────────── */
+    .profile-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .profile-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 44px 180px 1fr;
+      align-items: start;
+      gap: 20px;
+      transition: box-shadow var(--transition);
+    }
+
+    .profile-card:hover {
+      box-shadow: 0 4px 16px rgba(1,50,76,0.07);
+    }
+
+    .profile-dot {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .profile-meta {}
+    .profile-aduana {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .profile-role {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .profile-topics {
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.55;
+    }
+
+    /* ── ICP Cards ───────────────────────────────────────── */
+    .icp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .icp-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 22px;
+    }
+
+    .icp-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .icp-role {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .icp-type {
+      font-size: 11.5px;
+      color: var(--gray-400);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .icp-pain {
+      font-size: 12.5px;
+      color: var(--gray-600);
+      line-height: 1.55;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .icp-pain strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    /* ── Prompt Blocks ───────────────────────────────────── */
+    .prompt-master {
+      background: var(--navy);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .prompt-master-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .prompt-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .prompt-badge {
+      background: var(--red);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .prompt-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .prompt-body {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 20px;
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.8);
+      font-family: 'Inter', monospace;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ── Tabs ────────────────────────────────────────────── */
+    .tabs-nav {
+      display: flex;
+      gap: 4px;
+      background: var(--gray-100);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 9px 14px;
+      border: none;
+      background: transparent;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--gray-600);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: var(--navy);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .prompt-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .prompt-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .prompt-card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .prompt-card-sub {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    .prompt-card-body {
+      padding: 20px;
+      font-size: 13px;
+      color: var(--gray-700);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: var(--gray-50);
+    }
+
+    /* ── Copy Button ─────────────────────────────────────── */
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), transform 0.1s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-copy:active { transform: scale(0.97); }
+
+    .btn-copy.light {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .btn-copy.light:hover { background: rgba(255,255,255,0.2); }
+    .btn-copy.light.copied { background: rgba(76,175,80,0.25); color: #4ade80; }
+
+    .btn-copy.dark {
+      background: var(--navy);
+      color: white;
+    }
+
+    .btn-copy.dark:hover { background: var(--navy-80); }
+    .btn-copy.dark.copied { background: #16a34a; }
+
+    .btn-copy svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ── Do's & Don'ts ───────────────────────────────────── */
+    .dos-donts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .dd-col {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .dd-header {
+      padding: 14px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .dd-header.do { background: rgba(22,163,74,0.06); color: #15803d; border-bottom: 1px solid rgba(22,163,74,0.1); }
+    .dd-header.dont { background: rgba(220,38,38,0.05); color: #dc2626; border-bottom: 1px solid rgba(220,38,38,0.1); }
+
+    .dd-list { padding: 14px 20px; }
+
+    .dd-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.5;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .dd-item:last-child { border-bottom: none; }
+
+    .dd-item-icon {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .dd-item-icon.do { background: rgba(22,163,74,0.1); color: #15803d; }
+    .dd-item-icon.dont { background: rgba(220,38,38,0.08); color: #dc2626; }
+
+    /* ── Example Block ───────────────────────────────────── */
+    .example-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .example-card {
+      border-radius: 12px;
+      padding: 18px 20px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .example-card.bad {
+      background: rgba(220,38,38,0.04);
+      border: 1px solid rgba(220,38,38,0.12);
+    }
+
+    .example-card.good {
+      background: rgba(22,163,74,0.04);
+      border: 1px solid rgba(22,163,74,0.14);
+    }
+
+    .example-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+    }
+
+    .example-card.bad .example-label { color: #dc2626; }
+    .example-card.good .example-label { color: #15803d; }
+
+    .example-text { color: var(--gray-700); }
+
+    /* ── Metrics Section ─────────────────────────────────── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .metric-item {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .metric-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--navy);
+      flex-shrink: 0;
+    }
+
+    .metric-label {
+      font-size: 13.5px;
+      color: var(--gray-700);
+      font-weight: 500;
+    }
+
+    /* ── Pillars ─────────────────────────────────────────── */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .pillar-card {
+      background: white;
+      border-left: 3px solid var(--red);
+      border-radius: 10px;
+      padding: 18px 20px;
+      border: 1px solid var(--gray-200);
+      border-left: 3px solid var(--red);
+    }
+
+    .pillar-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .pillar-desc {
+      font-size: 12.5px;
+      color: var(--gray-600);
+    }
+
+    /* ── Final CTA ───────────────────────────────────────── */
+    .final-cta {
+      background: var(--navy);
+      border-radius: 20px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .cta-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .cta-title {
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 24px;
+      line-height: 1.3;
+      letter-spacing: -0.4px;
+    }
+
+    .cta-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+
+    .cta-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cta-step-num {
+      width: 32px; height: 32px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .cta-step-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .cta-arrow {
+      padding: 0 16px;
+      color: rgba(255,255,255,0.25);
+      font-size: 18px;
+    }
+
+    /* ── Divider ─────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--gray-200);
+      margin: 32px 0;
+    }
+
+    .sub-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+      letter-spacing: -0.3px;
+    }
+
+    .sub-section-body {
+      font-size: 14px;
+      color: var(--gray-600);
+      line-height: 1.65;
+      margin-bottom: 28px;
+      max-width: 620px;
+    }
+
+    /* ── Profile Check Items (PCI) ─────────────────────── */
+    .pci {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .pci-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+    }
+
+    .pci-num {
+      width: 36px; height: 36px;
+      background: var(--navy);
+      color: white;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .pci-info { flex: 1; min-width: 0; }
+
+    .pci-name {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 2px;
+    }
+
+    .pci-desc {
+      font-size: 12.5px;
+      color: var(--gray-600);
+    }
+
+    .pci-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-req { background: rgba(221,69,38,0.1); color: var(--red); }
+    .badge-rec { background: rgba(1,50,76,0.08); color: var(--navy); }
+
+    .pci-body {
+      padding: 16px 24px 20px;
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+    }
+
+    .pci-note {
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .pci-rules { display: flex; flex-direction: column; gap: 6px; }
+
+    .pci-rule {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.5;
+      padding: 7px 12px;
+      border-radius: 8px;
+    }
+
+    .pci-rule.do {
+      background: rgba(22,163,74,0.04);
+      border: 1px solid rgba(22,163,74,0.1);
+    }
+
+    .pci-rule.do::before {
+      content: '✓';
+      color: #15803d;
+      font-weight: 800;
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .pci-rule.dont {
+      background: rgba(220,38,38,0.03);
+      border: 1px solid rgba(220,38,38,0.08);
+    }
+
+    .pci-rule.dont::before {
+      content: '✕';
+      color: #dc2626;
+      font-weight: 800;
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .pci-formula {
+      background: var(--navy);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+
+    .pci-formula-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 6px;
+    }
+
+    .pci-formula-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .pci-template {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .pci-template-label {
+      padding: 8px 16px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      background: var(--gray-100);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .pci-template-body {
+      padding: 16px;
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+
+    /* ── Skills Tags ─────────────────────────────────────── */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .skill-tag {
+      background: rgba(1,50,76,0.06);
+      color: var(--navy);
+      border: 1px solid rgba(1,50,76,0.12);
+      border-radius: 20px;
+      padding: 5px 13px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ── Checklist Summary ───────────────────────────────── */
+    .checklist-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .cl-group {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .cl-group-header {
+      padding: 12px 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .cl-group-header.req {
+      background: rgba(221,69,38,0.06);
+      color: var(--red);
+      border-bottom: 1px solid rgba(221,69,38,0.1);
+    }
+
+    .cl-group-header.rec {
+      background: rgba(1,50,76,0.05);
+      color: var(--navy);
+      border-bottom: 1px solid rgba(1,50,76,0.08);
+    }
+
+    .cl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 20px;
+      font-size: 13px;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
+      line-height: 1.4;
+    }
+
+    .cl-item:last-child { border-bottom: none; }
+
+    .cl-box {
+      width: 18px; height: 18px;
+      border: 2px solid var(--gray-300);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Mobile ──────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+
+      .sidebar.open { transform: translateX(0); }
+
+      .overlay.open { display: block; }
+
+      .main { margin-left: 0; }
+
+      .section { padding: 60px 24px; }
+
+      .hero { padding: 80px 24px 60px; }
+
+      .goal-grid { grid-template-columns: 1fr; }
+
+      .stepper { flex-direction: column; gap: 20px; }
+      .step::after { display: none; }
+      .step { text-align: left; display: flex; align-items: flex-start; gap: 14px; }
+      .step-num { margin: 0; flex-shrink: 0; }
+
+      .plan-grid { grid-template-columns: 1fr; }
+
+      .profile-card {
+        grid-template-columns: 44px 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .profile-card .profile-topics {
+        grid-column: 1 / -1;
+      }
+
+      .icp-grid { grid-template-columns: 1fr; }
+
+      .dos-donts { grid-template-columns: 1fr; }
+
+      .example-compare { grid-template-columns: 1fr; }
+
+      .metrics-grid { grid-template-columns: 1fr; }
+
+      .pillars-grid { grid-template-columns: 1fr; }
+
+      .cta-steps { flex-direction: column; }
+      .cta-arrow { display: none; }
+
+      .final-cta { padding: 32px 24px; }
+
+      .tabs-nav { gap: 3px; }
+      .tab-btn { min-width: 100px; font-size: 11px; }
+
+      .pci-header { flex-wrap: wrap; gap: 12px; }
+      .pci-badge { align-self: flex-start; }
+      .checklist-summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-img-wrap">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACUCAYAAAD4UUeAAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAADoAEAAwAAAAEAAQAAoAIABAAAAAEAAADcoAMABAAAAAEAAACUAAAAAALhoe0AAAGdaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjgwMDwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj41Mzk8L2V4aWY6UGl4ZWxZRGltZW5zaW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KLRBvpwAAMO1JREFUeAHtfQl4VNeV5tEuoQ2QkIRASGLXwr7vuwHbgLFjO47tLM7S6cSTtZPp6ZnppOfrTCadTuJ0T096OnYcx5204zgYGy/Y7IvYQSB2IUBIQkISQkJoX/v/b/FEqaj3qlSSnoG656Oo0nt3Pe+ce849y30BnQDRoDGgMWALBgJt6UV3ojGgMaAwoBlOE4LGgI0Y0AxnI7J1VxoDmuE0DWgM2IgBzXA2Ilt3pTGgGU7TgMaAjRjQDGcjsnVXGgOa4TQNaAzYiAHNcDYiW3elMaAZTtOAxoCNGNAMZyOydVcaA5rhNA1oDNiIAc1wNiJbd6UxoBlO04DGgI0Y0AxnI7J1VxoDmuE0DWgM2IgBzXA2Ilt3pTGgGU7TgMaAjRjQDGcjsnVXGgOa4TQNaAzYiAHNcDYiW3elMaAZTtOAxoCNGNAMZyOydVcaA5rhNA1oDNiIAc1wNiJbd6UxoBlO04DGgI0Y0AxnI7J1VxoDmuE0DWgM2IgBzXA2Ilt3pTGgGU7TgMaAjRgItrEv1RXfjtXe0SHt7R3Sgd+Ot2UFSECASFBgoATiw2/+rUFj4EHDgC0M19beLo1NLdLY3Co1t+qltKJartfUys1bDdLS2gYmE4kIC5PY6AESNzBKkuIHSkxUpESEhkh4WKiEBAc9aHjX87HAAGniVn2j2LbqYuGPCA+TAeGhalSk1YamZuv+UScmakCPabNfGa6ppVUh7szFEtl5+JTknMiXc4Wlcr26FsyHCUHSifE6SIq0wCCJigiT+EHRMnbEUJk9cYwsnpEt2aNTJDoyQsLBgBoefAwcPXtJXnptkwQG27Pj6Whpl8dWzpFnVs1TyH1vz1F564McCQw1X+g72jrkey+sl+lZI3v0QPqF4SjRamrrZduhU/L6u7tk99Ezcqu2DisGxkZpRZEWgE/Q3Qita2ySuvoGKbxSKh/vPio/i46U+VMz5LOPLpQVcyfJQPytJV6PnvF9V7iorFLefHuHSLhNC2xDk6SkJnYxXO65QvS/TSDyzHHX1CrPPLzgk2e4+sZm4Qr1j799Rz7YnSvtLS0ilExQDb0CtZkDUwY5Vpf65hb5aNcR+Xj/CXlo9kT59ufWyJyJYyUGEk/Dg4kB7uOhzoBmbGK4jk4JCboje9SCDhXTmmYDoJDdLTA8PZE7vXgq6cX9m3UN8tt3dsiP/v+fpfJ6tQNh3jKaWftkQLQB84p8BIm3//h5efEzD8t/+cxqSYiLlUBtXTHDnL5+D2Kg5yxqMokaGED+7l//JN/+yatSCYOIY3XoS1Ojg/FqoXL+71/9Uf7i738ttehTg8bA/YSBPpFwpZXV8tcv/bu8vhF6dwia7FepEyAREeGSMDhagrX18n6iNT1WYKDXDEfz7S9ef08ZRySUzXkh1ZRlEv8Z3+pRoJ6qany7eT4wxQaj0or5U+RHLz4jUVabWjfV/e0S/Zz0d9LXGYBFMDAwQPk4+w8PeKCqP1ifAQFdhjEvaMKXQXWjH18auF3HIMWuJm5fAN5MweqeaaVeMhwf6HvYV/3LHz6E5ZFI9YBYjp8DhSI7ICRUBoBBQ2AcIUG00lcH/0tTW5t04KEpKeksKVEtAJvbqRNGy4+/9SwkXGy3adGZXnmjVjnTu91w/gP9hGEjHhcb7XxVmuG+oAuD/p+2tnaJBCMbRhneq6q55RhPt1pOf6DdKBhxjDpOd7p+1tY1Sl2DZ99S3MBo2AqCpQ04qKy+qdDV1YjrD/RLP+Xg2Ch1pwP4qYWFtxoWYi6EtdhT34IFjvMKAp4jB4TJIPg31TesvbT49lZL6GxqlPZbN6Wj/pa0N9TjA2t0c5NjpGHhEjQgCp9ICYyKlqCoWAkI7yNjF+ghOChAQgJ7LTOkE7gOVvTrGHYQ3FMRYWg31MLQRzJ2quP6aMz+7tVoi69dl7//9QY4teFToyppBRggIR7O7ZThiZI1JkVGJico/5oiFBBHScUNuVBUJldLKuQa9oHNIBTlPiAfg6FGot6Pv/msZI4crtpy/u8WCPqlP3wgLdjjmaq0QOwo1P360yvh2GyR8qoaEHWtFGEepeU3pOpmnTTCMb8A1tA1i6ap5i9drZBfv7HZrQujq//WdlmyYIqsWeio03Xd6cfWQydl7/484Mnct0Pu+urTq2Vs2lC5gbH8DL6oDiwApusY5pM5Pl2+sG6xXLteI4UY68GTBXL01AXJLy6XMsyPTlwuRpRw9GMOQWDBqOREmZI5UmZNGitjU4dK8pDB2HJ7eH5Oc+HPDjBZ6/Vyaco/JY1nc6X58gVpqywD49WBgDFmQACYPDASqv+QJAlLHysRmVMkfEyWhODvwKgYVcbn/zraJWtcumSOSvG5ia6KWFSzR6d2/Um/7/qV8+CHM8cJnwvx1lMwb9FDS+1YTV/Bnu3M2csOE65VeRBSEB74GDizn4KD8fFls2R8+jA85O5m31ZMgkxMv93b2w/L0bx8KQXjdbZ3SiKc4T/42pOydGa2255oIf0nSNpGSiMzcy0iXRYsnCqPLpgqe3LPKavn4TOXpQQW1XoyKgkFjNsGpuhiuNJy+cUrGx0WV7c94yKkSAAc9lYMt/PQafnnlzdY+3bAQCvB6GS46lt18nOo6p0Ys0N7cNM5XCZLl86U8WnJ8qfNOdA2jsml0gqBeHTUoUrnrHhg0btWUSUnzxXKxp2HJAERPStmTJAnV8+TGVmjJDnBMwF1trZIa2mR3DqwU+p2fSCN+aelo7FeMbThXzUUEzx2kerr0lJ0UeqP7JVASLuIcdkSvfhhiZq5SEKGpkgANB2foKVNnlg2W/7rC4/5VL1bJdInXRG3Yd2SGfLooumm65xRLsiMzowCbr59ZrireHCvvbPTesVmh0B6ED4zJ4ySH37taXloziQ3w3Bcov+DUoyfNYuny+/f3yuvbNgmZSXl8vXnHpFn4Wg0A67gZOBG+m6ckNetPBB0q75Jfvivb4JA90k9w4eINOWIB2UGAx1Q0ajmGhBEomWbLouDcV99g1E8OeOV6kYXiVU7kESqPzSK6FJoNCEC3QF/mKjqwFdB0TV54W9/JRcuFTvmwrGH3iEeNT7jPzbjhJsKqOC/f3+XbN5/XJ57dJF86YnlaiEMNiGkjrpaqT9+QG689VtpzD2AhbAVDBMCSQCflRtwDBtjwZDUDNqapeH4QWk8lSt1U7dL3KdekIhJM5QUdFPd46UgqHSh/WA4o8W9CppPgIXKyMVkGBaoSCy0PQGfGY6raVHxNWsC4kgg+jPHpMpL338BTDfa67Fxn/UN+NomjUuV7QdPyneeexS0YkJI3rYKYjxZUCTH4ZjnPtKS+L1t85MsB3wwKkNt9KwY2WyMxCf2KVXY8/3y9U2Sd75Q/u7FTyOkbuxdC0h7bbXc/HijVL3+L1Alr4HJQkGQPZVOCEpXEq1T6g7ugBqaL/GffVFilq2VoJiBZqM0vU4B2h/wUU6uvPHubgnkPs4EOrHd+Zu/fEpmTRhjUsL9ZfMW3ZdXVxm6tXHHodtWRouCUDtjBkRAFXy6R8zm3OKiaZnCT18B9zOmKmdfdWJnO71dhDhWtoHPDixsNBD983//ssybMq5LzeK+7OZ7b0jlqy9JR3OjqUTzftqwmIaGS1vVNSn/1Y+hNjfJwLXPQuWM9L4JlKRW0x9w+lKJbPoox1r9R2jXF55Y0ePufWI4+t2OYu9jaQDgUGBxXLVojqxbbG5M6PGIdYX+wwCkZN75y/K9n70mb/z0O5I+LAH7WkTu794sFa/+ExijGYYQqNd9BGyrs6lBKn/zCwmKGyKxS9diMbyjzlt2A3Xvxs1bcr6w1OFdsixschMCITIyXFIS47oVCOYYPKn/EK+2hXadu1wq1TU32WO3gXb7AwMKRTzcl9Yvg/nWfbkOSJvC0kplAu9W19s/oEgPgkl8yKBeWry87e9+Kkd9S1ktXAZNqWAlGLAnO3H6opy+WKwYrgnWx8pXfwHGgGEk2AOzgYDvUntUf+YdBiCGkUaX6y//QsJGZ0k4rJncD7OaGr5ZVVjF39l5RE5ji0Art08A6/IUZKT8H1i+7QKfJFw+Ivk7m2Gyj3DPSGrw2LuNGDFMZmWPMZ1LXUOz/ADhYDXYvMNaYFrO7AbHsHblXPnKE8vMivjndRAgV9+4yAEykDlbsLq2grhq6uqlCoaiDlh9TS2fSDuZPiNT7eM6W5rlxpsvS0vJZexnLPxnit7hXEcEUGBkrATR1wZuaW+8BffBLaFl09lY4/pQyMjNxQVS/edXJemb/0tZs4ckxEnFjRosDib7dqjABYVlUoDUL58BFuBWEwORz216qOgTw5XAZ2W5SrJT7POy4POKiTJ/UK2trfIhNqhVZVW+7atgyk8fOczDFL24zaWURMNvEKsjC92LevdiEYw/EmktkzJGykqkM02CwWpgTKRyhueeuywf5ZyQU/mFUu/O3YDph4AAv/7USomHA77x7HGlTppZIdX0UScgABFAMPFHTl8oEROmSnB8kvLFtRZflvrcHGk8fljabyKY3UK6BoaEya0d78vg9Z+FnzVDHls+U/4NflVL5zOZpTcMw/n2g5XTiix8YjhGM3gEPPjkxEHWxfAAwqDCKGuhL4iDOb5XkRK3GY1O3xhknDPjNxj7zkGIwLgvAfMJAx4fg5/zf375CRkHX6czPAb/0qdWzJYfv/y2vL1lvzQBf4oJjEJYJEfBkbxqHl03iFrZtkkxSqBVdEhnu4SkjZchX/quRM1ZqpzdRnMyfb7ELF8rN9//o1T98d+k/cZ19GeiFUFiteF+7a7NMmRUhjy3er68tgGWTPpGe678dA3hXvvhE8PR6e0NhNKvZSt4Ny41JMyBPpy0pDiZAGkwccwISRkaj3CzEMlEpMF9CWCg6ZPHyU+/81kZCqe2O5gweoT8/HufU1n3W/adYHzUnWJwmC+BOjkoJgr7qgZpOJqDfZvFM8QePHBAjCR85XsSNde9Wh8UHSuDP/0VpTlUvPJTFWvZjcnv9K6Ytf7wXhny/IsyJSNd0pAUev5CcfcxOpW/H39aYNN8OhF0BHuk7QDE8t2OqTNvqo/veLkUgtnCsa9ZNCNLvvb0KhBZlgox6+PB2Nsc1SMYp779/KOmzGYMKCluoPz1lx6XnNzz0sAEYap6BHzPAcMS2q6VSMvVK5YMR8d35JzFkGxLVB2r/2LXPyu1ez6C0/uIqfGFBpSWkovSWlMpUUOSZRIWh/OMZHJeFFw78UiHrhU+2b9NdqTWg1LBv8ZDMiuKlgvLKmBBgtpiAsSVsjCxDKWm66c/kIk2Azo7ZDFCxP7f//iKrEVEC89Lue8BqtdQSGguHt7APMRRZiKeVWAkUUC8wNE7JiVZ/dkChqP1EFcd913/V88mUKIXrEQRz2QUFBGlynYy7MwMYOrvqLslbRXlqsRohAJaLuy9pQ/Sm2UHZgP1/bpPEi41eQiQbPIgjLFgtTp3+aqU37iJFdf9Xo7Z2tEwqrRyz+QSRsMM75sMvKVFzUNXRpdefYPZkhB0+qNvfEZG0s/0oAAWrbTkeKUOejMlhsFljhouR46dve1PZeYBsgkQXE5oo5GD+ydTVwAsobBKhqWM9KY7VSZ8bJalxOSD7oTfr70W1kmAw91jwlVglqQhAyURWSOkFZ8AhwelIZDbTvCJ4TLSkyUEqR6tXB3NmAGb9/LyKtly4BQOAFrgdk6MXn9h7WJH5raLW4Cm65c3bkdMG/x9Kg7LbRM9v4iQnPXLZ8lURNk/UACaC4UByuxxuJtrdISTZEd9dSbobeNVQFurImPz9kDmgTR4eR/eFRgxAPs08xbVGJUhyyF1GStpSmCI8Gfw8guPLfHZqkxrNI9mtBN8YrjRKUkwMAyRS/DyW+nXzGv7DU4/egSpK3FwULvCAAR+/rVJtDfz4zYh164KaSe9T5O93TOIKghMTmtdX4OV6sy+VEiZB1rr1Zhg5atC5AUzLrw1dVcgQLeLoDG2Nlhom+GqUQC/GwOoTYEaTkuTtNfApTNilGkx5xttyBxg7lmA2Z6MggrBFAHhjtOy6nAglanKB2YZnjhYpsK4cj+BZ+XbzWxoxVqEo+uUyuHmftclEPfeo6flt0jj4WlePQEmgva5Pwzq5CBEpWT1tRUSxMekTysgM3QRt1VBX+8FB8hl5MAx1MkbqEbe38kLV+4smJhDC3xzldUcJ7TMQXEINMZ6TCZwC1D/EOrVmHfY7d27L3ZK06ljyj939z3jCqyeSFoNGehQ9YuhIVntD9UiZlS9T759YjjOjf6ccB4lRhXAAujq+ckr8PtsP+iRKJ2b6ZfTuKCmJgyOkXgsGH0KUMPy8otMFxXm6p3E/V45aT0NGIaLGkis323apZJOrYpzIftwby4iNaih3CGBTqiRZy5dVVWDh41Akmgsft82qrhrEHVrt78vrRWemby1vExu5Wy13sNhHxoclyhBCQkq3O9MQYn1bsJCALsb7r1w7Q62eziahZBwMxBRrpIdreqCGHmK13d/+pq88vZ2yb9ShhxPa3cBj5lmFjazlftWKkDCgdlCPGWnO81HqVWeHixUpJMI+uVxE66SnMz25ub9cu4iGM4q29upT59/YhxU4T/YewxHLSDXzw1Q5cwrKJaf/XaTUiG74Rdr597cM8pyHBKHLO20MdIJNdMMGHzcdOG03HjjZWR7I1XLRBy23ahE2NZvpLnwAvZw5rsYZoqHZ0yUoMgYuVp+HcwPnJn5ASGRuc/n8RG9/fBkAeLFDjCfvYfeeYDPi/Bh5eZdkDpk37paGbtVh3+oAtbK//bL38suHHn++PLZyHNLU2FftJZRmtGZzvNDmHl9EgTx7vZDOPYAKgVUpT4DEFQomK0naR08X0QFaVOQmw0F429E9vXf/t831BymwCDDfnhOym5YAX+CTO8WPlCTIO4+mx/3cVAJv/MPr8HP9pgsmTlB7Z05FqpfPFclH1LtH199R46dLsAC4PL4Qdy7j57FURdVMiIpHj62JSrhFJFbpnMPwIJa/fbvoCq2ysDVTyGsK0GMyJQOpN1wj3dzy0a5seF1MJvF+k5NCRbR6AUPoa8A+WBfnlRWYv/uOkYDWShD9fkDSOpeA3ATB81nwRRsk/oZXDDes954DMEjS2Yhe3oPXGiIWDAjSDYLYmvDHuq9HYfl4wMncZZGkoxNGYrDXGOQCRGq3jXAQ4AKsA8pQGJrI1dodaaEVaM9Gy9L91RVjUUcYkhYKIJ/aUywGAvmx6Dur/3oZfUuhEGoV151E1H3cCDTudzfzGagAlKu6FqlfPunv5Ml0zNVguRgJPM2YQxnIGW3IuftahlCrBhS5wpgiKvI3nhr60H5FpJ/Yxaulpq3X5c2JJyCW1xLO/6mDw7hXWS6hhOHJHLqXMRVDleYaqsok/oTB6X5/CkH6iz8dZ0Idg8fN1Eip81HkHWD/PumndbbFQRfvLX1gDKsmQhW9+N1c5XB1bOnZcvHv7rHGS4ChPgP33lWmrB5fgcSSe1RsPKYA+5BorVAdTiFkJ1T3Ne4AutjpWY5b4Anh/UnpMHnmAJr2KUrIDpP0hZMVQ81+CCkvtrbci5c1e1iNgMR6I9q0mYEhm/OOe7AJxY7FVhA3LpjNqMu7v/81Y2yEgcpZY0eKfGf/6Zce+kH2DpgwWFddwBGovRqvnxemi+dQ7nbzAkmIqfxMCFLgO8teOBghIh9X2V+H8C4DyAKxhMNcI7UinoNaEO9LafXDXluwASDnisaJah6/M1XHkfkBiIcIJo9GVGMeooQaR52/ZBArXjWaIBRAvgX089nU8YiCoVv8WEiplfAsXMOnBe/PylQ47g9Bv4ms3BMLgEGdw0PzzAcGocKwsDN6EWrJGbJw3isnp9tAE362KNRZVcf/vbEbKQZqJID1z0vAybNVMPh/rMDzOQVcFHrgw+bsAP6hCJmZo2WH/zl07Ji9iSHi5qmyf4E7IdCYYB4aOEUWWFxKFFfDIHO4CdXzJVwRFV0UaEvDfevIPZlRHfXAZHzYJzvfmGdUvlZIChmkAx+5qtIvZmP+UNikfH6CtgemDR2+WM4YuEzEnD7MCK1x7aLA/pqLl6206s9nHMfi7FfIBMkxsfK+7DWVdfgQFCuqH2JOIYaQfyNTkmQ1QunyzNI4ZiZPdp5GP3ye/H0DFmFMyc3btmH7oGyns4J4oIRFv2i/RqN9nRMzpiiOANueUbl1599WJ7Hq8GcjzAMHzVe4r/wbakKDpWGw3uUgUQsrI3OTbv/jf5g/QzAmZUxSx4BQ/+FOqvSfdkH62qfMRzRMnfSOCQuxkgGEk834VzJ3PxCHMJLgwEEqZn+7wmfJChKTKhCwxEDOQeuiDWLZsjy2RNk6BD3MZqemuzpfZ5Q/L3Pr5ESGBSO0LpHNcmTamZ0AqmRhDMz4uBwPw189Ol+DriJguTlPrYBhoYeL3DELbSFcET8zJ2QKZ9/fKk6M9Td0W8DJuCcxi98S2qGJEpdzjZpr6pw4MDYrxnztfpmf5Rq2POFIAYzZumjErv6SQkdlmpV64G616cMR8xwlfwGXic1DTlmWw7kyT6Yxc/C98ZXDRuM06Vzu0MlnokSBUp1wWnBSApNGxEvk8ePhJk7W+ZPGQ+GHoYmXJRu1FO+FOr+ZsyNYwYYweIL8J10P/j6U/LL370nOXnnpRHHQyimo+XNZShq/Nyb4N4onLH55U+vlALg4DTqWcYeok6PomswlwwEIC+fNUG27MmV01euYlz0cWJAXBBcccSJK6JXSFYvRckcmyqLUZ+Hn3LBtDrcNCJjkgQjAiUMCaL1+7dJ0/nTSFCtgpbJk525qBIRLshgf3iWnBePUghOHC4RWVNU5kDkjAVuj8dTGSR8Tt4uapxXb4B0obQnRyMqgoX+x1YsrGaA8fXoWd1up88Zju3SR7dy3mSZhtN8j2GPlQuncN75K1IIk38pYiOrkTHexPMksNoZB8DwnPZgrJb0e8XiJKVESMoRiH4fOzJFpoxPk8nw240ekQRh6X7byXcGLILq1wxfU4BJGZ4lOBELgS9ABn8EJzYzG/xdvCDy8InzcvEqHLqQLPSxUcqQjEMwjyjEAibj3XVZSGpdhRePrAUx/8eHOXJ51kSkwISadk/CpWPea0D5YZDyf4WXVM5Fus1+vNI5D/ljl66WSwVU+noEELRCO1DEjvHz+IRIRAclIK6Vh+1OyEiTuRPHySwYhbw9iCkkabgMwn4rImOyNJ4+Jo1njktr8SVpvYFULLxbQFkzDYsLGQZHJwThWHMebx6WNlrCs6erI8/DUkeZTpPv/VsGK2mAxVHjppV9uEG6yHCKySRuloFuLZ8VfM/U5noKAXgYpJN+hSY4hRkXdxln3/OIPfqnbiD2sB6rMYOUCUyepCrD6G2mXDAEKxUB0iOQ40WVzhPQPMxXxTqvVHfVwVR5vkc2Eht7Azz3/+SFIrmEE6FLcX5/Haxq7J+IVASN8Y9AJjnPvWegNxeTS3hfgnLkkwgtgOfac76MyJn45F85zN7uJBXbAF7XPjRH3nnp+6rFmzgxuKC4TPVVhuPbr8MJfguBBMQJT06LhPrJs0rIpDwCjwuYN7g1Gy5DwVqvXVWHDLXhPQM8QqG94fahQajEsycDkfEdPHiIBCcMldDh6Y69mtl8bnd0HZFJ5xhi5qGc2bh6fB10EQOcM+ufUAQ/ZRG2D5YSFnUy8HzdBeVb9W8Lw7kOgMTJyAxGYvB1SgSqMjzfhL49njFyl8ro2sg98jcXE86Db7shUEJH8GwUT+ZwD+P3heGcmySTMTSOuGYUD5me6VB9MTbnfrp+gwA7cMoXD3VlThtVS8cx6OGQVOZSvau+n/zoF5XSE+5oAXO2gnkqfy/f5+ui+LnXgAzPTHarbPZ2MGUdjs5rakIIFn5z0QuHOhwZyddY9ZA0II0Y6S/83CfAlKqKikq1l42NZaB2/0MPsdr/A9I99D8GWiD1iouL1aeyshIvNWlQDBeIPfQAHE2fmJgoc+bMwrv0kA3yAMOVK0Wyc+cuiYsbLCtXPmTLfDXDPcAE5W5qtbW1cuxYrpw8eUpqa2+BwQZIFF7SSInWhj1ZaWmNVFVVycyZM9xVf6CulZeXS15ensTHD8Frv5Zohnugnu49MJn6+nrZvXuPHDp0WGJiYsBU02XYsGHqt4Ph8B4BnJTcjNhYlet4D4y5P4eQkpIic+fOQVIyXB02SXMt4frzifaibVo8lc/Qyh+Fe4bRyVNXNEYfP35CcnL2Q4WKk9WrV8ro0aN6RGiGQbsnBi3uk8xeM2Z1z3k+xvEVZu04l+VvjtPdGNkOrxv3hg1LloceoiqJdwKaBHS71nHtq6d/a4brKcZsKs9DascgiKDDKi0I94YleBdtU1NTo5iNxLh06WLJysr0aiYsX16OV0BfuwYDC14njJUgOjpKkpIS1V7PIF4aXgoKLgqND8OHD1P7w7KycqQ1tUBljZL09DR1j+2VlFyVsrIySFLei8Q7KEaofZTrgKjyXb1aqqQumY1tjxgBt8nAgaooU6YuXCiA0SNC0tLSULYE/ZbI4MGDZNw4JEcDKNVLS/HymeoaJbm5T+X4U1NTVSIy97KsP3JkehcjksnKyvAqLfTP+pxjdHQ0jiFEOlnCENWur/9phvMVc/1cj/6yH371SQQG0N3g3ndHR/lw+Cm9ATIDiYhSzVtm46FCZ86cldzcXLmBF2swU54MQ6MLDQ3Tpk2VzMwMWDeRlgTDy8cfb8VR6aPk5s2bcuDAIVyrk4YGBCKAYDMyxsuSJYsUIx44cBjMe0saGxtVe6yzbNkSJXk5F/Zx/ny+HDx4GPvMWgTnhEKSt8Ga2qwYbuHCBYrwOY7t23fgt+MMlK1btyvmmjAhWzEcGZtjv3z5ispndEhIBCig/TVrHgGzR8uHH27G4jFUMRz7Zu5iXt5JOXHipGJ0HqXP4Azub8ls06ZNQ9tjTaU227ACzXBW2PkE79Gc/zTeDNRXcOnSZUW0o0ale61Gnjt3HgT5EYitDYQ2RUk0EmtJSYkcOZILk3qFMraQmZi+U1lZocqWl1/DvmiQYsZGHJl+5MhRMOBBRaSUNrzHOs3w2R07drxrT7ly5QrFnJRSZASq1LNmzZQhQ+IVw+Tn58vRo7mqHTIM+Bh94igOOPcpfdnXhAlZSppybFu2bJWLFy/h71QwVLaStGRc1omMjFL9l5aWYQ6O3EvOjcakjz7aoubFOcfHxysLbmHhFTDvcdStUq6T9PQ0nx6NZjif0HZ/VSIhVVdXg0ADlUXOm9GTgHfu3A3JViVr165R0ow+OsLYsWOUVNu2bafs2bNXEXgQzjcJQRgXLZyjR4+GxFqsjDGtCJsKg2/u3Xc3gekOyKRJk7BvWq7UQ/r+aLx5880/KWvhwoXz1WKQk7NPqbFPPfUplMcZJ7eDCKhOUr09evSosqJS4lD63bhxQ1lbV69eBbUvSe3HNm/+GMxzWiZPnqSkJ10dlFYEqr/csxUWFqm2Kfkohal20k1ANfKJJ9aDebNV+6zDORGP3APn5OQotdls38fyZuA+MNGstL5+X2KAhML9DqNNQr3MpL9ypRiq2GVYMYd3YzYiICoqCn662ZBUA5UEIRMEq9O/8NoquBdmzZquGIpEzP6yszMhUQZAXWuTqVMnqz0Y77EsVdKBAweBaaqhwtUrFZJqLPeIY8aMUeMmg/BDhk9PT0e5OjDLlS5G5F5wypRJKD9ajY0Mc+LECfweIIsXL8QckruYjeNnOw4mpmnqDhQUFEDlvarUy4kTJ3QxG0vExsaoOUcjBOzcuXwsLHhlmw+gJZwPSLvfqjiIG6/3BeNR/fIGSkqK1X4mNTVFEahrHaqFZIqTJ6/DoFIOyRmn2g/Hq60GDx7crTivhYaGQao0dxk8jAIkfhoxrl+vggrZAilzQ+0HSeCUnirT3CiM9ObS0qu4JiiPc1kU4BVdCFxPg9HEAO5Vq3Fi95gxo5QkMq57+i4qKsZ+rU1JbHfSi/ONi4sHsxdCtaxU8/fUput9zXCuGHkA/ybD0XJHAwytjd4ApQiBhgV3wDYZAuZg4jtH8lGK8p4z8O87193do6rnMGbQ0EImo7uDVkIyF+8ZwLbGjx+njDZUSXk/CMmwVC0N4NjJOJTE3roSWJeSERHLpnOmVGQkDvHo7cJljMn41gxnYOIB/6bh4ODBQ0oFpHObZm4roG+K0Nx8h5mcy5PRqOaRkQb00bkynZ0BinlI0DSULFvG9wZ06xV/MHMe0f3Y+7GcAc48HqrSegLV+FjWdQEw6rh+U6qxPI057oAMTkspmTiCR274AJrhfEDa/ViFm/7ExCTl/zp06IgsWDCvm1RwnVNSUpLa93BPQ1O5swRhWZrrqUpSJWS76i1Hro308O9OHLcXHx8PFTFUSRua+9m+GdCt4A4YqkWGoKWysvK6176z5OShagFhjCWZyzDWGH3QIFRVRQvnACwIvvnjtNHEwOYD/s0917x5s8E4IbCy7VPSjvsQmvydgX/TQjly5EgQaqKQ+E6fPqMI0ChHyXbw4BG170pPT1Pugg4endBLMCRbamqaMl4cPXocqlt3pqIEogGIgJ9ugdbL9PQ05TukRZFWTGfgHNmXs1RkuzTScP9JZ3p+/oVuEpR+RvoWb96shZV2rFJpndv09reWcN5i6j4vR7WKPi2uzlu2bJP33/9Q9u8/qCx4AwfGqtWcjmS6D+jkff7552T9+nXy5z+/LRs2vK2IkGZ5EmtBwUU5e/Y8mDJN1q1bAykUphiDUsGM8Ujg3Je5YxLHPUeYGmMa1659RN56a4O89957cLyfFsY8MsiakpbMQwPMunWP4ol0qoXANbyNUnHNmkehGm6Qffv2w8hRpCyP0dExYNYW7A2vQcLjeAfsyZzHTJcC2924cZO88cYflUshOTkZ7bTAEX8OOLgE/2GGPPLIauVW8IUkNMP5grX7tA73KFlZWSpY99SpU8rsT2KkkYIMyb0JVUcGNJMJGJXy5JOPq4gPmuELYZ0jBAeHqPQdBj9TnSSQeEmwZAbXPRP3eQkJ8SqEyvCFqUq3/2NsZwOOZzD2jeyffrBDh46izyuQpA5nN/2IVBU5LkokjpfSjAuFq3GEFsXHH1+HNo6ofSsd2sz3Y2gX2+CcQ0MjhGokVVACx52ZmQlmClXO+Px8SroCdY94WbRovsyYMf0uK6wq4OV/n0jGt5dj08X6CQMkVqqNtMrx27C4keApSfhhvCKJmBKAoVo1NTdVeV6jyZ5GCxpeDOZiOSZzOpgroes6p8D+eI9RHlRTXZmOJn4aIwxHtlGH+0QaeGh1ZPuO8UUq6yilMtt1WDI7VLuuey7eZwoS58hvSm62QcsrVUfOhfs8XnPek1GKc76cd0NDgxov4zgpIenC6A1ohusN9h6AuiRKSjN+kwD5cQe8T9WN+x5XwnZXvi+vGeMzpHBP2yYDcS/IIGWrObq265hzu1o8+mrOmuFcsaz/tsQAiZ/hTwyDcgeURFQtFyyY7+627ddoYPnoo60qk2ApkkwZjfJJgt7DfZLYvw/75qp/5sw5EPBVpVa6qoeOcz9NzIce5su6VEnNpKyH6m5vk+FOncIbg66WIZNhpGY4t1jSF+9pDFBFo7WPlr7k5ESoo87D7cQe0POxhs41KBVp3CgrK8XZIiuVJdX5fm9+0+o5a9YslbZj5Mj1pr3e1tUSrrcY9MP63Mcx4mPYsCRJS0vrNQbIwPv27YNRplExXK8bdGqAe69Zs2YoowyNPZ80aIb7pJ/Afd2/I63F3RQYQEwLIx3uDNNyBkq0oiJGc+Cd3kiZoZWUVkTuDy9fLlRmezJKSsrwLgMNo1qKi0uU+4DGj+HDhyuTvtEuLYq0hHL/GBUVpdphrhuzERiqRUslTftRUXekL8dB1fjatQq4FpqUZKabgFE2zsB26OxPTR2hrKVMjqVVlRkKzHjoCfSsdE9a1mUfeAw4JJ37adbUVCMH7j2Vxf300091M6cfP56H7PAtKju8tbVZRbM4okc64ZB/Hw0yMHqAfPGLX4RPrBPS7wASVY8ppzsDlXnIESNmZs+epT7c89Ffx/7ouCYD79ixSzF8YmICcu1OwVF/Vp566lNdezg60Hft2gsnfoFy1tM/RzWZLpEJE7IRlTNPOfQ5u/37D2CMV+SZZz6tHOn0YTJwOysrUzOc+8evr/YHBmhqp+RwBhpVGOkxYkQqpE2yOrho794cWbXqIWVeZxrOjh3blU9v8uSJSlLQ8cxwM0q8yZMnK0Knk55ByGQ2Zm7zzJHp06cp6cVcNKbu0PpIfyGlWGtrm0p+zcs7rVJ4mC6UkTEOhp1olfJDf5sRlEy/HpmT4Vssk52drcbMdvfv349jG3ahbCvU2+VKwtIXV1FxHdbZ3ZCcF+F4x7sYILVDQnour3pewxm7+refYoCbuAAQ/Mcg1AgYTe5E7TO0a/ny5ercjxUrloL4SxTTjEFuGgOod+3aDeNIhTz88CrFRFQjU1KGqdjOgIA2xVRMgaHPzSGFdqtEV4ZTMSKF0mz48GHKp/baa68r6cN0HaqmVO/y888jyXUqJNRcOLTDbhtgjIwBtfmUw4ePqGzwrKzxGMfDiimpwjJ0jIz0hz/8B+Im94MZx6qEV7ZN6XfxYoE6MJaRLoxG6ak6SWJx7+X0UzLS0/YeA1QnSXAkRkoj4xOMlzbStE/gsQZkPqb47Nq1B0cjHFOqIQl99uyZqj73VWQMR8QKM8RDFTNRSp49e04levLgHmYOkClYjn2NHTsae60hSpVkxAzvkXkZWrZgwTzFOJRuvG5YURkaRtWV2eAM85o7d64KQmZ7ZGT2SdcB4yVr8EIRSksC69Gwk5IyQpgJzn0p94KOMasiXv+nJZzXqNIF72CAfoBO5RagkaI7OHLVeI1EnJ2dpZiCpz1TrWN41IoVK9QeyKhHNdQA59885oEMw6MeaBRxhTq8mozqHg0uBJ6uxRAt14xzo14Q3kLLcLHKyutQRWOVUca4Z3xzEeEpYjz0iAYVA9h2WtoItTgY13z51gznC9Z0HSU1aGZn/KMVUGpMnJit1Djug6ZMmagyFKzqGPeY/U2mJZPQKuhgRgdzUsKSaSjFuJciz1K1ZVykueQJUK4HSjmOi9ZOd8A2KaVpmSSwX/bHOr0FzXC9xaAf13eWRmZooCqWm0sVLghBzxGQVkXK4peenm5Wpes6iZ6GFFoj6QZwBTIBgSoeTfcEc2Yj4+A9hGBOlqGRhWOjCusKZDSWJfM6g1XbzuWsfus9nBV29L1eY4CqJD/G8Xh1dbWwOm5XqqCnxuPjE8BwjgNg6R9z/fAkZH64B6PK5wm4QFAq0k/HbACqlu6gEGlIDDNjig+BzNdXoBmurzDph+1QalkBpc62bdvVfo1nTk6ZMhkHAI1XpyozMdQA7pvYFlU95wxvGleY3HrkyBF1nINR3v23Z67gEQ5UC8eNG6sc6BwDJZ0zFBeXwIJ5Bv64cOw/J6hb3khy5zasfmuV0go7+p4lBii5GBkCGdCtHJ3TWVkZYLZt6hiGdevWwWKZoPZjy5YtUced7927T9LS8N52mNip1vHodB75sGfPXuVQJqOlpaWrhE8eeb5hw0b46CaqKBBaRhkGxthLGjgYAUIpZMYYvO74OFROugwoxehMZ9/cY3I/x+gYHvRaU3ND5s+fD5dA6u15sX63Kfr8h2Y4n1HnvxUZlUGJdOJEHr4DuxEjCTMC72rn+ZI8MJVO6enTpyhmI8Z4XALfDcCTkZnmQ7WNKh4DjEnwZGJGhQwfniKf+9xzcCssg8oYhnNVTsnWrduU2Z97OzIQ3QAxMbGK4bi/IiMaLgnnp2OMF+ymLlM1Xb/+MTjgdyrHPMfJg2y5d6MLYOnSpfDjzena3znaNg9jc+7L02+dD+cJQ/r+XRgggdIcDxp3A0xkDVLEyjI8E8TVdcDXHPOgHprpeXAPpQvDtSgti4qKlTGDdXhMOYmdVkrGSTre4FOvmJehXzSWMN6Smed0kl+6VAiXwCDlUHceGMO3ePgPpSH3cATGUTKyhG/ccRxC264YPzk5SfkPuQgYwJeB8LSu9PQ05Xw3rvvyrRnOF6z5eR1a98zUN1fUcH9GpnEFow3n+2QCh4WwUzGsswWR0oyRICxDoISlscTYR9JoQgML3QjGNaNP1mF9576Me9w3sl3Oh/fvOOGNEg7mZH22y/Z7A5rheoM9XVdjoIcY6B279rAzXVxjwN8xoBnO3ylAz99WDGiGsxXdujN/x4BmOH+nAD1/WzGgGc5WdOvO/B0DmuH8nQL0/G3FgGY4W9GtO/N3DGiG83cK0PO3FQOa4WxFt+7M3zGgGc7fKUDP31YMaIazFd26M3/HgGY4f6cAPX9bMaAZzlZ06878HQOa4fydAvT8bcWAZjhb0a0783cMaIbzdwrQ87cVA5rhbEW37szfMaAZzt8pQM/fVgxohrMV3bozf8eAZjh/pwA9f1sxoBnOVnTrzvwdA5rh/J0C9PxtxYBmOFvRrTvzdwxohvN3CtDztxUDmuFsRbfuzN8xoBnO3ylAz99WDGiGsxXdujN/x4BmOH+nAD1/WzGgGc5WdOvO/B0DmuH8nQL0/G3FgGY4W9GtO/N3DGiG83cK0PO3FQOa4WxFt+7M3zGgGc7fKUDP31YMaIazFd26M3/HgGY4f6cAPX9bMaAZzlZ06878HQOa4fydAvT8bcWAZjhb0a0783cM/CdFqwT9PtN2sgAAAABJRU5ErkJggg==" alt="GrupoEi Comercio Exterior" class="logo-img" />
+    </div>
+  </div>
+
+  <div class="sidebar-label">Programa · 6 Módulos</div>
+
+  <nav class="sidebar-nav">
+    <a href="#modulo-1" class="nav-item active" data-section="modulo-1">
+      <span class="nav-num">1</span>
+      El Programa
+    </a>
+    <a href="#modulo-2" class="nav-item" data-section="modulo-2">
+      <span class="nav-num">2</span>
+      Cómo Funciona
+    </a>
+    <a href="#modulo-3" class="nav-item" data-section="modulo-3">
+      <span class="nav-num">3</span>
+      Tu Perfil y Territorio
+    </a>
+    <a href="#modulo-4" class="nav-item" data-section="modulo-4">
+      <span class="nav-num">4</span>
+      IA para Crear Contenido
+    </a>
+    <a href="#modulo-5" class="nav-item" data-section="modulo-5">
+      <span class="nav-num">5</span>
+      Métricas y Arranque
+    </a>
+    <a href="#modulo-6" class="nav-item" data-section="modulo-6">
+      <span class="nav-num">6</span>
+      Perfil de LinkedIn
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <p>Thought Leadership<br/>Grupo Ei · 2026</p>
+  </div>
+</aside>
+
+<!-- Hamburger -->
+<button class="hamburger" id="hamburger" aria-label="Menú">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- ══ MÓDULO 1 ══════════════════════════════════════ -->
+  <section class="hero section visible" id="modulo-1">
+    <div class="module-tag">Módulo 1</div>
+    <h1 class="hero-title">Thought Leadership<br/><span>Grupo Ei</span></h1>
+    <p class="hero-subtitle">Conviértete en referente de tu industria en LinkedIn y acorta el ciclo de ventas sin hacer cold calling.</p>
+    <div class="hero-stat">
+      <div class="hero-stat-icon">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div class="hero-stat-text">
+        <strong>70% del camino de confianza, recorrido</strong>
+        Un prospecto que ya te lee en LinkedIn llega con el 70% del proceso de confianza avanzado antes de la primera llamada.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="modulo-1-body">
+    <div class="module-tag">El Programa</div>
+    <h2 class="section-title">Qué es este programa</h2>
+    <p class="section-subtitle">Una iniciativa de liderazgo de opinión donde los colaboradores de Grupo Ei se posicionan como expertos en comercio exterior en LinkedIn — usando IA asistida y calibrada con la guía de voz de la marca.</p>
+
+    <h3 class="sub-section-title">Los 4 objetivos estratégicos</h3>
+
+    <div class="goal-grid">
+      <div class="goal-card">
+        <div class="goal-icon navy">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div class="goal-title">Humanización de marca</div>
+        <div class="goal-desc">Pasar del logotipo al experto que asesora. Las personas confían en personas, no en logos.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-icon red">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="goal-title">Autoridad de nicho</div>
+        <div class="goal-desc">Ser el referente indiscutible en cada aduana del país — marítima, terrestre y aérea.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-icon navy">
+          <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <div class="goal-title">Amplificación de alcance orgánico</div>
+        <div class="goal-desc">LinkedIn prioriza el contenido de personas sobre el de empresas. Tus posts llegan más lejos que los de la página corporativa.</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-icon red">
+          <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="goal-title">Aceleración de confianza</div>
+        <div class="goal-desc">Social Selling activo: ciclos de venta más cortos cuando el prospecto ya te conoce y te lee.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MÓDULO 2 ══════════════════════════════════════ -->
+  <section class="section" id="modulo-2">
+    <div class="module-tag">Módulo 2</div>
+    <h2 class="section-title">Cómo Funciona</h2>
+    <p class="section-subtitle">Cuatro pasos. Menos de 20 minutos por semana. Tu voz, tu expertise, amplificados por IA.</p>
+
+    <div class="stepper">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-label">Captura la idea</div>
+          <div class="step-desc">Un mensaje de voz o una idea clave sobre tu semana operativa</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-label">IA procesa</div>
+          <div class="step-desc">El Prompt Maestro estructura el contenido con tu voz y los pilares de marca</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-label">Filtro humano</div>
+          <div class="step-desc">Tú revisas que suene a ti, que sea preciso, que no exponga al cliente</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-label">Publicación</div>
+          <div class="step-desc">Publicas y el equipo interactúa para impulsar el alcance orgánico</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3 class="sub-section-title">Frecuencia de publicación</h3>
+    <p class="sub-section-body">Elige el plan que se ajuste a tu agenda. Cualquiera de los dos construye autoridad — la consistencia es más importante que la frecuencia.</p>
+
+    <div class="plan-grid">
+      <div class="plan-card plan-a">
+        <span class="plan-badge">Plan A · Recomendado</span>
+        <div class="plan-freq">1 post / semana</div>
+        <div class="plan-impact">4 impactos al mes en tu red</div>
+        <div class="plan-note">Máxima visibilidad y velocidad de posicionamiento</div>
+      </div>
+      <div class="plan-card plan-b">
+        <span class="plan-badge">Plan B · Sostenible</span>
+        <div class="plan-freq">1 post / 15 días</div>
+        <div class="plan-impact">2 impactos al mes en tu red</div>
+        <div class="plan-note">Sin comprometer la agenda operativa diaria</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MÓDULO 3 ══════════════════════════════════════ -->
+  <section class="section" id="modulo-3">
+    <div class="module-tag">Módulo 3</div>
+    <h2 class="section-title">Tu Perfil y Territorio</h2>
+    <p class="section-subtitle">Cada colaborador tiene un territorio de expertise. Publicar desde tu experiencia real es lo que hace que el contenido funcione.</p>
+
+    <h3 class="sub-section-title">Los 5 segmentos de colaboradores</h3>
+
+    <div class="profile-grid">
+      <div class="profile-card">
+        <div class="profile-dot" style="background:rgba(1,50,76,0.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#01324c" stroke-width="1.8"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <div class="profile-meta">
+          <div class="profile-aduana">Aduana Marítima</div>
+          <div class="profile-role">Líderes de Operación</div>
+        </div>
+        <div class="profile-topics">Control en puerto, estrategias para evitar demoras, trazabilidad puerto-planta, manejo de contenedores y tiempos de validación.</div>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-dot" style="background:rgba(221,69,38,0.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dd4526" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="profile-meta">
+          <div class="profile-aduana">Aduana Terrestre</div>
+          <div class="profile-role">Expertos en Frontera</div>
+        </div>
+        <div class="profile-topics">Optimización de tiempos en cruce, WMS para inventarios en frontera, coordinación cross-border y compliance de último kilómetro.</div>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-dot" style="background:rgba(1,50,76,0.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#01324c" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div class="profile-meta">
+          <div class="profile-aduana">Aduana Aérea</div>
+          <div class="profile-role">Especialistas en Carga Crítica</div>
+        </div>
+        <div class="profile-topics">Manejo de urgencias, carga peligrosa, procesos en AIFA/AICM, tiempos de 2-3 días y coordinación con aerolíneas.</div>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-dot" style="background:rgba(221,69,38,0.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dd4526" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="profile-meta">
+          <div class="profile-aduana">Consultoría / Ventas</div>
+          <div class="profile-role">Gerentes de Cuenta</div>
+        </div>
+        <div class="profile-topics">Reducción de riesgo arancelario, cumplimiento legal, optimización del ROI logístico y gestión de relación con clientes.</div>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-dot" style="background:rgba(1,50,76,0.12);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#01324c" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="profile-meta">
+          <div class="profile-aduana">Dirección General</div>
+          <div class="profile-role">CEO / Directivos</div>
+        </div>
+        <div class="profile-topics">Nearshoring, futuro del comercio exterior en México, política arancelaria y el respaldo de 35+ años de operación.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3 class="sub-section-title">Los 3 perfiles de cliente que apuntamos</h3>
+    <p class="sub-section-body">Todo el contenido que creas debe estar dirigido a uno de estos tres tomadores de decisión. Conocer su dolor te da el gancho del post.</p>
+
+    <div class="icp-grid">
+      <div class="icp-card">
+        <div class="icp-num">ICP 1</div>
+        <div class="icp-role">Gerente de Aduanas</div>
+        <div class="icp-type">Corporativos medianos y grandes</div>
+        <div class="icp-pain">
+          <strong>Dolor principal</strong>
+          La impredecibilidad en tiempos de liberación que detiene la línea de producción.
+        </div>
+      </div>
+      <div class="icp-card">
+        <div class="icp-num">ICP 2</div>
+        <div class="icp-role">Compras / Comercio Exterior</div>
+        <div class="icp-type">PyMEs importadoras y exportadoras</div>
+        <div class="icp-pain">
+          <strong>Dolor principal</strong>
+          Miedo a multas del SAT por clasificaciones arancelarias incorrectas.
+        </div>
+      </div>
+      <div class="icp-card">
+        <div class="icp-num">ICP 3</div>
+        <div class="icp-role">Director Supply Chain</div>
+        <div class="icp-type">Multinacionales con operación en México</div>
+        <div class="icp-pain">
+          <strong>Dolor principal</strong>
+          Ineficiencias ocultas en la cadena que afectan el costo total de operación (TCO).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MÓDULO 4 ══════════════════════════════════════ -->
+  <section class="section" id="modulo-4">
+    <div class="module-tag">Módulo 4 · El más importante</div>
+    <h2 class="section-title">Cómo Usar IA para Crear tu Contenido</h2>
+    <p class="section-subtitle">Primero siempre el Prompt Maestro. Luego elige el prompt del tipo de post que quieres crear. Copia, pega en ChatGPT o Claude, y ajusta.</p>
+
+    <!-- Prompt Maestro -->
+    <div class="prompt-master">
+      <div class="prompt-master-header">
+        <div class="prompt-label">
+          <span class="prompt-badge">Siempre primero</span>
+          <span class="prompt-title">Prompt Maestro — Voz de Grupo Ei</span>
+        </div>
+        <button class="btn-copy light" onclick="copyPrompt(this, 'prompt-maestro')">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copiar
+        </button>
+      </div>
+      <pre class="prompt-body" id="prompt-maestro">Eres el estratega de contenido de Grupo Ei, una agencia aduanal premium en México con:
+- Cobertura en 30 aduanas (marítima, aérea, terrestre)
+- 18 patentes aduanales activas
+- 35+ años de experiencia
+- Tecnología propia para visibilidad y gestión documental
+
+VOZ DE MARCA: "El Partner Aduanal que habla tu idioma operativo"
+
+PERSONALIDAD:
+1. Confiable: Respaldo con datos, NOMs y casos reales. Sin arrogancia.
+2. Innovador: Beneficios tangibles de la tecnología, no jerga técnica.
+3. Dinámico: Pirámide invertida (dolor → solución → evidencia). Párrafos cortos.
+4. Humano: Reconocemos el estrés real de las multas y la presión de los paros de línea.
+
+REGLAS CRÍTICAS:
+✅ Valida el dolor antes de presentar la solución
+✅ Usa métricas reales (Aéreo 2-3 días, Marítimo 5-7 días, Terrestre mismo día a 3 días)
+✅ Enfoque en Despacho Aduanal y Compliance, no en fletes
+✅ Verbos de acción: Protege, Acelera, Elimina, Garantiza
+❌ EVITA claims genéricos: "líderes del mercado", "calidad garantizada"
+❌ EVITA prometer dashboards en tiempo real para todas las aduanas
+❌ EVITA hablar de nosotros antes de validar el dolor del cliente</pre>
+    </div>
+
+    <!-- 4 Prompt Tabs -->
+    <h3 class="sub-section-title">4 tipos de post para LinkedIn</h3>
+    <p class="sub-section-body">Usa el Prompt Maestro primero, luego elige uno de estos cuatro según qué tienes disponible esta semana.</p>
+
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab(this, 'tab-1')">Post de tu semana</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tab-2')">Actualización regulatoria</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tab-3')">Insight estratégico</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tab-4')">Caso de éxito</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-1">
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <div>
+            <div class="prompt-card-title">Prompt 1 — Post desde tu semana</div>
+            <div class="prompt-card-sub">Lo que viviste esta semana se convierte en contenido de valor</div>
+          </div>
+          <button class="btn-copy dark" onclick="copyPrompt(this, 'prompt-1')">
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <pre class="prompt-card-body" id="prompt-1">[Pega el Prompt Maestro primero]
+
+Tengo esta situación de mi semana:
+[Describe en 2-3 líneas qué pasó: un problema que resolviste, una pregunta frecuente de un cliente, una situación en aduana que fue retadora]
+
+Convierte esto en un post de LinkedIn que posicione mi expertise.
+Mi perfil es: [Marítima / Terrestre / Aérea / Ventas / Dirección]
+ICP al que apunto: [ICP 1 Corporativos / ICP 2 PyMEs / ICP 3 Multinacionales]
+
+REQUISITOS:
+- Hook que enganche en la primera línea
+- 3-5 puntos accionables
+- CTA que invite a comentar o compartir experiencia</pre>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-2">
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <div>
+            <div class="prompt-card-title">Prompt 2 — Actualización regulatoria</div>
+            <div class="prompt-card-sub">Convierte los cambios de norma en contenido de autoridad</div>
+          </div>
+          <button class="btn-copy dark" onclick="copyPrompt(this, 'prompt-2')">
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <pre class="prompt-card-body" id="prompt-2">[Pega el Prompt Maestro primero]
+
+Acaba de salir este cambio regulatorio o noticia del sector:
+[Describe o pega el cambio: NOM, RGCE, aranceles, nearshoring, etc.]
+
+Genera un post de LinkedIn que explique el impacto para importadores/exportadores y posicione a Grupo Ei como el experto que anticipa estos cambios.
+ICP al que apunto: [ICP 1 / ICP 2 / ICP 3]</pre>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-3">
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <div>
+            <div class="prompt-card-title">Prompt 3 — Insight estratégico</div>
+            <div class="prompt-card-sub">Perspectiva profunda que solo un experto puede dar</div>
+          </div>
+          <button class="btn-copy dark" onclick="copyPrompt(this, 'prompt-3')">
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <pre class="prompt-card-body" id="prompt-3">[Pega el Prompt Maestro primero]
+
+Quiero compartir un insight sobre:
+TEMA: [Ej: Nearshoring y comercio exterior / El costo real de un error arancelario / Cómo reducir tiempos en frontera]
+PILAR: [Blindaje Legal / Control Inteligente / Alcance Estratégico / Respaldo Humano]
+ICP: [ICP 1 / ICP 2 / ICP 3]
+
+Genera un post de LinkedIn nivel CEO/experto.
+- Hook con dato sorprendente
+- Cuerpo con perspectiva que solo alguien con experiencia en aduanas podría dar
+- CTA para generar conversación</pre>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-4">
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <div>
+            <div class="prompt-card-title">Prompt 4 — Caso de éxito</div>
+            <div class="prompt-card-sub">Sin revelar datos del cliente, máximo impacto de credibilidad</div>
+          </div>
+          <button class="btn-copy dark" onclick="copyPrompt(this, 'prompt-4')">
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <pre class="prompt-card-body" id="prompt-4">[Pega el Prompt Maestro primero]
+
+Tengo este resultado que logramos con un cliente:
+[Describe el problema que tenían, qué hicimos, qué resultado obtuvieron — sin revelar nombre del cliente]
+Industria del cliente: [Automotriz / Manufactura / Retail / etc.]
+
+Convierte esto en un post de LinkedIn que use este caso como prueba de expertise sin revelar información confidencial del cliente.</pre>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Do's & Don'ts -->
+    <h3 class="sub-section-title">Reglas del contenido que funciona</h3>
+
+    <div class="dos-donts">
+      <div class="dd-col">
+        <div class="dd-header do">Lo que sí debes hacer</div>
+        <div class="dd-list">
+          <div class="dd-item">
+            <div class="dd-item-icon do">✓</div>
+            Cuantifica el dolor antes de ofrecer la solución
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon do">✓</div>
+            Usa social proof específico por industria
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon do">✓</div>
+            Conecta cada feature a tiempo ahorrado o dinero protegido
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon do">✓</div>
+            Personaliza el mensaje por industria del lector
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon do">✓</div>
+            Usa verbos de acción: Protege, Acelera, Elimina, Garantiza
+          </div>
+        </div>
+      </div>
+      <div class="dd-col">
+        <div class="dd-header dont">Lo que debes evitar</div>
+        <div class="dd-list">
+          <div class="dd-item">
+            <div class="dd-item-icon dont">✕</div>
+            Claims sin respaldo: "Somos líderes del mercado"
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon dont">✕</div>
+            Jerga sin impacto: "Usamos blockchain y IA"
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon dont">✕</div>
+            Hablar de nosotros antes que de ellos: "Tenemos 35 años..."
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon dont">✕</div>
+            CTAs vagos: "Contáctanos para más información"
+          </div>
+          <div class="dd-item">
+            <div class="dd-item-icon dont">✕</div>
+            Celebraciones vacías de LinkedIn: "Feliz #LunesDeLogística"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Asi si / Asi no -->
+    <h3 class="sub-section-title">Asi se ve en la práctica</h3>
+
+    <div class="example-compare">
+      <div class="example-card bad">
+        <div class="example-label">Asi no</div>
+        <div class="example-text">¡Feliz #LunesDeLogística! En Grupo Ei estamos comprometidos con la excelencia en cada uno de nuestros servicios. Síguenos para más contenido sobre comercio exterior.</div>
+      </div>
+      <div class="example-card good">
+        <div class="example-label">Asi sí</div>
+        <div class="example-text">3 señales de que tu agente aduanal te está costando más de lo que crees:<br/><br/>1) Eres tú quien llama para preguntar dónde está la carga.<br/>2) Recibes el pedimento el mismo día del pago de contribuciones.<br/>3) Nadie te avisa de cambios regulatorios hasta que ya son urgentes.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MÓDULO 5 ══════════════════════════════════════ -->
+  <section class="section" id="modulo-5">
+    <div class="module-tag">Módulo 5</div>
+    <h2 class="section-title">Métricas y Arranque</h2>
+    <p class="section-subtitle">Mide lo que importa, no solo el alcance. El objetivo a 90 días es construir autoridad medible, no solo visibilidad.</p>
+
+    <h3 class="sub-section-title">Línea base que levantamos al arrancar</h3>
+    <p class="sub-section-body">Antes de publicar el primer post, registra estos números por colaborador. Son tu punto de comparación a 90 días.</p>
+
+    <div class="metrics-grid">
+      <div class="metric-item">
+        <div class="metric-dot"></div>
+        <div class="metric-label">Seguidores y conexiones actuales en LinkedIn</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-dot"></div>
+        <div class="metric-label">Impresiones promedio por post (últimos 3 meses)</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-dot"></div>
+        <div class="metric-label">Engagement rate actual (reacciones + comentarios / impresiones)</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-dot"></div>
+        <div class="metric-label">Frecuencia histórica de publicación</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-dot" style="background:var(--red)"></div>
+        <div class="metric-label">Leads o conversaciones generadas desde LinkedIn (último trimestre)</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3 class="sub-section-title">Los 4 pilares de contenido</h3>
+    <p class="sub-section-body">Cada post que crees debe encajar en uno de estos cuatro pilares. Esto mantiene coherencia de marca en todos los perfiles del equipo.</p>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-name">Blindaje Legal</div>
+        <div class="pillar-desc">Cero sorpresas normativas. Clasificaciones correctas, cumplimiento de NOMs, anticipación de cambios regulatorios.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-name">Control Inteligente</div>
+        <div class="pillar-desc">Visibilidad que da tranquilidad. Trazabilidad de la carga, status proactivo, tecnología al servicio de la operación.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-name">Alcance Estratégico</div>
+        <div class="pillar-desc">Un solo socio, todas las aduanas. 30 aduanas cubiertas, 18 patentes activas, presencia nacional sin costura.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-name">Respaldo Humano</div>
+        <div class="pillar-desc">Tecnología más expertise consultivo. 35 años de aprendizajes operativos que la tecnología sola no puede replicar.</div>
+      </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="final-cta">
+      <div class="cta-tag">Tu primer post esta semana</div>
+      <div class="cta-title">Tres pasos para publicar hoy</div>
+      <div class="cta-steps">
+        <div class="cta-step">
+          <div class="cta-step-num">1</div>
+          <div class="cta-step-text">Copia el Prompt Maestro</div>
+        </div>
+        <div class="cta-arrow">→</div>
+        <div class="cta-step">
+          <div class="cta-step-num">2</div>
+          <div class="cta-step-text">Elige tu tipo de post</div>
+        </div>
+        <div class="cta-arrow">→</div>
+        <div class="cta-step">
+          <div class="cta-step-num">3</div>
+          <div class="cta-step-text">Publica esta semana</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MÓDULO 6 ══════════════════════════════════════ -->
+  <section class="section" id="modulo-6">
+    <div class="module-tag">Módulo 6</div>
+    <h2 class="section-title">Tu Perfil de LinkedIn</h2>
+    <p class="section-subtitle">Tu perfil es tu landing page. Antes de publicar el primer post, cada sección tiene que estar en orden — es lo primero que ve un prospecto cuando te busca.</p>
+
+    <div class="hero-stat" style="margin-bottom: 48px; display: flex; max-width: 100%;">
+      <div class="hero-stat-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="hero-stat-text" style="color:var(--gray-700);">
+        <strong style="color:var(--navy);">Los perfiles completos reciben 36× más mensajes</strong>
+        Un prospecto que ve tu contenido visita tu perfil antes de contactarte. Si el perfil está incompleto o genérico, la credibilidad que construiste con el post se pierde en segundos.
+      </div>
+    </div>
+
+    <h3 class="sub-section-title">Lista de verificación del perfil</h3>
+    <p class="sub-section-body">Revisa cada elemento. Los marcados como <span style="color:var(--red);font-weight:700;">Obligatorio</span> son el mínimo indispensable antes de comenzar a publicar.</p>
+
+    <!-- 1. Foto de perfil -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">1</div>
+        <div class="pci-info">
+          <div class="pci-name">Foto de perfil profesional</div>
+          <div class="pci-desc">El primer impacto visual de tu marca personal</div>
+        </div>
+        <span class="pci-badge badge-req">Obligatorio</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-rules">
+          <div class="pci-rule do">Fondo neutro: blanco, gris claro o azul marino</div>
+          <div class="pci-rule do">Cara visible al 60% del encuadre, mirando a cámara</div>
+          <div class="pci-rule do">Vestimenta profesional acorde a tu rol en Grupo Ei</div>
+          <div class="pci-rule do">Mínimo 400×400 px, iluminación natural o de estudio</div>
+          <div class="pci-rule dont">Sin selfies, fotos de viajes ni imágenes de grupo</div>
+          <div class="pci-rule dont">Sin logos como foto de perfil — eso es para la Página de Empresa</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Portada -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">2</div>
+        <div class="pci-info">
+          <div class="pci-name">Portada corporativa (banner)</div>
+          <div class="pci-desc">1584 × 396 px que refuerza la imagen de Grupo Ei en cada visita a tu perfil</div>
+        </div>
+        <span class="pci-badge badge-req">Obligatorio</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-note">El equipo de marketing proporcionará la imagen de portada oficial. Usa únicamente la versión aprobada para mantener consistencia visual en todos los perfiles del equipo.</div>
+        <div class="pci-rules">
+          <div class="pci-rule do">Solicita la imagen oficial a marketing (versión aprobada de Grupo Ei)</div>
+          <div class="pci-rule do">Tamaño recomendado: 1584 × 396 px</div>
+          <div class="pci-rule dont">No uses fondos genéricos de LinkedIn ni imágenes propias no autorizadas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Titular -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">3</div>
+        <div class="pci-info">
+          <div class="pci-name">Titular profesional (Headline)</div>
+          <div class="pci-desc">Las 220 caracteres más importantes de tu perfil — aparecen en búsquedas y debajo de tu nombre en cada post</div>
+        </div>
+        <span class="pci-badge badge-req">Obligatorio</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-note">No pongas solo el puesto. Ese espacio es para posicionarte como experto, no para repetir lo que ya dice tu tarjeta de presentación.</div>
+        <div class="pci-formula">
+          <div class="pci-formula-label">Fórmula recomendada</div>
+          <div class="pci-formula-text">[Puesto] en Grupo Ei &nbsp;|&nbsp; [Especialidad] &nbsp;|&nbsp; [Beneficio para el cliente]</div>
+        </div>
+        <div class="example-compare" style="margin-bottom:0; margin-top:16px;">
+          <div class="example-card bad">
+            <div class="example-label">Así no</div>
+            <div class="example-text">Agente Aduanal en Grupo Ei</div>
+          </div>
+          <div class="example-card good">
+            <div class="example-label">Así sí</div>
+            <div class="example-text">Especialista en Aduanas Marítimas · Grupo Ei | Acelero liberaciones en Manzanillo y Veracruz sin paros de línea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Acerca de -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">4</div>
+        <div class="pci-info">
+          <div class="pci-name">Sección "Acerca de"</div>
+          <div class="pci-desc">Tu propuesta de valor en primera persona — los primeros 2 renglones son los únicos visibles antes del "ver más"</div>
+        </div>
+        <span class="pci-badge badge-req">Obligatorio</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-note">El hook va en la primera línea. Si arrancas con "Hola, soy Juan y llevo 10 años en la industria…" nadie hace clic en "ver más". Empieza con el dolor que resuelves.</div>
+        <div class="pci-template">
+          <div class="pci-template-label">Plantilla de 3 párrafos</div>
+          <div class="pci-template-body">Párrafo 1 — Hook (el dolor que resuelves)
+"¿Tu carga lleva días detenida en aduana y nadie te da una respuesta clara? Eso no debería pasar."
+
+Párrafo 2 — Quién eres y qué haces en Grupo Ei
+"Soy [Nombre], [Puesto] especializado en [Aduana/Modalidad] con [X] años operando en [Aduanas clave]. En Grupo Ei ayudo a empresas [del sector] a [resultado concreto: liberar en X días / evitar multas del SAT / reducir costos de almacenaje]."
+
+Párrafo 3 — CTA suave
+"Si importas o exportas y quieres un proceso aduanal sin sorpresas, escríbeme directamente. Respondo en menos de 24 horas."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Experiencia -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">5</div>
+        <div class="pci-info">
+          <div class="pci-name">Experiencia — Posición en Grupo Ei</div>
+          <div class="pci-desc">Cómo describir tu rol para que genere credibilidad, no solo registre historial</div>
+        </div>
+        <span class="pci-badge badge-req">Obligatorio</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-rules">
+          <div class="pci-rule do">Vincula tu perfil a la Página de Empresa de Grupo Ei (aparece el logo automáticamente)</div>
+          <div class="pci-rule do">Incluye la especialidad y cobertura: "Aduana Marítima — Manzanillo, Veracruz, Altamira"</div>
+          <div class="pci-rule do">Agrega 1-2 logros concretos: "Reducción del 30% en tiempos de liberación para clientes del sector automotriz"</div>
+          <div class="pci-rule do">Sube medios si tienes: presentaciones, artículos o documentos relevantes del sector</div>
+          <div class="pci-rule dont">No dejes la descripción en blanco o solo con el título del puesto</div>
+          <div class="pci-rule dont">No copies el mismo texto del "Acerca de" — esta sección es más operativa y específica</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. URL -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">6</div>
+        <div class="pci-info">
+          <div class="pci-name">URL personalizada del perfil</div>
+          <div class="pci-desc">Un detalle pequeño que marca la diferencia en profesionalismo</div>
+        </div>
+        <span class="pci-badge badge-req">Obligatorio</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-formula">
+          <div class="pci-formula-label">Formato recomendado</div>
+          <div class="pci-formula-text">linkedin.com/in/nombre-apellido</div>
+        </div>
+        <div class="pci-note" style="margin-top:14px; margin-bottom:0;">Cómo cambiarla: Ve a tu perfil → botón "Editar perfil público y URL" (esquina superior derecha) → "Editar tu URL personalizada". Evita números aleatorios como <em>juan-perez-48372b</em>.</div>
+      </div>
+    </div>
+
+    <!-- 7. Aptitudes -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">7</div>
+        <div class="pci-info">
+          <div class="pci-name">Aptitudes y habilidades (Skills)</div>
+          <div class="pci-desc">Mejoran el SEO dentro de LinkedIn y validan tu expertise ante los prospectos</div>
+        </div>
+        <span class="pci-badge badge-rec">Recomendado</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-note">Agrega mínimo 10 aptitudes. Las primeras 3 son las más visibles en tu perfil. Pide a colegas que las validen — cada validación es una prueba social silenciosa.</div>
+        <div class="skills-grid">
+          <span class="skill-tag">Comercio Exterior</span>
+          <span class="skill-tag">Despacho Aduanal</span>
+          <span class="skill-tag">Compliance Aduanero</span>
+          <span class="skill-tag">Clasificación Arancelaria</span>
+          <span class="skill-tag">Logística Internacional</span>
+          <span class="skill-tag">Regulaciones SAT</span>
+          <span class="skill-tag">Nearshoring</span>
+          <span class="skill-tag">Supply Chain</span>
+          <span class="skill-tag">Importación y Exportación</span>
+          <span class="skill-tag">RGCE</span>
+          <span class="skill-tag">NOM Compliance</span>
+          <span class="skill-tag">Gestión Aduanal</span>
+          <span class="skill-tag">IMMEX</span>
+          <span class="skill-tag">Comercio Electrónico Transfronterizo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Recomendaciones -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">8</div>
+        <div class="pci-info">
+          <div class="pci-name">Recomendaciones</div>
+          <div class="pci-desc">Social proof escrito directamente en tu perfil — el equivalente a testimonios en un sitio web</div>
+        </div>
+        <span class="pci-badge badge-rec">Recomendado</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-rules">
+          <div class="pci-rule do">Solicita al menos 2-3 recomendaciones a colegas, clientes o superiores directos</div>
+          <div class="pci-rule do">Guía a quien te recomienda: pídele que mencione un resultado concreto, no solo "es muy profesional"</div>
+          <div class="pci-rule do">Ofrece escribir una recomendación de regreso — la reciprocidad funciona muy bien en LinkedIn</div>
+          <div class="pci-rule dont">No dejes el apartado vacío — es el único espacio donde otra persona habla de ti en tu perfil</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Extras -->
+    <div class="pci">
+      <div class="pci-header">
+        <div class="pci-num">9</div>
+        <div class="pci-info">
+          <div class="pci-name">Idiomas, educación y certificaciones</div>
+          <div class="pci-desc">Los datos que completan el cuadro de autoridad y mejoran tu visibilidad en búsquedas</div>
+        </div>
+        <span class="pci-badge badge-rec">Recomendado</span>
+      </div>
+      <div class="pci-body">
+        <div class="pci-rules">
+          <div class="pci-rule do">Agrega español e inglés (nivel mínimo conversacional para acceder a búsquedas internacionales)</div>
+          <div class="pci-rule do">Incluye tu formación académica aunque sea básica — aporta contexto</div>
+          <div class="pci-rule do">Agrega cursos o certificaciones del sector: SAT, VUCEM, IMMEX, Incoterms, etc.</div>
+          <div class="pci-rule do">Activa "Abierto a" → "Proveer servicios" para que prospectos te encuentren directamente</div>
+          <div class="pci-rule do">Sigue la Página de Empresa de Grupo Ei para que aparezca en tu perfil</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Checklist de verificación final -->
+    <h3 class="sub-section-title">Resumen de verificación</h3>
+    <div class="checklist-summary">
+      <div class="cl-group">
+        <div class="cl-group-header req">Obligatorio antes de publicar</div>
+        <div class="cl-item"><span class="cl-box"></span>Foto de perfil profesional</div>
+        <div class="cl-item"><span class="cl-box"></span>Portada corporativa de Grupo Ei</div>
+        <div class="cl-item"><span class="cl-box"></span>Titular con fórmula [Puesto | Especialidad | Beneficio]</div>
+        <div class="cl-item"><span class="cl-box"></span>Sección "Acerca de" con hook y CTA</div>
+        <div class="cl-item"><span class="cl-box"></span>Experiencia vinculada a la Página de Empresa</div>
+        <div class="cl-item"><span class="cl-box"></span>URL personalizada sin números aleatorios</div>
+      </div>
+      <div class="cl-group">
+        <div class="cl-group-header rec">Completar en los primeros 30 días</div>
+        <div class="cl-item"><span class="cl-box"></span>Mínimo 10 aptitudes con validaciones de colegas</div>
+        <div class="cl-item"><span class="cl-box"></span>Al menos 2 recomendaciones escritas</div>
+        <div class="cl-item"><span class="cl-box"></span>Idiomas y certificaciones del sector actualizados</div>
+        <div class="cl-item"><span class="cl-box"></span>Botón "Proveer servicios" activado</div>
+        <div class="cl-item"><span class="cl-box"></span>Página de Grupo Ei seguida desde tu perfil</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  /* ── Mobile sidebar ─── */
+  const sidebar  = document.getElementById('sidebar');
+  const hamburger = document.getElementById('hamburger');
+  const overlay  = document.getElementById('overlay');
+
+  function openSidebar()  { sidebar.classList.add('open'); hamburger.classList.add('open'); overlay.classList.add('open'); }
+  function closeSidebar() { sidebar.classList.remove('open'); hamburger.classList.remove('open'); overlay.classList.remove('open'); }
+
+  hamburger.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+  overlay.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => { if (window.innerWidth < 768) closeSidebar(); });
+  });
+
+  /* ── Scroll spy ─── */
+  const sections = ['modulo-1', 'modulo-2', 'modulo-3', 'modulo-4', 'modulo-5', 'modulo-6'];
+  const navItems = document.querySelectorAll('.nav-item');
+
+  function setActive(id) {
+    navItems.forEach(n => {
+      n.classList.toggle('active', n.dataset.section === id);
+    });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const matched = sections.find(s => id === s || id === s + '-body');
+        if (matched) setActive(matched);
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+
+  /* ── Fade-in on scroll ─── */
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        fadeObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.section:not(.visible)').forEach(s => fadeObs.observe(s));
+
+  /* ── Tab switching ─── */
+  function switchTab(btn, tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  /* ── Copy buttons ─── */
+  function copyPrompt(btn, id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiado!`;
+      btn.classList.add('copied');
+      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+</script>
+</body>
+</html>

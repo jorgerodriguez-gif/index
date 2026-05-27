@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo Manychat CEFAT - Visualizador</title>
+    <script src="https://viewer.diagrams.net/js/viewer.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .toolbar {
+            background: #f5f5f5;
+            padding: 15px 30px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .viewer-container {
+            display: flex;
+            height: 800px;
+            background: #f9f9f9;
+        }
+
+        #diagram-viewer {
+            width: 100%;
+            background: white;
+            overflow: auto;
+        }
+
+        .legend {
+            padding: 30px;
+            background: white;
+            border-top: 1px solid #ddd;
+        }
+
+        .legend h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 2px solid #333;
+        }
+
+        .color-blue {
+            background: #87CEEB;
+        }
+
+        .color-yellow {
+            background: #FFE77F;
+        }
+
+        .color-red {
+            background: #FF6B6B;
+        }
+
+        .color-orange {
+            background: #FFA500;
+        }
+
+        .color-green {
+            background: #90EE90;
+        }
+
+        .info-section {
+            padding: 30px;
+            background: #f5f7ff;
+            border-top: 1px solid #ddd;
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: #f5f5f5;
+            padding: 20px 30px;
+            text-align: center;
+            color: #999;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .viewer-container {
+                height: 600px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <h1>🤖 Flujo Manychat CEFAT</h1>
+            <p class="subtitle">Automatización de Atención a Prospectos</p>
+        </header>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <button class="btn" onclick="zoomIn()">🔍 Ampliar</button>
+            <button class="btn" onclick="zoomOut()">🔍 Reducir</button>
+            <button class="btn" onclick="fitToPage()">↔️ Ajustar</button>
+            <button class="btn" onclick="downloadDiagram()">⬇️ Descargar PNG</button>
+            <button class="btn" onclick="editInDrawio()">✏️ Editar en Draw.io</button>
+        </div>
+
+        <!-- VIEWER -->
+        <div class="viewer-container">
+            <div id="diagram-viewer" class="loading">
+                Cargando diagrama...
+            </div>
+        </div>
+
+        <!-- LEYENDA -->
+        <div class="legend">
+            <h3>🎨 Leyenda de Colores</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color color-blue"></div>
+                    <span><strong>Azul:</strong> Procesos automáticos</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-yellow"></div>
+                    <span><strong>Amarillo:</strong> Decisiones (Diamantes)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-red"></div>
+                    <span><strong>Rojo:</strong> Escaladas a coordinador</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-orange"></div>
+                    <span><strong>Naranja:</strong> Notificaciones/Alertas</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-green"></div>
+                    <span><strong>Verde:</strong> Inicio/Fin del flujo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFORMACIÓN -->
+        <div class="info-section">
+            <h3>📋 Componentes del Flujo</h3>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>👥 Entrada de Prospectos</h4>
+                    <p>Meta Ads (Instagram/Facebook) → Formulario → Detección NUEVO/RETORNO</p>
+                </div>
+                <div class="info-card">
+                    <h4>🆕 Rama NUEVO (8 pasos)</h4>
+                    <p>Saludo → Menú → FAQs → Datos → Agendamiento → PDF → HubSpot → Tag</p>
+                </div>
+                <div class="info-card">
+                    <h4>🔄 Rama RETORNO (5 pasos)</h4>
+                    <p>Reconocer → Saludo → Ofrecimiento → Agendar/Escalar → Tag</p>
+                </div>
+                <div class="info-card">
+                    <h4>❓ Decisión Inteligente</h4>
+                    <p>¿Caso complejo? → SÍ: Escalada | NO: Agendamiento automático</p>
+                </div>
+                <div class="info-card">
+                    <h4>🚨 Escaladas</h4>
+                    <p>Coordinador académico + Notificación instantánea + Transfer a agente</p>
+                </div>
+                <div class="info-card">
+                    <h4>⏰ Seguimiento</h4>
+                    <p>Follow-up automático 24-48 hrs + Tagging de prospectos inactivos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>Flujo Manychat CEFAT | Implementación en 2 semanas | Ready for Production</p>
+            <p style="margin-top: 10px;">Generado el 21 de Mayo, 2026</p>
+        </footer>
+    </div>
+
+    <!-- EMBEDDED DIAGRAM XML -->
+    <div style="display:none;" id="mxxml"><?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-05-21T19:15:00.000Z" agent="Mozilla/5.0" version="20.0.0" type="device">
+  <diagram id="flowchart-cefat-manychat" name="Flujo Manychat CEFAT">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="start" value="🎯 START: Meta Ads&#10;(Instagram/Facebook)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;strokeWidth=2;fontSize=11;fontStyle=bold;" vertex="1" parent="1"><mxGeometry x="500" y="20" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="form" value="📝 Prospecto llena formulario" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="120" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow1" edge="1" parent="1" source="start" target="form"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="decision1" value="🤖 Manychat detecta:&#10;¿NUEVO o RETORNO?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE77F;strokeColor=#FF9800;strokeWidth=2;fontSize=10;fontStyle=bold;" vertex="1" parent="1"><mxGeometry x="475" y="220" width="250" height="100" as="geometry"/></mxCell>
+        <mxCell id="arrow2" edge="1" parent="1" source="form" target="decision1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="nuevo1" value="👋 Saludo personalizado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="370" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="nuevo2" value="📋 Menú interactivo&#10;(4 opciones)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="450" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="nuevo3" value="❓ Responder FAQs&#10;(15+ preguntas)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="530" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="nuevo4" value="📱 Capturar datos&#10;(nombre, email, tel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="610" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="nuevo5" value="📅 Ofrecimiento de&#10;agendamiento" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="690" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="nuevo6" value="📄 Descargar PDF&#10;(FAQs, brochure)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="770" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="nuevo7" value="🔗 Crear contacto en&#10;HubSpot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="850" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="nuevo8" value="🏷️ Tag: prospecto-nuevo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="930" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow_nuevo1" value="NUEVO" edge="1" parent="1" source="decision1" target="nuevo1"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="475" y="270"/></mxGeometry></mxCell>
+        <mxCell id="arrow_nuevo2" edge="1" parent="1" source="nuevo1" target="nuevo2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_nuevo3" edge="1" parent="1" source="nuevo2" target="nuevo3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_nuevo4" edge="1" parent="1" source="nuevo3" target="nuevo4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_nuevo5" edge="1" parent="1" source="nuevo4" target="nuevo5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_nuevo6" edge="1" parent="1" source="nuevo5" target="nuevo6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_nuevo7" edge="1" parent="1" source="nuevo6" target="nuevo7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_nuevo8" edge="1" parent="1" source="nuevo7" target="nuevo8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="retorno1" value="🔍 Reconocer prospecto" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="920" y="370" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="retorno2" value="👋 Saludo personalizado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="920" y="450" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="retorno3" value="💼 Ofrecimiento&#10;actualizado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="920" y="530" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="retorno4" value="📞 Agendar llamada&#10;o escalar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="920" y="610" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="retorno5" value="🏷️ Tag: reconexión" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="920" y="690" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow_retorno1" value="RETORNO" edge="1" parent="1" source="decision1" target="retorno1"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="725" y="270"/></mxGeometry></mxCell>
+        <mxCell id="arrow_retorno2" edge="1" parent="1" source="retorno1" target="retorno2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_retorno3" edge="1" parent="1" source="retorno2" target="retorno3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_retorno4" edge="1" parent="1" source="retorno3" target="retorno4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_retorno5" edge="1" parent="1" source="retorno4" target="retorno5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="converge1" value="📊 Consolidar datos&#10;y contexto" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="500" y="800" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow_converge1" edge="1" parent="1" source="nuevo8" target="converge1"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="230" y="955"/></mxGeometry></mxCell>
+        <mxCell id="arrow_converge2" edge="1" parent="1" source="retorno5" target="converge1"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="920" y="715"/></mxGeometry></mxCell>
+        <mxCell id="decision2" value="❓ ¿Caso complejo&#10;o solicitud especial?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE77F;strokeColor=#FF9800;strokeWidth=2;fontSize=10;fontStyle=bold;" vertex="1" parent="1"><mxGeometry x="475" y="900" width="250" height="100" as="geometry"/></mxCell>
+        <mxCell id="arrow_decision2" edge="1" parent="1" source="converge1" target="decision2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="escalada1" value="🚨 ESCALAR a coordinador" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF6B6B;strokeColor=#CC0000;strokeWidth=2;fontSize=10;fontStyle=bold;" vertex="1" parent="1"><mxGeometry x="300" y="1050" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="notif1" value="🔔 Notificación instantánea&#10;al equipo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFA500;strokeColor=#FF8C00;strokeWidth=2;fontSize=10;fontStyle=bold;" vertex="1" parent="1"><mxGeometry x="300" y="1130" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="transfer" value="☎️ Transfer a agente&#10;o call center" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF6B6B;strokeColor=#CC0000;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="300" y="1210" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow_escalada1" value="SÍ" edge="1" parent="1" source="decision2" target="escalada1"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="475" y="950"/></mxGeometry></mxCell>
+        <mxCell id="arrow_notif" edge="1" parent="1" source="escalada1" target="notif1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="arrow_transfer" edge="1" parent="1" source="notif1" target="transfer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="auto_agenda" value="📅 AGENDAMIENTO AUTOMÁTICO&#10;(HubSpot Meetings)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;fontStyle=bold;" vertex="1" parent="1"><mxGeometry x="700" y="1050" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="confirm" value="✅ Confirmación enviada&#10;al prospecto" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="700" y="1130" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow_auto1" value="NO" edge="1" parent="1" source="decision2" target="auto_agenda"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="725" y="950"/></mxGeometry></mxCell>
+        <mxCell id="arrow_confirm" edge="1" parent="1" source="auto_agenda" target="confirm"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="follow_start" value="⏰ Inicio de seguimiento" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#87CEEB;strokeColor=#1E90FF;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="500" y="1260" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow_follow1" edge="1" parent="1" source="transfer" target="follow_start"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="450" y="1235"/></mxGeometry></mxCell>
+        <mxCell id="arrow_follow2" edge="1" parent="1" source="confirm" target="follow_start"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="800" y="1180"/></mxGeometry></mxCell>
+        <mxCell id="followup1" value="📬 Follow-up en 24 hrs&#10;(sin respuesta)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#FF9800;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="350" y="1360" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="followup2" value="📬 Follow-up en 48 hrs&#10;(reengagement)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#FF9800;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="650" y="1360" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="tag_inactivo" value="🏷️ Tag: prospecto-inactivo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#FF9800;strokeWidth=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="500" y="1450" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="arrow_follow3" edge="1" parent="1" source="follow_start" target="followup1"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="500" y="1310"/></mxGeometry></mxCell>
+        <mxCell id="arrow_follow4" edge="1" parent="1" source="follow_start" target="followup2"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="700" y="1310"/></mxGeometry></mxCell>
+        <mxCell id="arrow_tag" edge="1" parent="1" source="followup1" target="tag_inactivo"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="425" y="1410"/></mxGeometry></mxCell>
+        <mxCell id="arrow_tag2" edge="1" parent="1" source="followup2" target="tag_inactivo"><mxGeometry relative="1" as="geometry"><mxPoint as="sourcePoint" x="725" y="1410"/></mxGeometry></mxCell>
+        <mxCell id="end" value="✅ END: Prospecto en Pipeline&#10;(Listo para conversión)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#90EE90;strokeColor=#228B22;strokeWidth=2;fontSize=11;fontStyle=bold;" vertex="1" parent="1"><mxGeometry x="450" y="1540" width="300" height="60" as="geometry"/></mxCell>
+        <mxCell id="arrow_end" edge="1" parent="1" source="tag_inactivo" target="end"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile></div>
+
+    <script>
+        // Diagram viewer configuration
+        let viewer = null;
+
+        function initViewer() {
+            const container = document.getElementById('diagram-viewer');
+            const xmlData = document.getElementById('mxxml').textContent;
+
+            viewer = new DiagramViewer(xmlData, {
+                container: container,
+                width: '100%',
+                height: '800px'
+            });
+        }
+
+        function zoomIn() {
+            if (viewer) viewer.zoom(1.2);
+        }
+
+        function zoomOut() {
+            if (viewer) viewer.zoom(0.8);
+        }
+
+        function fitToPage() {
+            if (viewer) viewer.fit();
+        }
+
+        function downloadDiagram() {
+            const xmlData = document.getElementById('mxxml').textContent;
+            const canvas = viewer ? viewer.getCanvas() : null;
+
+            if (canvas) {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'FLUJO_MANYCHAT_CEFAT.png';
+                link.click();
+            } else {
+                alert('Por favor abre el diagrama primero');
+            }
+        }
+
+        function editInDrawio() {
+            window.open('https://app.diagrams.net/?mode=device', '_blank');
+            alert('Abre Draw.io y sube el archivo FLUJO_MANYCHAT_CEFAT.xml para editar');
+        }
+
+        // Initialize on load
+        window.addEventListener('load', function() {
+            initViewer();
+        });
+    </script>
+</body>
+</html>

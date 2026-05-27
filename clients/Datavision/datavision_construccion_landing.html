@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datavision | Construcción & Inmobiliaria — Infraestructura digital sin riesgos</title>
+<meta name="description" content="Checklist gratuito: 7 riesgos críticos de datos en proyectos de construcción. Datavision, Microsoft Scale Solution Partner, 21 años en México.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+:root{
+  --ink:       #111318;
+  --ink-2:     #1A2130;
+  --body:      #374151;
+  --muted:     #6B7280;
+  --border:    #E5E7EB;
+  --surface:   #F9FAFB;
+  --surface-2: #F3F4F6;
+  --white:     #FFFFFF;
+  --green:     #0B9D6F;
+  --green-h:   #088A60;
+  --green-lit: #E6F7F2;
+  --green-dim: rgba(11,157,111,0.10);
+  --dv-gray:   #3D3D3D;
+  --danger:    #DC2626;
+  --warn:      #D97706;
+  --ok:        #059669;
+  --r-v:       108px;
+  --c-w:       1200px;
+}
+
+body{
+  font-family:'Outfit',system-ui,sans-serif;
+  background:var(--white);
+  color:var(--body);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+.container{max-width:var(--c-w);margin:0 auto;padding:0 56px}
+.section{padding:var(--r-v) 0}
+.section--surface{background:var(--surface)}
+.section--dark{background:var(--ink)}
+
+h1{font-size:clamp(42px,5.2vw,70px);font-weight:700;letter-spacing:-2.5px;line-height:1.05;color:var(--white)}
+h2{font-size:clamp(30px,3.8vw,50px);font-weight:700;letter-spacing:-2px;line-height:1.1;color:var(--ink)}
+h3{font-size:18px;font-weight:600;letter-spacing:-0.4px;line-height:1.3;color:var(--ink)}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);margin-bottom:18px;
+}
+.eyebrow__dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.eyebrow--light{color:rgba(255,255,255,0.4)}
+
+.lead{font-size:18px;color:var(--muted);max-width:580px;line-height:1.85;margin-top:16px;font-weight:400}
+.green{color:var(--green)}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;height:60px;z-index:100;
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+}
+.nav__inner{
+  max-width:var(--c-w);margin:0 auto;padding:0 56px;height:100%;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav__status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.nav__dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.7)}}
+.nav__right{display:flex;align-items:center;gap:22px}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Outfit',sans-serif;font-weight:600;
+  transition:all .2s cubic-bezier(.16,1,.3,1);white-space:nowrap;
+}
+.btn--nav{
+  background:var(--green);color:var(--white);
+  font-size:13.5px;padding:9px 20px;border-radius:100px;
+}
+.btn--nav:hover{background:var(--green-h);transform:translateY(-1px);box-shadow:0 6px 18px rgba(11,157,111,.3)}
+.btn--nav:active{transform:scale(.98)}
+
+.btn--hero{
+  background:var(--green);color:var(--white);
+  font-size:15px;padding:14px 28px;border-radius:12px;letter-spacing:-.2px;
+}
+.btn--hero:hover{background:var(--green-h);transform:translateY(-2px);box-shadow:0 12px 32px rgba(11,157,111,.35)}
+.btn--hero:active{transform:scale(.98)}
+
+.btn--ghost{
+  background:transparent;color:rgba(255,255,255,.45);
+  font-size:14px;padding:14px 0;
+}
+.btn--ghost:hover{color:rgba(255,255,255,.85)}
+
+.btn--dl{
+  background:var(--green);color:var(--white);
+  font-size:15px;padding:16px 24px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+}
+.btn--dl:hover{background:var(--green-h);transform:translateY(-1px);box-shadow:0 8px 24px rgba(11,157,111,.3)}
+
+.btn--cta{
+  background:var(--green);color:var(--white);
+  font-size:15.5px;font-weight:700;
+  padding:18px 36px;border-radius:14px;letter-spacing:-.3px;
+  display:flex;justify-content:center;width:100%;
+}
+.btn--cta:hover{background:var(--green-h);transform:translateY(-2px);box-shadow:0 16px 40px rgba(11,157,111,.35)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100dvh;background:var(--ink);
+  display:flex;align-items:center;
+  position:relative;overflow:hidden;padding-top:60px;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;
+}
+.hero__glow{
+  position:absolute;top:-15%;right:-8%;
+  width:640px;height:640px;border-radius:50%;
+  background:radial-gradient(circle,rgba(11,157,111,.16) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero__inner{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 400px;gap:72px;align-items:center;
+  padding:80px 0;
+}
+.hero__tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(11,157,111,.10);border:1px solid rgba(11,157,111,.25);
+  color:#3DD9A4;font-size:11px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:6px 14px;border-radius:100px;margin-bottom:26px;
+}
+.hero h1{margin-bottom:22px}
+.hero h1 .accent{color:#3DD9A4}
+.hero__lead{
+  font-size:17px;color:rgba(255,255,255,.48);
+  max-width:500px;font-weight:300;line-height:1.8;margin-bottom:38px;
+}
+.hero__actions{display:flex;align-items:center;gap:14px;margin-bottom:60px}
+.hero__stats{
+  display:flex;gap:40px;flex-wrap:wrap;
+  border-top:1px solid rgba(255,255,255,.07);padding-top:40px;
+}
+.stat__n{
+  font-size:34px;font-weight:700;color:var(--white);
+  letter-spacing:-1.5px;line-height:1;
+}
+.stat__n .u{color:#3DD9A4}
+.stat__l{font-size:12px;color:rgba(255,255,255,.32);margin-top:5px;max-width:130px;line-height:1.4}
+
+/* Risk Panel */
+.hero__visual{animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.risk-panel{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:20px;padding:26px;backdrop-filter:blur(10px);
+}
+.rp__hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.rp__title{font-size:13px;font-weight:500;color:rgba(255,255,255,.5)}
+.rp__badge{
+  font-size:11px;font-weight:600;
+  background:rgba(220,38,38,.15);color:#F87171;
+  padding:3px 10px;border-radius:100px;
+}
+.rp__score{text-align:center;margin-bottom:22px}
+.rp__num{font-size:60px;font-weight:700;color:var(--white);letter-spacing:-3px;line-height:1}
+.rp__sub{font-size:12px;color:rgba(255,255,255,.3);margin-top:4px}
+.rp__bar{height:5px;background:rgba(255,255,255,.07);border-radius:100px;margin:12px 0 5px;overflow:hidden}
+.rp__fill{height:100%;width:73%;background:linear-gradient(90deg,#F59E0B,#EF4444);border-radius:100px;animation:growBar 1.4s cubic-bezier(.16,1,.3,1) .3s both}
+@keyframes growBar{from{width:0}to{width:73%}}
+.rp__src{font-size:10px;color:rgba(255,255,255,.22)}
+.rp__items{display:flex;flex-direction:column;gap:7px}
+.rp__item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;font-size:12px;color:rgba(255,255,255,.45);
+}
+.rp__dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rp__dot--r{background:#EF4444;box-shadow:0 0 6px rgba(239,68,68,.5)}
+.rp__dot--a{background:#F59E0B;box-shadow:0 0 6px rgba(245,158,11,.4)}
+.rp__dot--g{background:#10B981;box-shadow:0 0 6px rgba(16,185,129,.4)}
+.rp__item-label{flex:1}
+.rp__chip{font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px}
+.rp__chip--r{background:rgba(239,68,68,.12);color:#F87171}
+.rp__chip--a{background:rgba(245,158,11,.12);color:#FCD34D}
+.rp__chip--g{background:rgba(16,185,129,.12);color:#34D399}
+.rp__footer{
+  margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.06);
+  font-size:10.5px;color:rgba(255,255,255,.2);text-align:center;
+}
+
+/* ── TRUST ── */
+.trust{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 0}
+.trust__inner{display:flex;align-items:center;gap:0;flex-wrap:wrap;gap:12px}
+.trust__lbl{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:#C0C8D2;flex-shrink:0;margin-right:16px;
+}
+.trust__pills{display:flex;gap:7px;flex-wrap:wrap}
+.trust__pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:500;color:var(--muted);
+  background:var(--white);border:1px solid var(--border);
+  padding:5px 12px;border-radius:100px;
+}
+.trust__dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+/* ── ALERT ── */
+.alert{background:#FFFBEB;border-bottom:1px solid rgba(217,119,6,.18);padding:15px 0}
+.alert__inner{display:flex;align-items:flex-start;gap:14px}
+.alert__icon{
+  width:34px;height:34px;flex-shrink:0;border-radius:8px;
+  background:rgba(217,119,6,.10);display:flex;align-items:center;justify-content:center;
+  color:var(--warn);margin-top:1px;
+}
+.alert__txt{font-size:13.5px;color:#78350F;line-height:1.55}
+.alert__txt strong{color:#92400E;font-weight:600}
+
+/* ── PROBLEMS ── */
+.problems__grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--border);border-radius:24px;overflow:hidden;
+  border:1px solid var(--border);margin-top:52px;
+}
+.prob-card{background:var(--white);padding:44px 40px;transition:background .18s}
+.prob-card:hover{background:#FAFBFF}
+.prob-num{font-size:11px;font-weight:700;letter-spacing:2px;color:#D1D5DB;margin-bottom:20px}
+.prob-card h3{font-size:20px;margin-bottom:12px}
+.prob-card p{font-size:15.5px;color:var(--muted);line-height:1.75;margin-bottom:18px}
+.rchip{
+  display:inline-block;font-size:10px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:6px;
+}
+.rchip--h{background:rgba(220,38,38,.08);color:var(--danger)}
+.rchip--m{background:rgba(217,119,6,.08);color:var(--warn)}
+
+/* ── CHECKLIST ── */
+.cl__layout{
+  display:grid;grid-template-columns:1fr 1.1fr;gap:72px;
+  align-items:start;margin-top:56px;
+}
+.cl__left p{font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:22px}
+.cl__what{border:1px solid var(--border);border-radius:16px;padding:28px;margin-top:4px}
+.cl__what-lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:14px}
+.what-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-top:1px solid var(--surface-2)}
+.what-row:first-of-type{border-top:none;padding-top:0}
+.what-chk{
+  width:20px;height:20px;flex-shrink:0;border-radius:50%;
+  background:rgba(5,150,105,.10);color:var(--ok);
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.what-txt{font-size:15px;color:var(--body);line-height:1.55}
+
+/* Checklist Card */
+.cl-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:24px;overflow:hidden;
+  box-shadow:0 12px 48px rgba(0,0,0,.07);
+}
+.cl-card__hd{
+  background:var(--ink);padding:36px 40px;position:relative;overflow:hidden;
+}
+.cl-card__hd::after{
+  content:'';position:absolute;bottom:-30px;right:-30px;
+  width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle,rgba(11,157,111,.22) 0%,transparent 65%);
+}
+.cl-card__eye{
+  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-bottom:10px;
+}
+.cl-card__title{
+  font-size:24px;font-weight:700;color:var(--white);
+  letter-spacing:-.6px;line-height:1.2;margin-bottom:8px;position:relative;z-index:1;
+}
+.cl-card__sub{font-size:14px;color:rgba(255,255,255,.42)}
+.cl-card__body{padding:0 40px}
+.cl-item{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:17px 0;border-bottom:1px solid var(--surface-2);
+}
+.cl-item:last-child{border-bottom:none}
+.cl-box{
+  width:22px;height:22px;flex-shrink:0;
+  border-radius:7px;border:1.5px solid #D1D5DB;margin-top:2px;
+}
+.cl-txt{font-size:15.5px;color:var(--body);line-height:1.6}
+.cl-txt strong{color:var(--ink);font-weight:600}
+.cl-card__ft{
+  padding:24px 40px 28px;background:var(--surface);border-top:1px solid var(--border);
+}
+.cl-note{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+
+/* ── SOLUTIONS (asymmetric) ── */
+.sol__layout{
+  display:grid;grid-template-columns:1.45fr 1fr;gap:24px;margin-top:56px;
+}
+.sol__right{display:flex;flex-direction:column;gap:24px}
+.sol-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:24px;padding:40px;position:relative;
+  transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s;overflow:hidden;
+}
+.sol-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--border);transition:background .22s;
+}
+.sol-card:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,.08)}
+.sol-card:hover::before{background:linear-gradient(90deg,var(--green),#3DD9A4)}
+.sol-card--feat{background:var(--ink-2);border-color:rgba(11,157,111,.2);height:100%}
+.sol-card--feat::before{background:linear-gradient(90deg,var(--green),#3DD9A4)}
+.sol-tag{
+  display:inline-block;font-size:11px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:16px;
+}
+.sol-tag--lit{background:var(--green-lit);color:var(--green)}
+.sol-tag--drk{background:rgba(11,157,111,.12);color:#3DD9A4}
+.sol-card h3{font-size:24px;font-weight:700;letter-spacing:-.7px;margin-bottom:12px}
+.sol-card--feat h3{color:var(--white)}
+.sol-card__desc{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:22px}
+.sol-card--feat .sol-card__desc{color:rgba(255,255,255,.42)}
+.sol-metric{
+  padding:18px 20px;background:var(--surface);border-radius:14px;margin-bottom:22px;
+  display:flex;align-items:baseline;gap:10px;
+}
+.sol-card--feat .sol-metric{background:rgba(255,255,255,.06)}
+.sol-metric__n{font-size:36px;font-weight:700;color:var(--ink);letter-spacing:-1.5px}
+.sol-card--feat .sol-metric__n{color:var(--white)}
+.sol-metric__l{font-size:14px;color:var(--muted);line-height:1.45}
+.sol-card--feat .sol-metric__l{color:rgba(255,255,255,.35)}
+.sol-list{list-style:none}
+.sol-list li{
+  display:flex;align-items:flex-start;gap:11px;
+  font-size:15px;color:var(--muted);padding:10px 0;
+  border-top:1px solid var(--surface-2);line-height:1.55;
+}
+.sol-list li:first-child{border-top:none}
+.sol-card--feat .sol-list li{color:rgba(255,255,255,.4);border-top-color:rgba(255,255,255,.07)}
+.sol-chk{
+  width:18px;height:18px;border-radius:50%;flex-shrink:0;
+  background:rgba(5,150,105,.10);color:var(--ok);
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+
+/* ── STATS ── */
+.stats__row{
+  display:grid;grid-template-columns:repeat(4,1fr);margin-top:52px;
+  border:1px solid var(--border);border-radius:24px;overflow:hidden;
+}
+.stat-cell{
+  padding:44px 36px;border-right:1px solid var(--border);
+  background:var(--white);transition:background .18s;
+}
+.stat-cell:last-child{border-right:none}
+.stat-cell:hover{background:var(--surface)}
+.stat-big{
+  font-size:54px;font-weight:700;color:var(--ink);
+  letter-spacing:-2.5px;line-height:1;margin-bottom:10px;
+}
+.stat-big .u{color:var(--green);font-size:.75em}
+.stat-cell h4{font-size:15.5px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:7px}
+.stat-cell p{font-size:14px;color:var(--muted);line-height:1.65}
+.stat-src{font-size:11px;color:#C0C8D2;margin-top:12px;font-style:italic}
+
+/* ── PROCESS ── */
+.process__grid{
+  display:grid;grid-template-columns:repeat(4,1fr);margin-top:60px;
+}
+.proc-step{
+  padding:0 28px 36px;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.proc-step:last-child{border-right:none}
+.proc-step:first-child{padding-left:0}
+.proc-step:last-child{padding-right:0}
+.proc-num{
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:rgba(255,255,255,.35);margin-bottom:22px;
+}
+.proc-step h3{font-size:18px;font-weight:600;color:var(--white);margin-bottom:10px}
+.proc-step p{font-size:14.5px;color:rgba(255,255,255,.35);line-height:1.75}
+.proc-time{
+  display:inline-block;margin-top:13px;font-size:11px;font-weight:600;
+  color:#3DD9A4;background:rgba(11,157,111,.10);padding:4px 12px;border-radius:100px;
+}
+
+/* ── CTA ── */
+.cta-section{padding:var(--r-v) 0;background:var(--ink);position:relative;overflow:hidden}
+.cta__glow{
+  position:absolute;bottom:-20%;left:50%;transform:translateX(-50%);
+  width:700px;height:400px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(11,157,111,.10) 0%,transparent 65%);
+}
+.cta__inner{position:relative;z-index:1}
+.cta__layout{
+  display:grid;grid-template-columns:1fr 440px;gap:80px;align-items:center;
+}
+.cta-section h2{color:var(--white)}
+.cta-lead{font-size:18px;color:rgba(255,255,255,.38);max-width:500px;line-height:1.8;margin-top:16px;font-weight:300}
+.cta-box{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  border-radius:24px;padding:40px;
+}
+.cta-row{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.cta-row:last-of-type{border-bottom:none;margin-bottom:22px}
+.cta-ico{
+  width:30px;height:30px;flex-shrink:0;border-radius:9px;
+  background:rgba(11,157,111,.12);color:#3DD9A4;
+  display:flex;align-items:center;justify-content:center;
+}
+.cta-row p{font-size:15px;color:rgba(255,255,255,.48);line-height:1.6}
+.cta-row p strong{color:rgba(255,255,255,.84);font-weight:600}
+.cta-alt{font-size:12px;color:rgba(255,255,255,.22);text-align:center;margin-top:11px}
+.cta-alt a{color:rgba(255,255,255,.4)}
+.cta-alt a:hover{color:rgba(255,255,255,.7)}
+
+/* ── FOOTER ── */
+.footer{background:#0A0E14;padding:24px 0;border-top:1px solid rgba(255,255,255,.05)}
+.footer__inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer__l{font-size:12px;color:rgba(255,255,255,.24)}
+.footer__l strong{color:rgba(255,255,255,.52)}
+.footer__r{font-size:11px;color:rgba(255,255,255,.17)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .hero__inner{grid-template-columns:1fr;gap:52px}
+  .hero__visual{max-width:440px;animation:none}
+  .sol__layout{grid-template-columns:1fr}
+  .cta__layout{grid-template-columns:1fr;gap:52px}
+  .cta-box{max-width:520px}
+  .cl__layout{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  :root{--r-v:72px}
+  .container,.nav__inner{padding:0 24px}
+  .nav__status{display:none}
+  .problems__grid{grid-template-columns:1fr}
+  .prob-card{padding:32px 28px}
+  .stats__row{grid-template-columns:1fr 1fr}
+  .stat-cell{padding:32px 26px}
+  .stat-cell:nth-child(2){border-right:none}
+  .stat-cell:nth-child(3){border-right:1px solid var(--border)}
+  .process__grid{grid-template-columns:1fr 1fr}
+  .proc-step{border-right:none;border-bottom:1px solid rgba(255,255,255,.06);padding:0 0 28px}
+  .proc-step:nth-child(2n){padding-left:16px}
+  .proc-step:nth-last-child(-n+2){border-bottom:none}
+  .cl-card__hd{padding:28px 28px}
+  .cl-card__body{padding:0 28px}
+  .cl-card__ft{padding:20px 28px 24px}
+  .sol-card{padding:30px}
+}
+@media(max-width:480px){
+  h1{letter-spacing:-1.5px}
+  h2{letter-spacing:-1px}
+  .hero__stats{flex-wrap:wrap;gap:24px}
+  .hero__actions{flex-direction:column;align-items:flex-start}
+  .stats__row{grid-template-columns:1fr}
+  .stat-cell{border-right:none!important}
+  .process__grid{grid-template-columns:1fr}
+  .cl-txt{font-size:15px}
+  .sol-card__desc{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav__inner">
+    <!-- Logo SVG — DATA(charcoal) + VISION(green) + arc -->
+    <a href="#" aria-label="Datavision">
+      <svg width="168" height="34" viewBox="0 0 168 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 28 C6 10 28 2 54 6" stroke="#8A8A8A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <text x="8" y="27" font-family="Outfit,sans-serif" font-weight="700" font-size="17" fill="#3D3D3D" letter-spacing="-0.4">DATA</text>
+        <text x="59" y="27" font-family="Outfit,sans-serif" font-weight="700" font-size="17" fill="#0B9D6F" letter-spacing="-0.4">VISION</text>
+      </svg>
+    </a>
+    <div class="nav__right">
+      <div class="nav__status">
+        <span class="nav__dot"></span>
+        Disponibilidad esta semana
+      </div>
+      <a href="CALENDLY_LINK_AQUI" class="btn btn--nav" target="_blank" rel="noopener">
+        Agendar conversación
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="container">
+    <div class="hero__inner">
+
+      <!-- LEFT -->
+      <div>
+        <div class="hero__tag">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Construcción · Inmobiliaria · Arquitectura
+        </div>
+
+        <h1>
+          ¿Cuántos riesgos<br>
+          tiene tu próximo<br>
+          <span class="accent">proyecto de obra?</span>
+        </h1>
+
+        <p class="hero__lead">
+          El 73% de constructoras en México gestiona información crítica fuera de sistemas controlados. Planos, contratos y autorizaciones en WhatsApp — invisibles ante una auditoría o disputa legal.
+        </p>
+
+        <div class="hero__actions">
+          <button class="btn btn--hero" onclick="document.getElementById('checklist').scrollIntoView({behavior:'smooth'})">
+            Descargar checklist gratuito
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button class="btn btn--ghost" onclick="document.getElementById('soluciones').scrollIntoView({behavior:'smooth'})">
+            Ver soluciones
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </button>
+        </div>
+
+        <div class="hero__stats">
+          <div><div class="stat__n">21<span class="u">+</span></div><div class="stat__l">años en México</div></div>
+          <div><div class="stat__n">200<span class="u">+</span></div><div class="stat__l">ingenieros certificados Microsoft</div></div>
+          <div><div class="stat__n"><span class="u">#1</span></div><div class="stat__l">Partner del Año Azure LATAM 2023</div></div>
+          <div><div class="stat__n">60<span class="u">%</span></div><div class="stat__l">menos CAPEX en recuperación ante desastres</div></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Risk Panel -->
+      <div class="hero__visual" aria-hidden="true">
+        <div class="risk-panel">
+          <div class="rp__hd">
+            <span class="rp__title">Diagnóstico de riesgos</span>
+            <span class="rp__badge">Requiere atención</span>
+          </div>
+          <div class="rp__score">
+            <div class="rp__num">73%</div>
+            <div class="rp__sub">de constructoras expuestas</div>
+            <div class="rp__bar"><div class="rp__fill"></div></div>
+            <div class="rp__src">Score de riesgo sectorial · LATAM 2024</div>
+          </div>
+          <div class="rp__items">
+            <div class="rp__item"><div class="rp__dot rp__dot--r"></div><span class="rp__item-label">Control de documentos</span><span class="rp__chip rp__chip--r">Alto</span></div>
+            <div class="rp__item"><div class="rp__dot rp__dot--r"></div><span class="rp__item-label">Trazabilidad de RFIs</span><span class="rp__chip rp__chip--r">Alto</span></div>
+            <div class="rp__item"><div class="rp__dot rp__dot--a"></div><span class="rp__item-label">Plan de recuperación</span><span class="rp__chip rp__chip--a">Medio</span></div>
+            <div class="rp__item"><div class="rp__dot rp__dot--g"></div><span class="rp__item-label">Infraestructura Azure</span><span class="rp__chip rp__chip--g">OK</span></div>
+          </div>
+          <div class="rp__footer">Datavision · Microsoft Scale Solution Partner</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div class="container">
+    <div class="trust__inner">
+      <span class="trust__lbl">Certificaciones</span>
+      <div class="trust__pills">
+        <span class="trust__pill"><span class="trust__dot"></span>Microsoft SSP</span>
+        <span class="trust__pill"><span class="trust__dot"></span>Azure Infrastructure</span>
+        <span class="trust__pill"><span class="trust__dot"></span>Security &amp; Compliance</span>
+        <span class="trust__pill"><span class="trust__dot"></span>Digital &amp; App Innovation</span>
+        <span class="trust__pill"><span class="trust__dot"></span>Modern Work</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ALERT -->
+<div class="alert">
+  <div class="container">
+    <div class="alert__inner">
+      <div class="alert__icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <p class="alert__txt">
+        <strong>¿Tienen licitación o auditoría próxima?</strong>
+        Los organismos gubernamentales y desarrolladores privados exigen cada vez más trazabilidad digital. Un entorno no controlado puede descalificarte antes de la revisión técnica.
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<!-- PROBLEMS -->
+<section class="section section--surface">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span>El problema del sector</span>
+    <h2>4 vulnerabilidades que afectan<br>a constructoras e inmobiliarias hoy</h2>
+    <p class="lead">La mayoría se descubren en el peor momento: en una licitación, una disputa con un contratista, o cuando alguien clave sale de la empresa.</p>
+
+    <div class="problems__grid">
+      <div class="prob-card">
+        <div class="prob-num">01</div>
+        <h3>Información de proyecto sin control de acceso</h3>
+        <p>Planos, presupuestos y contratos circulan por correos personales, USBs y grupos de WhatsApp. Sin registro de quién los tiene ni quién los modificó.</p>
+        <span class="rchip rchip--h">Riesgo alto</span>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">02</div>
+        <h3>Autorizaciones y RFIs sin trazabilidad legal</h3>
+        <p>Órdenes de cambio y aprobaciones de gasto por mensaje. En una disputa legal, ese "yo lo autoricé" no existe en ningún sistema auditable.</p>
+        <span class="rchip rchip--h">Riesgo alto</span>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">03</div>
+        <h3>Plan de continuidad que nunca se prueba</h3>
+        <p>Muchas empresas tienen un DRP en papel. El RTO real en un incidente suele ser 3–6 veces mayor al planeado. Nadie lo descubre hasta que ocurre.</p>
+        <span class="rchip rchip--m">Riesgo medio-alto</span>
+      </div>
+      <div class="prob-card">
+        <div class="prob-num">04</div>
+        <h3>Costos de nube creciendo sin visibilidad</h3>
+        <p>El gasto cloud crece por proyecto sin gobernanza. El 40% promedio corresponde a recursos que nadie está usando activamente.</p>
+        <span class="rchip rchip--m">Riesgo medio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CHECKLIST -->
+<section class="section" id="checklist">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span>Descarga gratuita</span>
+    <h2>7 riesgos críticos que tu<br>constructora debe <span class="green">auditar hoy</span></h2>
+    <p class="lead">Para directores de TI, operaciones y dirección general. Úsalo antes de una licitación, auditoría o cierre de proyecto.</p>
+
+    <div class="cl__layout">
+      <!-- LEFT -->
+      <div class="cl__left">
+        <p>Este checklist concentra los 7 puntos de riesgo más comunes que encontramos al hacer diagnósticos en constructoras e inmobiliarias en México.</p>
+        <p>No requiere registro. Descarga directa en PDF. Si alguno de estos puntos no puedes contestarlo con certeza — hay trabajo por hacer.</p>
+        <div class="cl__what">
+          <div class="cl__what-lbl">Lo que incluye</div>
+          <div class="what-row"><span class="what-chk">✓</span><span class="what-txt">7 preguntas de auditoría rápida (10 min)</span></div>
+          <div class="what-row"><span class="what-chk">✓</span><span class="what-txt">Escala de riesgo por cada punto</span></div>
+          <div class="what-row"><span class="what-chk">✓</span><span class="what-txt">Solución recomendada por categoría</span></div>
+          <div class="what-row"><span class="what-chk">✓</span><span class="what-txt">Referencias a benchmarks del sector 2023–2024</span></div>
+          <div class="what-row"><span class="what-chk">✓</span><span class="what-txt">Formato PDF listo para imprimir o compartir</span></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Card -->
+      <div class="cl-card">
+        <div class="cl-card__hd">
+          <div class="cl-card__eye">Checklist Datavision · Construcción</div>
+          <div class="cl-card__title">7 Riesgos Críticos de Datos<br>en Proyectos de Obra</div>
+          <p class="cl-card__sub">Para directores de TI, operaciones y dirección general</p>
+        </div>
+        <div class="cl-card__body">
+          <div class="cl-item"><div class="cl-box"></div><p class="cl-txt"><strong>Control de acceso:</strong> ¿Saben quién puede ver planos, contratos y presupuestos del proyecto?</p></div>
+          <div class="cl-item"><div class="cl-box"></div><p class="cl-txt"><strong>Trazabilidad de autorizaciones:</strong> ¿Las órdenes de cambio quedan en un sistema formal?</p></div>
+          <div class="cl-item"><div class="cl-box"></div><p class="cl-txt"><strong>Plan de recuperación:</strong> ¿Cuándo fue la última vez que hicieron un drill de DR real?</p></div>
+          <div class="cl-item"><div class="cl-box"></div><p class="cl-txt"><strong>Gestión de salidas:</strong> ¿Qué pasa con los accesos cuando sale un contratista?</p></div>
+          <div class="cl-item"><div class="cl-box"></div><p class="cl-txt"><strong>Visibilidad de costos:</strong> ¿Pueden ver el gasto cloud por proyecto en tiempo real?</p></div>
+          <div class="cl-item"><div class="cl-box"></div><p class="cl-txt"><strong>Procesos fuera de sistemas:</strong> ¿Cuántos procesos críticos viven en WhatsApp o Excel?</p></div>
+          <div class="cl-item"><div class="cl-box"></div><p class="cl-txt"><strong>Cumplimiento de licitación:</strong> ¿Pueden demostrar trazabilidad digital ante un auditor hoy?</p></div>
+        </div>
+        <div class="cl-card__ft">
+          <button class="btn btn--dl" onclick="generatePDF()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF — Gratis, sin registro
+          </button>
+          <p class="cl-note">Descarga directa · Sin formulario · Formato A4 PDF</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SOLUTIONS -->
+<section class="section section--surface" id="soluciones">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span>Soluciones Datavision</span>
+    <h2>Lo que hacemos concreto<br>para construcción e inmobiliaria</h2>
+    <p class="lead">Tres servicios para los riesgos del sector. Sin implementaciones de 18 meses. Resultados visibles antes de los 90 días.</p>
+
+    <div class="sol__layout">
+      <!-- FEATURED (left, tall) -->
+      <div class="sol-card sol-card--feat">
+        <span class="sol-tag sol-tag--drk">Más solicitado</span>
+        <h3>Colaboración Segura en Obra</h3>
+        <p class="sol-card__desc">Convertimos Microsoft 365 en un entorno donde planos, contratos y comunicaciones de proyecto son auditables. Sabes exactamente quién accede a qué, cuándo y desde dónde.</p>
+        <div class="sol-metric">
+          <span class="sol-metric__n" style="color:var(--white)">100%</span>
+          <span class="sol-metric__l">trazabilidad en documentos del proyecto</span>
+        </div>
+        <ul class="sol-list">
+          <li><span class="sol-chk">✓</span> Control de acceso por proyecto y rol</li>
+          <li><span class="sol-chk">✓</span> Auditoría completa de accesos y modificaciones</li>
+          <li><span class="sol-chk">✓</span> Cumplimiento para licitaciones públicas y privadas</li>
+          <li><span class="sol-chk">✓</span> Sin cambiar las herramientas que ya usan</li>
+        </ul>
+      </div>
+
+      <!-- RIGHT: 2 stacked -->
+      <div class="sol__right">
+        <div class="sol-card">
+          <span class="sol-tag sol-tag--lit">Digitalización</span>
+          <h3>Procesos de Obra Trazables</h3>
+          <p class="sol-card__desc">RFIs, órdenes de cambio y autorizaciones que hoy viven en WhatsApp y Excel — convertidos en flujos digitales auditables sin disrupciones.</p>
+          <div class="sol-metric">
+            <span class="sol-metric__n">3–6</span>
+            <span class="sol-metric__l">meses para procesos críticos auditables</span>
+          </div>
+          <ul class="sol-list">
+            <li><span class="sol-chk">✓</span> RFIs y órdenes de cambio con registro legal</li>
+            <li><span class="sol-chk">✓</span> Autorizaciones con historial trazable</li>
+          </ul>
+        </div>
+
+        <div class="sol-card">
+          <span class="sol-tag sol-tag--lit">Continuidad</span>
+          <h3>Plan de Recuperación Real (DRP)</h3>
+          <p class="sol-card__desc">Recuperación ante desastres en Azure — probado y validado, no solo en papel. RTO y RPO verificados en condiciones reales.</p>
+          <div class="sol-metric">
+            <span class="sol-metric__n">60–70%</span>
+            <span class="sol-metric__l">menos CAPEX vs DR tradicional</span>
+          </div>
+          <ul class="sol-list">
+            <li><span class="sol-chk">✓</span> Failover real probado y documentado</li>
+            <li><span class="sol-chk">✓</span> SLA de recuperación garantizado 24/7</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- STATS -->
+<section class="section">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span>Datos del sector</span>
+    <h2>Por qué esto no puede esperar</h2>
+    <p class="lead">Benchmarks de la industria de construcción e inmobiliaria en México y Latinoamérica, 2023–2024.</p>
+
+    <div class="stats__row">
+      <div class="stat-cell">
+        <div class="stat-big">73<span class="u">%</span></div>
+        <h4>de constructoras maneja info sensible fuera de sistemas controlados</h4>
+        <p>Planos, presupuestos y contratos en canales no auditables.</p>
+        <div class="stat-src">Benchmark LATAM Construcción &amp; TI, 2024</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-big">3<span class="u">×</span></div>
+        <h4>diferencia entre RTO planeado y RTO real en un incidente</h4>
+        <p>Un DR que nunca se prueba es una suposición, no un plan.</p>
+        <div class="stat-src">Gartner IT DR Report, 2023</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-big">40<span class="u">%</span></div>
+        <h4>del gasto cloud promedio son recursos sin uso activo</h4>
+        <p>FinOps activo recupera ese presupuesto sin afectar operación.</p>
+        <div class="stat-src">FinOps Foundation, 2024</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-big">6<span class="u">×</span></div>
+        <h4>más costoso resolver un incidente que prevenirlo</h4>
+        <p>El costo promedio de un breach en LATAM supera los $3.2M USD.</p>
+        <div class="stat-src">IBM Cost of a Data Breach, 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PROCESS -->
+<section class="section section--dark">
+  <div class="container">
+    <span class="eyebrow eyebrow--light"><span class="eyebrow__dot"></span>Cómo trabajamos</span>
+    <h2 style="color:var(--white)">De la primera conversación<br>a <span class="green">resultados medibles</span></h2>
+    <p class="lead" style="color:rgba(255,255,255,.33)">Sin presentaciones de 3 horas. Sin proyectos que duran años. Claridad desde el primer contacto.</p>
+
+    <div class="process__grid">
+      <div class="proc-step">
+        <div class="proc-num">01</div>
+        <h3>Conversación de 15 min</h3>
+        <p>Entendemos tu operación, dónde están los riesgos y qué tiene más urgencia. Sin compromiso.</p>
+        <span class="proc-time">Esta semana</span>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">02</div>
+        <h3>Assessment técnico</h3>
+        <p>Revisamos tu entorno y entregamos un mapa de riesgos con prioridades y costo-beneficio estimado.</p>
+        <span class="proc-time">1–2 semanas</span>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">03</div>
+        <h3>Propuesta específica</h3>
+        <p>Una propuesta para tu empresa — no un paquete genérico. ROI proyectado, timeline y responsables claros.</p>
+        <span class="proc-time">Semana 2–3</span>
+      </div>
+      <div class="proc-step">
+        <div class="proc-num">04</div>
+        <h3>Implementación y resultados</h3>
+        <p>Arrancamos con lo más urgente. Primeros resultados visibles antes de los 90 días.</p>
+        <span class="proc-time">Desde semana 4</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-section" id="agendar">
+  <div class="cta__glow" aria-hidden="true"></div>
+  <div class="container cta__inner">
+    <div class="cta__layout">
+
+      <div>
+        <span class="eyebrow eyebrow--light"><span class="eyebrow__dot"></span>Siguiente paso</span>
+        <h2>¿Tu operación pasaría<br><span class="green">una auditoría hoy?</span></h2>
+        <p class="cta-lead">Una conversación de 15 minutos. Sin demo de producto. Sin presión de venta. Solo para saber si hay oportunidad real de trabajar juntos.</p>
+      </div>
+
+      <div class="cta-box">
+        <div class="cta-row">
+          <div class="cta-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <p><strong>Sin demo genérica.</strong> Hablamos de tu operación específica, no de características de producto.</p>
+        </div>
+        <div class="cta-row">
+          <div class="cta-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <p><strong>Identificamos los riesgos concretos</strong> de tu entorno en la primera conversación.</p>
+        </div>
+        <div class="cta-row">
+          <div class="cta-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <p><strong>Si no hay oportunidad real,</strong> te lo decimos directo. No vamos a insistir.</p>
+        </div>
+        <div class="cta-row">
+          <div class="cta-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <p>Disponibilidad <strong>esta semana.</strong> Elige el horario que te convenga.</p>
+        </div>
+
+        <a href="CALENDLY_LINK_AQUI" class="btn btn--cta" target="_blank" rel="noopener">
+          Agendar conversación de 15 minutos
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <p class="cta-alt">
+          ¿Prefieres escribirnos?
+          <a href="mailto:CORREO@DATAVISION.COM.MX">CORREO@DATAVISION.COM.MX</a>
+          &nbsp;·&nbsp;
+          <a href="tel:TELEFONO_AQUI">TELEFONO</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <p class="footer__l">
+        <strong>DATAVISION</strong> · Microsoft Scale Solution Partner · Partner del Año Azure Americas 2023 · 21 años en México · datavision.com.mx
+      </p>
+      <p class="footer__r">Contenido dirigido al sector construcción e inmobiliaria en México</p>
+    </div>
+  </div>
+</footer>
+
+
+<!-- PDF GENERATOR -->
+<script>
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, M = 20, CW = W - M * 2;
+
+  doc.setFillColor(11, 25, 41);
+  doc.rect(0, 0, W, 52, 'F');
+  doc.setFillColor(11, 157, 111);
+  doc.rect(0, 49, W, 3, 'F');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(61, 217, 164);
+  doc.text('CHECKLIST DATAVISION · CONSTRUCCIÓN & INMOBILIARIA', M, 18);
+
+  doc.setFontSize(18);
+  doc.setTextColor(255, 255, 255);
+  doc.text('7 Riesgos Críticos de Datos', M, 29);
+  doc.text('en Proyectos de Construcción', M, 39);
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(140, 160, 180);
+  doc.text('Para directores de TI, operaciones y dirección general  ·  datavision.com.mx  ·  2024', M, 57);
+
+  doc.setFontSize(9);
+  doc.setTextColor(80, 100, 120);
+  const introLines = doc.splitTextToSize('Usa este checklist para evaluar el estado de tu infraestructura digital antes de una licitación, auditoría o cierre de proyecto. Si algún punto no puedes contestarlo con certeza — hay trabajo por hacer.', CW);
+  doc.text(introLines, M, 66);
+
+  const items = [
+    { n:'01', cat:'Seguridad de Documentos', risk:'ALTO', q:'¿Saben quién puede ver planos, contratos y presupuestos de cada proyecto?', detail:'Documentos en correos personales o USBs no son auditables ni controlables.', sol:'SecureVision — Control de acceso en Microsoft 365' },
+    { n:'02', cat:'Trazabilidad de Autorizaciones', risk:'ALTO', q:'¿Las órdenes de cambio, RFIs y aprobaciones quedan en un sistema formal?', detail:'Autorizaciones por WhatsApp no tienen validez legal en disputas contractuales.', sol:'Assessment de Aplicaciones — Digitalización de procesos de obra' },
+    { n:'03', cat:'Plan de Recuperación ante Desastres', risk:'ALTO', q:'¿Cuándo fue la última vez que probaron su DRP con un failover real?', detail:'El RTO real suele ser 3–6 veces mayor al planeado si el plan no se prueba.', sol:'DRP en Azure — Plan de recuperación probado y validado' },
+    { n:'04', cat:'Gestión de Salidas', risk:'MEDIO-ALTO', q:'¿Tienen proceso para revocar accesos cuando sale un contratista o empleado?', detail:'Cada persona que sale con accesos activos es un riesgo latente.', sol:'SecureVision — Gobierno de identidades y accesos' },
+    { n:'05', cat:'Visibilidad de Costos Cloud', risk:'MEDIO', q:'¿Pueden ver el gasto en nube desagregado por proyecto en tiempo real?', detail:'Sin visibilidad, el 40% del gasto cloud son recursos sin uso activo.', sol:'Consumo Smart (FinOps) — Optimización de costos Azure' },
+    { n:'06', cat:'Procesos en Sistemas Formales', risk:'MEDIO-ALTO', q:'¿Cuántos procesos críticos de obra viven en WhatsApp, Excel o correos?', detail:'Procesos fuera de sistemas no son auditables ni escalan.', sol:'Fábrica Low Code — Apps de negocio sin deuda técnica' },
+    { n:'07', cat:'Cumplimiento para Licitaciones', risk:'ALTO', q:'¿Pueden demostrar trazabilidad digital completa ante un auditor hoy?', detail:'Los requisitos de licitación exigen evidencia de control digital.', sol:'Assessment completo de cumplimiento digital' }
+  ];
+
+  const rColors = { 'ALTO':[180,30,30], 'MEDIO-ALTO':[160,90,0], 'MEDIO':[0,130,80] };
+  let y = 82;
+
+  items.forEach(item => {
+    if (y > 248) { doc.addPage(); y = 20; }
+    doc.setFillColor(245,247,250); doc.roundedRect(M,y,CW,30,3,3,'F');
+    doc.setFillColor(11,25,41); doc.roundedRect(M,y,14,30,3,3,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(255,255,255);
+    doc.text(item.n, M+7, y+18, {align:'center'});
+    const rc = rColors[item.risk]||[100,100,100];
+    const bw = item.risk==='MEDIO-ALTO'?28:22;
+    doc.setFillColor(...rc); doc.roundedRect(W-M-bw,y+4,bw,8,2,2,'F');
+    doc.setFontSize(6); doc.setTextColor(255,255,255);
+    doc.text(item.risk, W-M-bw/2, y+9.5, {align:'center'});
+    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(11,157,111);
+    doc.text(item.cat, M+17, y+9);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(30,50,70);
+    const qL = doc.splitTextToSize(item.q, CW-52); doc.text(qL, M+17, y+16);
+    y += 34;
+    doc.setFontSize(7.5); doc.setTextColor(100,120,140);
+    const dL = doc.splitTextToSize(item.detail, CW-6); doc.text(dL, M+4, y);
+    y += dL.length*3.8+2;
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(11,157,111);
+    doc.text('→ Solución: '+item.sol, M+4, y); y += 10;
+  });
+
+  if (y > 246) { doc.addPage(); y = 20; }
+  doc.setFillColor(11,25,41); doc.rect(0,y,W,40,'F');
+  doc.setFillColor(11,157,111); doc.rect(0,y,4,40,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(255,255,255);
+  doc.text('¿Más de 2 riesgos sin respuesta segura?', M+4, y+12);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(180,200,220);
+  doc.text('Agenda una conversación de 15 minutos con el equipo de Datavision.', M+4, y+21);
+  doc.text('Sin compromiso. Sin demo. Solo claridad sobre tu situación actual.', M+4, y+28);
+  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(61,217,164);
+  doc.text('datavision.com.mx  ·  Microsoft Scale Solution Partner  ·  Partner del Año Azure LATAM 2023', M+4, y+37);
+
+  doc.save('Checklist_Riesgos_Construccion_Datavision.pdf');
+}
+</script>
+
+</body>
+</html>

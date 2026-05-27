@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo Manychat CEFAT - Diagrama Visual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .diagram-section {
+            padding: 40px;
+            overflow-x: auto;
+        }
+
+        svg {
+            margin: 0 auto;
+            display: block;
+        }
+
+        .controls {
+            padding: 20px 40px;
+            background: #f5f5f5;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .legend {
+            padding: 30px 40px;
+            background: #f9f9f9;
+            border-top: 1px solid #ddd;
+        }
+
+        .legend h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 2px solid #333;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px 40px;
+            text-align: center;
+            color: #999;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Flujo Manychat CEFAT</h1>
+            <p>Automatización Completa de Atención a Prospectos</p>
+        </header>
+
+        <div class="diagram-section">
+            <svg width="1200" height="1800" viewBox="0 0 1200 1800">
+                <!-- Define gradients and styles -->
+                <defs>
+                    <style>
+                        .box { font-size: 12px; font-family: Arial, sans-serif; }
+                        .process { fill: #87CEEB; stroke: #1E90FF; stroke-width: 2; }
+                        .decision { fill: #FFE77F; stroke: #FF9800; stroke-width: 2; }
+                        .escalada { fill: #FF6B6B; stroke: #CC0000; stroke-width: 2; }
+                        .notif { fill: #FFA500; stroke: #FF8C00; stroke-width: 2; }
+                        .inicio { fill: #90EE90; stroke: #228B22; stroke-width: 2; }
+                        .text { font-size: 11px; font-weight: bold; text-anchor: middle; }
+                        .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+                        .label { font-size: 10px; fill: #666; }
+                    </style>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#333" />
+                    </marker>
+                </defs>
+
+                <!-- START -->
+                <ellipse cx="600" cy="50" rx="100" ry="30" class="inicio" />
+                <text x="600" y="55" class="text">🎯 START: Meta Ads</text>
+
+                <!-- Arrow down -->
+                <path d="M 600 80 L 600 120" class="arrow" />
+
+                <!-- Formulario -->
+                <rect x="500" y="120" width="200" height="50" rx="5" class="process" />
+                <text x="600" y="150" class="text">📝 Llenar Formulario</text>
+
+                <!-- Arrow down -->
+                <path d="M 600 170 L 600 210" class="arrow" />
+
+                <!-- DECISION 1: NUEVO o RETORNO -->
+                <polygon points="600,210 700,260 600,310 500,260" class="decision" />
+                <text x="600" y="265" class="text">¿NUEVO o</text>
+                <text x="600" y="280" class="text">RETORNO?</text>
+
+                <!-- LEFT BRANCH: NUEVO -->
+                <path d="M 500 260 L 300 260" class="arrow" />
+                <text x="400" y="255" class="label">NUEVO</text>
+
+                <!-- Nuevo Branch -->
+                <rect x="150" y="240" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="265" class="text">👋 Saludo</text>
+
+                <path d="M 225 280 L 225 320" class="arrow" />
+
+                <rect x="150" y="320" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="345" class="text">📋 Menú (4 opcs)</text>
+
+                <path d="M 225 360 L 225 400" class="arrow" />
+
+                <rect x="150" y="400" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="425" class="text">❓ Responder FAQs</text>
+
+                <path d="M 225 440 L 225 480" class="arrow" />
+
+                <rect x="150" y="480" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="505" class="text">📱 Capturar datos</text>
+
+                <path d="M 225 520 L 225 560" class="arrow" />
+
+                <rect x="150" y="560" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="585" class="text">📅 Agendamiento</text>
+
+                <path d="M 225 600 L 225 640" class="arrow" />
+
+                <rect x="150" y="640" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="665" class="text">📄 Descargar PDF</text>
+
+                <path d="M 225 680 L 225 720" class="arrow" />
+
+                <rect x="150" y="720" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="745" class="text">🔗 HubSpot</text>
+
+                <path d="M 225 760 L 225 800" class="arrow" />
+
+                <rect x="150" y="800" width="150" height="40" rx="5" class="process" />
+                <text x="225" y="825" class="text">🏷️ Tag: nuevo</text>
+
+                <!-- RIGHT BRANCH: RETORNO -->
+                <path d="M 700 260 L 900 260" class="arrow" />
+                <text x="800" y="255" class="label">RETORNO</text>
+
+                <!-- Retorno Branch -->
+                <rect x="850" y="240" width="150" height="40" rx="5" class="process" />
+                <text x="925" y="265" class="text">🔍 Reconocer</text>
+
+                <path d="M 925 280 L 925 320" class="arrow" />
+
+                <rect x="850" y="320" width="150" height="40" rx="5" class="process" />
+                <text x="925" y="345" class="text">👋 Saludo</text>
+
+                <path d="M 925 360 L 925 400" class="arrow" />
+
+                <rect x="850" y="400" width="150" height="40" rx="5" class="process" />
+                <text x="925" y="425" class="text">💼 Ofrecimiento</text>
+
+                <path d="M 925 440 L 925 480" class="arrow" />
+
+                <rect x="850" y="480" width="150" height="40" rx="5" class="process" />
+                <text x="925" y="505" class="text">📞 Agendar/Escalar</text>
+
+                <path d="M 925 520 L 925 560" class="arrow" />
+
+                <rect x="850" y="560" width="150" height="40" rx="5" class="process" />
+                <text x="925" y="585" class="text">🏷️ Tag: retorno</text>
+
+                <!-- Converge branches -->
+                <path d="M 225 840 L 600 880" class="arrow" />
+                <path d="M 925 600 L 600 880" class="arrow" />
+
+                <!-- DECISION 2: ¿Caso complejo? -->
+                <polygon points="600,880 700,930 600,980 500,930" class="decision" />
+                <text x="600" y="930" class="text">¿Caso</text>
+                <text x="600" y="945" class="text">complejo?</text>
+
+                <!-- LEFT: ESCALADA -->
+                <path d="M 500 930 L 350 930" class="arrow" />
+                <text x="425" y="925" class="label">SÍ</text>
+
+                <rect x="200" y="910" width="150" height="40" rx="5" class="escalada" />
+                <text x="275" y="935" class="text">🚨 Escalar</text>
+
+                <path d="M 275 950 L 275 990" class="arrow" />
+
+                <rect x="200" y="990" width="150" height="40" rx="5" class="notif" />
+                <text x="275" y="1015" class="text">🔔 Notificación</text>
+
+                <path d="M 275 1030 L 275 1070" class="arrow" />
+
+                <rect x="200" y="1070" width="150" height="40" rx="5" class="escalada" />
+                <text x="275" y="1095" class="text">☎️ Transfer</text>
+
+                <!-- RIGHT: AGENDAMIENTO -->
+                <path d="M 700 930 L 850 930" class="arrow" />
+                <text x="775" y="925" class="label">NO</text>
+
+                <rect x="800" y="910" width="150" height="40" rx="5" class="process" />
+                <text x="875" y="930" class="text">📅 Agenda Auto</text>
+                <text x="875" y="945" class="text">(HubSpot)</text>
+
+                <path d="M 875 950 L 875 990" class="arrow" />
+
+                <rect x="800" y="990" width="150" height="40" rx="5" class="process" />
+                <text x="875" y="1015" class="text">✅ Confirmación</text>
+
+                <!-- Converge again -->
+                <path d="M 275 1110 L 600 1150" class="arrow" />
+                <path d="M 875 1030 L 600 1150" class="arrow" />
+
+                <!-- SEGUIMIENTO -->
+                <rect x="500" y="1150" width="200" height="40" rx="5" class="process" />
+                <text x="600" y="1175" class="text">⏰ Inicio Seguimiento</text>
+
+                <!-- Follow-ups -->
+                <path d="M 500 1190 L 350 1230" class="arrow" />
+                <rect x="250" y="1230" width="150" height="40" rx="5" class="notif" />
+                <text x="325" y="1255" class="text">📬 Follow-up 24h</text>
+
+                <path d="M 700 1190 L 850 1230" class="arrow" />
+                <rect x="800" y="1230" width="150" height="40" rx="5" class="notif" />
+                <text x="875" y="1255" class="text">📬 Follow-up 48h</text>
+
+                <!-- Converge at tag -->
+                <path d="M 325 1270 L 600 1310" class="arrow" />
+                <path d="M 875 1270 L 600 1310" class="arrow" />
+
+                <rect x="500" y="1310" width="200" height="40" rx="5" class="notif" />
+                <text x="600" y="1335" class="text">🏷️ Tag: inactivo</text>
+
+                <!-- Arrow to end -->
+                <path d="M 600 1350 L 600 1390" class="arrow" />
+
+                <!-- END -->
+                <ellipse cx="600" cy="1420" rx="100" ry="30" class="inicio" />
+                <text x="600" y="1420" class="text">✅ Pipeline Listo</text>
+                <text x="600" y="1435" class="text">para Conversión</text>
+            </svg>
+        </div>
+
+        <div class="legend">
+            <h3>🎨 Leyenda de Colores</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #87CEEB;"></div>
+                    <span><strong>Azul:</strong> Procesos automáticos</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #FFE77F;"></div>
+                    <span><strong>Amarillo:</strong> Decisiones</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #FF6B6B;"></div>
+                    <span><strong>Rojo:</strong> Escaladas</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #FFA500;"></div>
+                    <span><strong>Naranja:</strong> Notificaciones</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #90EE90;"></div>
+                    <span><strong>Verde:</strong> Inicio/Fin</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="downloadImage()">⬇️ Descargar como PNG</button>
+            <button onclick="printPage()">🖨️ Imprimir</button>
+            <button onclick="openInDrawio()">✏️ Editar en Draw.io</button>
+        </div>
+
+        <div class="footer">
+            <p>Flujo Manychat CEFAT | Implementación 2 semanas | Generado 21 de Mayo, 2026</p>
+        </div>
+    </div>
+
+    <script>
+        function downloadImage() {
+            const svg = document.querySelector('svg');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const img = new Image();
+            
+            canvas.width = svg.width.baseVal.value;
+            canvas.height = svg.height.baseVal.value;
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'FLUJO_MANYCHAT_CEFAT.png';
+                link.click();
+            };
+            
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+
+        function printPage() {
+            window.print();
+        }
+
+        function openInDrawio() {
+            window.open('https://app.diagrams.net/', '_blank');
+        }
+    </script>
+</body>
+</html>

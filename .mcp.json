@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "analytics-mcp": {
+      "command": "/Users/jorgerodriguez/.local/bin/analytics-mcp"
+    }
+  }
+}

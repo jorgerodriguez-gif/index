@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo Manychat CEFAT - Detallado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            overflow-x: auto;
+            background: #f5f5f5;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .nav-tab:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .nav-tab.active {
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-bottom-color: #667eea;
+        }
+
+        .content {
+            padding: 40px;
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .message-box {
+            background: #f5f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .data-table tr:hover {
+            background: #f5f7ff;
+        }
+
+        .flow-section {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .step-desc {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .option-list {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin: 10px 0;
+            background: #f5f7ff;
+            border-radius: 6px;
+        }
+
+        .option-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-size: 0.9em;
+        }
+
+        .option-text {
+            flex: 1;
+            color: #333;
+        }
+
+        ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        li {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .success {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            border-top: 1px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                padding: 10px 15px;
+                font-size: 0.85em;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Flujo Manychat CEFAT</h1>
+            <p class="subtitle">Detallado, Simplificado y Listo para Implementar</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('vision')">📋 Visión General</button>
+            <button class="nav-tab" onclick="showTab('disparadores')">🔔 Disparadores</button>
+            <button class="nav-tab" onclick="showTab('validacion')">✅ Validación</button>
+            <button class="nav-tab" onclick="showTab('categorias')">📂 Categorías</button>
+            <button class="nav-tab" onclick="showTab('cursos')">📚 Flujo Cursos</button>
+            <button class="nav-tab" onclick="showTab('talleres')">🎯 Flujo Talleres</button>
+            <button class="nav-tab" onclick="showTab('carreras')">🎓 Flujo Carreras</button>
+            <button class="nav-tab" onclick="showTab('datos')">📊 Datos</button>
+            <button class="nav-tab" onclick="showTab('automaciones')">⚙️ Automaciones</button>
+            <button class="nav-tab" onclick="showTab('resumen')">🎯 Resumen</button>
+        </div>
+
+        <!-- TAB 1: VISIÓN GENERAL -->
+        <div id="vision" class="content active">
+            <h2>📋 Estructura General del Flujo</h2>
+            
+            <div class="flow-section">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">DISPARADOR (Palabras clave)</div>
+                        <div class="step-desc">Usuario escribe: hola, cursos, taller, carrera, etc.</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: #667eea; font-size: 1.5em; margin: 10px 0;">↓</div>
+
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">VALIDACIÓN (¿Contacto conocido?)</div>
+                        <div class="step-desc">Verifica si existe en HubSpot</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: #667eea; font-size: 1.5em; margin: 10px 0;">↓</div>
+
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">MENSAJE BIENVENIDA</div>
+                        <div class="step-desc">Personalizado (NUEVO o RETORNO)</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: #667eea; font-size: 1.5em; margin: 10px 0;">↓</div>
+
+                <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">CATEGORIZACIÓN</div>
+                        <div class="step-desc">Usuario elige: Cursos, Talleres, Carreras o Consultoría</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: #667eea; font-size: 1.5em; margin: 10px 0;">↓</div>
+
+                <div class="flow-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-title">CAPTURA DE DATOS</div>
+                        <div class="step-desc">Máximo 5 preguntas según categoría</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: #667eea; font-size: 1.5em; margin: 10px 0;">↓</div>
+
+                <div class="flow-step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <div class="step-title">CONFIRMACIÓN + ESCALADA</div>
+                        <div class="step-desc">Crear contacto en HubSpot, notificar equipo, seguimiento automático</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>⏱️ Tiempo Estimado</h3>
+            <ul>
+                <li><strong>Flujo Cursos:</strong> 2-3 minutos</li>
+                <li><strong>Flujo Talleres:</strong> 2-3 minutos</li>
+                <li><strong>Flujo Carreras:</strong> 4-5 minutos</li>
+                <li><strong>Objetivo de conversión:</strong> 60%+</li>
+            </ul>
+        </div>
+
+        <!-- TAB 2: DISPARADORES -->
+        <div id="disparadores" class="content">
+            <h2>🔔 Disparadores (Palabras Clave)</h2>
+            
+            <p>El flujo se activa cuando el usuario escribe cualquiera de estas palabras:</p>
+
+            <div class="option-list">
+                <div class="option-item">
+                    <div class="option-number">✓</div>
+                    <div class="option-text">
+                        <strong>Saludos básicos:</strong> hola, buenas, buenos días, buenas noches, hey
+                    </div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">✓</div>
+                    <div class="option-text">
+                        <strong>Educación:</strong> cursos, taller, carrera, diplomado, formación, capacitación
+                    </div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">✓</div>
+                    <div class="option-text">
+                        <strong>Específicos CEFAT:</strong> actuación, cine, tv, televisión, luces, cámara
+                    </div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">✓</div>
+                    <div class="option-text">
+                        <strong>Información:</strong> información, precio, horarios, cuánto cuesta, dónde, cuándo
+                    </div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">✓</div>
+                    <div class="option-text">
+                        <strong>Otras:</strong> ayuda, soporte, consulta, asesoría, mentoría
+                    </div>
+                </div>
+            </div>
+
+            <h3>¿Cuándo se activa?</h3>
+            <p>Cuando un usuario envía un mensaje inicial (primer contacto) o reenvía un mensaje después de 7+ días de inactividad con cualquiera de estas palabras clave.</p>
+
+            <div class="highlight">
+                ⚠️ <strong>Importante:</strong> El flujo solo se activa UNA VEZ. Mensajes posteriores no lo reaactivan automáticamente (para evitar loops).
+            </div>
+        </div>
+
+        <!-- TAB 3: VALIDACIÓN -->
+        <div id="validacion" class="content">
+            <h2>✅ Validación Inicial (¿Contacto Conocido?)</h2>
+            
+            <h3>¿Qué se verifica?</h3>
+            <ul>
+                <li>¿Existe un registro de email en HubSpot?</li>
+                <li>¿Ha interactuado antes con CEFAT?</li>
+                <li>¿Tiene tag de prospecto/cliente?</li>
+            </ul>
+
+            <h3>📱 Rama SÍ: CONTACTO CONOCIDO</h3>
+            <div class="message-box">¡Hola [NOMBRE]! 👋
+
+Nos alegra verte de vuelta por CEFAT.
+
+¿En qué te podemos ayudar hoy?
+
+1️⃣ Tengo duda sobre un curso
+2️⃣ Quiero información de programas
+3️⃣ Actualización de datos
+4️⃣ Otra consulta</div>
+
+            <h3>📱 Rama NO: CONTACTO NUEVO</h3>
+            <div class="message-box">¡Hola! 👋 Bienvenido a CEFAT
+
+Somos el Centro de Formación Actoral de TV Azteca.
+Ofrecemos cursos, talleres y carreras profesionales en:
+📽️ Actuación | 💡 Televisión | 🎬 Cine
+
+¿Cuál es tu interés?
+
+1️⃣ Cursos
+2️⃣ Talleres
+3️⃣ Carreras profesionales
+4️⃣ Consultoría</div>
+        </div>
+
+        <!-- TAB 4: CATEGORÍAS -->
+        <div id="categorias" class="content">
+            <h2>📂 Las 4 Categorías Principales</h2>
+            
+            <div class="flow-section">
+                <h3>1️⃣ CURSOS</h3>
+                <p><strong>Descripción:</strong> Programas cortos (4-8 semanas), prácticos y especializados.</p>
+                <p><strong>Ejemplos:</strong></p>
+                <ul>
+                    <li>Actuación Básica (4 semanas) - $2,500</li>
+                    <li>Técnica de Cámara (6 semanas) - $3,000</li>
+                    <li>Guión para TV (8 semanas) - $3,500</li>
+                </ul>
+                <p><strong>Datos a capturar:</strong> Nombre, Email, Tel, Curso, Fecha inicio, Presupuesto</p>
+                <p><strong>Tiempo de flujo:</strong> 2-3 minutos</p>
+            </div>
+
+            <div class="flow-section">
+                <h3>2️⃣ TALLERES</h3>
+                <p><strong>Descripción:</strong> Sesiones intensivas (4 horas), prácticas, máximo 15 personas.</p>
+                <p><strong>Ejemplos:</strong></p>
+                <ul>
+                    <li>Composición de Escenas (Sábado) - $500</li>
+                    <li>Manejo de Cámara 4K (Domingo) - $500</li>
+                    <li>Producción Audiovisual (Martes) - $800</li>
+                </ul>
+                <p><strong>Datos a capturar:</strong> Nombre, Email, Tel, Taller, Num. asistentes, Experiencia</p>
+                <p><strong>Tiempo de flujo:</strong> 2-3 minutos</p>
+            </div>
+
+            <div class="flow-section">
+                <h3>3️⃣ CARRERAS PROFESIONALES</h3>
+                <p><strong>Descripción:</strong> Programas de 1-2 años, completos, con certificación.</p>
+                <p><strong>Ejemplos:</strong></p>
+                <ul>
+                    <li>Actuación para Cine y TV (18 meses) - $18,000</li>
+                    <li>Producción Audiovisual (12 meses) - $12,000</li>
+                    <li>Dirección de Fotografía (18 meses) - $20,000</li>
+                </ul>
+                <p><strong>Datos a capturar:</strong> Nombre, Email, Tel, Carrera, Nivel, Disponibilidad, Modalidad</p>
+                <p><strong>Tiempo de flujo:</strong> 4-5 minutos</p>
+            </div>
+
+            <div class="flow-section">
+                <h3>4️⃣ CONSULTORÍA</h3>
+                <p><strong>Descripción:</strong> Servicios personalizados, asesoría, mentoría.</p>
+                <p><strong>Ejemplos:</strong></p>
+                <ul>
+                    <li>Asesoría en Proyectos Audiovisuales (1-3 meses)</li>
+                    <li>Mentoría Personalizada (3-6 meses, 4 sesiones/mes) - $3,500/mes</li>
+                </ul>
+                <p><strong>Datos a capturar:</strong> Nombre, Email, Tel, Tipo, Descripción, Presupuesto, Timeline</p>
+                <p><strong>Tiempo de flujo:</strong> 3-4 minutos</p>
+            </div>
+        </div>
+
+        <!-- TAB 5: FLUJO CURSOS -->
+        <div id="cursos" class="content">
+            <h2>📚 Flujo Detallado: CURSOS</h2>
+            
+            <h3>Paso 1: Mostrar Opciones</h3>
+            <div class="message-box">Excelente, te compartimos nuestros cursos 👇
+
+📌 CURSOS DISPONIBLES:
+
+📚 Actuación Básica (4 semanas)
+Inicio: Próximo lunes | $2,500
+
+📚 Técnica de Cámara (6 semanas)
+Inicio: Próximo lunes | $3,000
+
+📚 Guión para TV (8 semanas)
+Inicio: 2 de Junio | $3,500
+
+¿Cuál te interesa?
+Responde con el número (1, 2, 3) o escribe "MÁS INFO"</div>
+
+            <h3>Paso 2: Preguntar Nombre</h3>
+            <div class="message-box">Perfecto, vamos a registrarte 📝
+
+¿Cuál es tu nombre completo?</div>
+
+            <h3>Paso 3: Preguntar Email</h3>
+            <div class="message-box">¡Gracias, [NOMBRE]!
+
+¿Cuál es tu correo electrónico?
+(Lo usaremos para enviarte confirmación y acceso)</div>
+
+            <h3>Paso 4: Preguntar Teléfono</h3>
+            <div class="message-box">¿Cuál es tu teléfono?
+(Opcional, para recordatorios SMS)</div>
+
+            <h3>Paso 5: Confirmar Disponibilidad</h3>
+            <div class="message-box">¿Cuándo podrías iniciar?
+
+1️⃣ Próximo lunes (ASAP)
+2️⃣ En 2 semanas
+3️⃣ En un mes
+4️⃣ A definir</div>
+
+            <h3>Paso 6: CONFIRMACIÓN FINAL</h3>
+            <div class="message-box">¡Perfecto, [NOMBRE]! ✅
+
+Hemos registrado tu interés en:
+📌 Curso: Actuación Básica
+💰 Precio: $2,500
+📅 Inicio: Próximo lunes
+
+En 24 horas nuestro asesor se contactará para:
+✓ Aclarar dudas
+✓ Procesar inscripción
+✓ Enviar cronograma
+
+Descarga nuestro catálogo completo:
+👉 [LINK PDF]
+
+¿Preguntas? Escribe "HABLAR CON ASESOR"</div>
+
+            <h3>Acciones Automáticas</h3>
+            <div class="success">
+                ✅ Crear contacto en HubSpot<br>
+                ✅ Tag: "prospecto-curso-actuacion"<br>
+                ✅ Asignar a: Asesor de Cursos<br>
+                ✅ Enviar email de confirmación<br>
+                ✅ Notificar en Slack al equipo<br>
+                ✅ Follow-up automático a 24 hrs
+            </div>
+        </div>
+
+        <!-- TAB 6: FLUJO TALLERES -->
+        <div id="talleres" class="content">
+            <h2>🎯 Flujo Detallado: TALLERES</h2>
+            
+            <h3>Paso 1: Mostrar Opciones</h3>
+            <div class="message-box">¡Perfecto! Te compartimos nuestros talleres 👇
+
+🎬 Taller: Composición de Escenas
+📅 Sábado 25 de Mayo | 10:00 AM
+💰 $500 por asistente
+
+🎬 Taller: Manejo de Cámara 4K
+📅 Domingo 26 de Mayo | 2:00 PM
+💰 $500 por asistente
+
+🎬 Taller: Producción Audiovisual
+📅 Próximo Martes | 6:00 PM
+💰 $800 por asistente
+
+¿Cuál te llama más la atención?
+Responde: "Composición", "Cámara 4K" o "Producción"</div>
+
+            <h3>Paso 2: Preguntar Experiencia</h3>
+            <div class="message-box">¡Buena elección! 
+
+Antes de registrarte, cuéntanos:
+¿Cuál es tu nivel de experiencia?
+
+1️⃣ Principiante (sin experiencia previa)
+2️⃣ Intermedio (tengo cursos básicos)
+3️⃣ Avanzado (experiencia laboral)</div>
+
+            <h3>Paso 3: Preguntar Nombre</h3>
+            <div class="message-box">¡Perfecto! Vamos a registrarte 📝
+
+¿Cuál es tu nombre?</div>
+
+            <h3>Paso 4: Preguntar Correo</h3>
+            <div class="message-box">¿Cuál es tu correo?
+(Para enviar confirmación de inscripción)</div>
+
+            <h3>Paso 5: Preguntar Asistentes</h3>
+            <div class="message-box">¿Cuántas personas van a asistir?
+
+1️⃣ Solo yo (1 persona)
+2️⃣ Vengo con alguien más (2 personas)
+3️⃣ Somos un grupo (3+)</div>
+
+            <h3>Paso 6: CONFIRMACIÓN FINAL</h3>
+            <div class="message-box">¡Excelente, [NOMBRE]! ✅
+
+Te hemos registrado para:
+
+📌 Taller: Composición de Escenas
+📅 Sábado 25 de Mayo | 10:00 AM
+💰 Total: $500 x 1 = $500
+
+En 2 horas recibirás:
+✓ Enlace de confirmación
+✓ Detalles de ubicación
+✓ Qué llevar
+
+¿Preguntas? Escribe "AYUDA"</div>
+
+            <h3>Acciones Automáticas</h3>
+            <div class="success">
+                ✅ Crear contacto en HubSpot<br>
+                ✅ Tag: "prospecto-taller-composicion"<br>
+                ✅ Enviar email confirmación<br>
+                ✅ Generar ticket de pago<br>
+                ✅ Notificar coordinador<br>
+                ✅ Follow-up 24 hrs antes del taller
+            </div>
+        </div>
+
+        <!-- TAB 7: FLUJO CARRERAS -->
+        <div id="carreras" class="content">
+            <h2>🎓 Flujo Detallado: CARRERAS</h2>
+            
+            <h3>Paso 1: Mostrar Opciones</h3>
+            <div class="message-box">¡Excelente opción! Aquí nuestras carreras 👇
+
+🎓 CARRERAS PROFESIONALES
+
+👉 Carrera: Actuación para Cine y TV
+Duración: 18 meses
+Inversión: $18,000
+Próximo inicio: 1 de Julio
+
+👉 Carrera: Producción Audiovisual
+Duración: 12 meses
+Inversión: $12,000
+Próximo inicio: 15 de Junio
+
+👉 Carrera: Dirección de Fotografía
+Duración: 18 meses
+Inversión: $20,000
+Próximo inicio: 1 de Julio
+
+¿Cuál carrera te interesa?
+Responde: "Actuación", "Producción" o "Fotografía"</div>
+
+            <h3>Paso 2: Preguntar Experiencia</h3>
+            <div class="message-box">Antes de continuar, cuéntanos:
+¿Cuál es tu experiencia actual?
+
+1️⃣ Sin experiencia (quiero aprender desde cero)
+2️⃣ Tengo cursos básicos
+3️⃣ Experiencia laboral en el área</div>
+
+            <h3>Paso 3: Preguntar Disponibilidad</h3>
+            <div class="message-box">¿Cuál es tu disponibilidad de tiempo?
+
+1️⃣ Tiempo completo (L-V todo el día)
+2️⃣ Tiempo parcial (noches/fines de semana)
+3️⃣ Flexible (a definir)</div>
+
+            <h3>Paso 4: Preguntar Modalidad</h3>
+            <div class="message-box">¿Qué modalidad prefieres?
+
+1️⃣ Presencial (en nuestras instalaciones)
+2️⃣ Híbrida (presencial + online)</div>
+
+            <h3>Paso 5: Preguntar Nombre</h3>
+            <div class="message-box">Perfecto, vamos a registrarte 📝
+
+¿Cuál es tu nombre completo?</div>
+
+            <h3>Paso 6: Preguntar Correo</h3>
+            <div class="message-box">¿Cuál es tu correo?
+(Aquí te enviaremos el plan de estudios)</div>
+
+            <h3>Paso 7: Preguntar Teléfono</h3>
+            <div class="message-box">¿Cuál es tu teléfono?
+(Para coordinar entrevista de admisión)</div>
+
+            <h3>Paso 8: CONFIRMACIÓN FINAL</h3>
+            <div class="message-box">¡Excelente, [NOMBRE]! 🎓
+
+Hemos registrado tu interés en:
+
+📌 Carrera: Actuación para Cine y TV
+📊 Nivel: Sin experiencia
+⏰ Modalidad: Presencial
+🕐 Disponibilidad: Tiempo completo
+💰 Inversión: $18,000 (18 cuotas de $1,000)
+📅 Próximo inicio: 1 de Julio
+
+Tu coordinador académico se contactará en 24 hrs para:
+✓ Aclarar dudas
+✓ Agendar entrevista personal (15 min)
+✓ Enviar plan de estudios completo
+✓ Discutir opciones de financiamiento
+
+Descarga especificaciones de la carrera:
+👉 [LINK PDF]
+
+¿Preguntas urgentes? Escribe "HABLAR CON COORDINADOR"</div>
+
+            <h3>Acciones Automáticas</h3>
+            <div class="success">
+                ✅ Crear contacto en HubSpot<br>
+                ✅ Tag: "prospecto-carrera-actuacion"<br>
+                ✅ Crear tarea: Coordinador académico<br>
+                ✅ Prioridad: ALTA<br>
+                ✅ Enviar email + PDF plan de estudios<br>
+                ✅ Notificación en Slack<br>
+                ✅ Crear reunión en calendario<br>
+                ✅ Follow-up si no responde en 48 hrs
+            </div>
+        </div>
+
+        <!-- TAB 8: DATOS A CAPTURAR -->
+        <div id="datos" class="content">
+            <h2>📊 Datos a Capturar por Categoría</h2>
+            
+            <h3>DATOS BÁSICOS (Todos los prospectos)</h3>
+            <table class="data-table">
+                <tr>
+                    <th>Campo</th>
+                    <th>Tipo</th>
+                    <th>Obligatorio</th>
+                    <th>Ejemplo</th>
+                </tr>
+                <tr>
+                    <td>Nombre completo</td>
+                    <td>Texto</td>
+                    <td>✅ Sí</td>
+                    <td>Juan Pérez López</td>
+                </tr>
+                <tr>
+                    <td>Correo electrónico</td>
+                    <td>Email</td>
+                    <td>✅ Sí</td>
+                    <td>juan@email.com</td>
+                </tr>
+                <tr>
+                    <td>Teléfono</td>
+                    <td>Teléfono</td>
+                    <td>✅ Sí</td>
+                    <td>+52 55 1234 5678</td>
+                </tr>
+                <tr>
+                    <td>Categoría de interés</td>
+                    <td>Select</td>
+                    <td>✅ Sí</td>
+                    <td>Cursos / Talleres / Carreras / Consultoría</td>
+                </tr>
+            </table>
+
+            <h3>CURSOS - Datos Específicos</h3>
+            <table class="data-table">
+                <tr>
+                    <th>Campo</th>
+                    <th>Opciones</th>
+                </tr>
+                <tr>
+                    <td>Curso seleccionado</td>
+                    <td>Actuación Básica / Técnica de Cámara / Guión para TV</td>
+                </tr>
+                <tr>
+                    <td>Fecha de inicio preferida</td>
+                    <td>Próximo lunes / En 2 semanas / En un mes / A definir</td>
+                </tr>
+                <tr>
+                    <td>Presupuesto disponible</td>
+                    <td>Sí / No / Consultar con familia</td>
+                </tr>
+            </table>
+
+            <h3>TALLERES - Datos Específicos</h3>
+            <table class="data-table">
+                <tr>
+                    <th>Campo</th>
+                    <th>Opciones</th>
+                </tr>
+                <tr>
+                    <td>Taller seleccionado</td>
+                    <td>Composición / Cámara 4K / Producción</td>
+                </tr>
+                <tr>
+                    <td>Nivel de experiencia</td>
+                    <td>Principiante / Intermedio / Avanzado</td>
+                </tr>
+                <tr>
+                    <td>Número de asistentes</td>
+                    <td>1 persona / 2 personas / 3+ personas</td>
+                </tr>
+            </table>
+
+            <h3>CARRERAS - Datos Específicos</h3>
+            <table class="data-table">
+                <tr>
+                    <th>Campo</th>
+                    <th>Opciones</th>
+                </tr>
+                <tr>
+                    <td>Carrera seleccionada</td>
+                    <td>Actuación / Producción / Fotografía</td>
+                </tr>
+                <tr>
+                    <td>Nivel de experiencia</td>
+                    <td>Sin experiencia / Cursos básicos / Experiencia laboral</td>
+                </tr>
+                <tr>
+                    <td>Disponibilidad de tiempo</td>
+                    <td>Tiempo completo / Tiempo parcial / Flexible</td>
+                </tr>
+                <tr>
+                    <td>Modalidad preferida</td>
+                    <td>Presencial / Híbrida</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- TAB 9: AUTOMACIONES -->
+        <div id="automaciones" class="content">
+            <h2>⚙️ Automaciones y Notificaciones</h2>
+            
+            <h3>Cuando se completa el flujo:</h3>
+
+            <div class="flow-section">
+                <h4>1️⃣ Crear Contacto en HubSpot</h4>
+                <ul>
+                    <li>Nombre, Email, Teléfono</li>
+                    <li>Fuente: WhatsApp/Facebook</li>
+                    <li>Tags automáticos: prospecto-[categoría]</li>
+                    <li>Propietario: Asignar automáticamente</li>
+                </ul>
+            </div>
+
+            <div class="flow-section">
+                <h4>2️⃣ Enviar Email de Confirmación</h4>
+                <p><strong>Plantilla:</strong> "Bienvenida a CEFAT - Confirmación de Interés"</p>
+                <ul>
+                    <li>Resumen de lo registrado</li>
+                    <li>Links a recursos (PDF, videos)</li>
+                    <li>Próximos pasos</li>
+                    <li>Contacto directo</li>
+                </ul>
+            </div>
+
+            <div class="flow-section">
+                <h4>3️⃣ Notificación al Equipo</h4>
+                <ul>
+                    <li><strong>Slack:</strong> "Nuevo prospecto en [CATEGORÍA] - [NOMBRE]"</li>
+                    <li><strong>HubSpot:</strong> Crear tarea asignada</li>
+                    <li><strong>Email:</strong> Al asesor correspondiente</li>
+                </ul>
+            </div>
+
+            <div class="flow-section">
+                <h4>4️⃣ Seguimiento Automático</h4>
+                <ul>
+                    <li><strong>24 hrs después:</strong> Si no hay respuesta, enviar mensaje</li>
+                    <li><strong>48 hrs después:</strong> Ofrecimiento de llamada directa</li>
+                    <li><strong>7 días después:</strong> Si aún no responde, cambiar a campaña de nurture</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 10: RESUMEN -->
+        <div id="resumen" class="content">
+            <h2>🎯 Resumen Ejecutivo</h2>
+            
+            <h3>Flujo Ultra Simplificado</h3>
+            <div class="option-list">
+                <div class="option-item">
+                    <div class="option-number">1</div>
+                    <div class="option-text">ENTRADA: Usuario escribe palabras clave</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">2</div>
+                    <div class="option-text">VALIDACIÓN: ¿Contacto nuevo o conocido?</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">3</div>
+                    <div class="option-text">BIENVENIDA: Mensaje personalizado</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">4</div>
+                    <div class="option-text">CATEGORÍA: Elige Curso, Taller, Carrera o Consultoría</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">5</div>
+                    <div class="option-text">DATOS: Máximo 5 preguntas según categoría</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">6</div>
+                    <div class="option-text">CONFIRMACIÓN: Resumen y próximos pasos</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">7</div>
+                    <div class="option-text">NOTIFICACIÓN: Equipo CEFAT</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">8</div>
+                    <div class="option-text">SEGUIMIENTO: Automático 24/48 hrs</div>
+                </div>
+                <div class="option-item">
+                    <div class="option-number">9</div>
+                    <div class="option-text">ESCALADA: Asesor contacta al prospecto</div>
+                </div>
+            </div>
+
+            <h3>📈 Métricas Esperadas</h3>
+            <table class="data-table">
+                <tr>
+                    <th>Métrica</th>
+                    <th>Target</th>
+                </tr>
+                <tr>
+                    <td>Tasa de entrada (inicia flujo)</td>
+                    <td>100%</td>
+                </tr>
+                <tr>
+                    <td>Tasa de completación (responde primera pregunta)</td>
+                    <td>70-80%</td>
+                </tr>
+                <tr>
+                    <td>Tasa de captura de datos</td>
+                    <td>60%+</td>
+                </tr>
+                <tr>
+                    <td>Tasa de escalada a asesor</td>
+                    <td>40-50%</td>
+                </tr>
+                <tr>
+                    <td>Tiempo promedio en flujo</td>
+                    <td>3-5 minutos</td>
+                </tr>
+            </table>
+
+            <h3>⏱️ Timeline de Implementación</h3>
+            <ul>
+                <li><strong>Semana 1:</strong> Configurar flujos en Manychat</li>
+                <li><strong>Semana 2:</strong> Testing y ajustes</li>
+                <li><strong>Semana 2:</strong> Ir a producción y activar disparadores</li>
+            </ul>
+
+            <div class="success">
+                ✅ Flujo detallado y simplificado<br>
+                ✅ Mensajes exactos para WhatsApp<br>
+                ✅ Datos claros a capturar<br>
+                ✅ Automaciones definidas<br>
+                ✅ Seguimiento automático<br>
+                ✅ Listo para implementar en Manychat
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Flujo Manychat CEFAT - Detallado y Simplificado</p>
+        <p>Documento generado: 21 de Mayo, 2026</p>
+    </footer>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
